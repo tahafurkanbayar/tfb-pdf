@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Dosya yükle',
+    'drop_here' => 'Dosyaları buraya sürükleyip bırakın',
+    'or' => 'veya',
+    'browse' => 'Dosya seçin',
+    'add_more' => 'Dosya ekle',
+    'allowed_types' => 'İzin verilen türler: :types',
+    'max_size' => 'Dosya başına en fazla :size',
+    'uploading' => 'Dosya yükleniyor...',
+    'uploading_named' => ':name yükleniyor...',
+    'success' => 'Dosya başarıyla yüklendi.',
+    'no_file' => 'Lütfen bir dosya seçin.',
+    'invalid_file' => 'Bu dosya geçerli değil veya desteklenmiyor.',
+    'unsupported_type' => 'Bu dosya türü desteklenmiyor. İzin verilen türler: :types',
+    'file_too_large' => 'Dosya çok büyük. En fazla :max yükleyebilirsiniz.',
+    'empty_file' => 'Dosya boş.',
+    'too_many_files' => 'Tek seferde en fazla :max dosya işleyebilirsiniz.',
+    'too_many_pages' => 'Belge çok fazla sayfa içeriyor. En fazla :max sayfa desteklenir.',
+    'invalid_pdf' => 'Dosya geçerli bir PDF değil veya bozuk.',
+    'encrypted_pdf' => 'Şifre korumalı PDF\'ler şu an desteklenmiyor. Lütfen önce şifreyi kaldırın.',
+    'partial' => 'Dosya yüklemesi yarıda kesildi. Lütfen tekrar deneyin.',
+    'quota_exceeded' => 'Depolama alanınız doldu. Yeni dosya yüklemek için eski belgelerinizi silin.',
+    'server_limit' => 'Dosya, sunucunun izin verdiği yükleme boyutunu aşıyor.',
+];

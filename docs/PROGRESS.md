@@ -10,7 +10,7 @@ Son güncelleme: 2026-10-07
 | 1 | Proje yapısı | [x] | Dizinler, kök + public .htaccess, private dizinlerde deny-all, front controller |
 | 2 | Composer | [x] | fpdi 2.6.8, tfpdf 1.33, phpmailer 7.1.1, phpunit 11.5 (dev); composer.phar yerelde |
 | 3 | Configuration | [x] | Env okuyucu, Config (nokta notasyonu), config/*.php, .env.example, Size |
-| 4 | Localization sistemi | [ ] | |
+| 4 | Localization sistemi | [x] | Translator, LocaleNegotiator, __()/trans_choice(), 8 dil grubu, bin/check-translations.php |
 | 5 | MySQL bağlantısı | [ ] | |
 | 6 | Migration sistemi | [ ] | |
 | 7 | Core PHP architecture | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 4: Localization sistemi (Translator, __(), TR/EN dosyaları, eksik anahtar kontrolü).
+Aşama 5: MySQL bağlantısı (Database sınıfı, PDO ayarları, yerel veritabanı oluşturma).
 
 ## Aşama notları
 

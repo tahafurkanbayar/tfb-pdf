@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Upload files',
+    'drop_here' => 'Drag and drop files here',
+    'or' => 'or',
+    'browse' => 'Choose files',
+    'add_more' => 'Add files',
+    'allowed_types' => 'Allowed types: :types',
+    'max_size' => 'Up to :size per file',
+    'uploading' => 'Uploading file...',
+    'uploading_named' => 'Uploading :name...',
+    'success' => 'File uploaded successfully.',
+    'no_file' => 'Please choose a file.',
+    'invalid_file' => 'This file is invalid or not supported.',
+    'unsupported_type' => 'This file type is not supported. Allowed types: :types',
+    'file_too_large' => 'The file is too large. The maximum size is :max.',
+    'empty_file' => 'The file is empty.',
+    'too_many_files' => 'You can process at most :max files at once.',
+    'too_many_pages' => 'The document has too many pages. At most :max pages are supported.',
+    'invalid_pdf' => 'The file is not a valid PDF or it is damaged.',
+    'encrypted_pdf' => 'Password-protected PDFs are not supported yet. Please remove the password first.',
+    'partial' => 'The upload was interrupted. Please try again.',
+    'quota_exceeded' => 'Your storage is full. Delete older documents to upload new files.',
+    'server_limit' => 'The file exceeds the upload size allowed by the server.',
+];

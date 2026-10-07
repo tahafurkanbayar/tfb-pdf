@@ -81,3 +81,11 @@ yetki + girdi doğrulama → rate limit → operation kaydı (processing)
 → TRANSACTION { version numarası (satır kilidi) → dosyayı versions/'a taşı → version kaydı → operation completed → audit event }
 → hata olursa: rollback + taşınan dosyayı sil + operation failed + audit event (failed)
 ```
+
+## Çoklu dil (i18n)
+
+- Dosyalar: `resources/lang/{tr,en}/{grup}.php` → iç içe dizi. Anahtar: `grup.anahtar[.alt]` (ör. `upload.success`).
+- Kullanım: `__('upload.file_too_large', ['max' => '25 MB'])`, çoğul: `trans_choice('common.page_count', $n)` (`"tekil|çoğul"`, Türkçede tek biçim).
+- Eksik anahtar: önce Türkçe yedeğe, sonra anahtarın kendisine düşer; istek içinde `missingKeys()` ile raporlanır.
+- Dil seçimi (`LocaleNegotiator`): URL öneki → `tfb_locale` cookie → `Accept-Language` → `tr`.
+- Kontrol: `php bin/check-translations.php` (ve `TranslationCompletenessTest`): iki dilde anahtar eşitliği, boş değer, `:yer_tutucu` uyumu, kodda kullanılan ama tanımsız anahtarlar. PHP'de ilk bölümü bir dil grubu olan tüm string sabitleri, JS'de `t('...')` çağrıları taranır.

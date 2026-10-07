@@ -50,3 +50,11 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 |---|---|
 | `php vendor/bin/phpunit` | OK (13 tests, 27 assertions) — EnvTest, SizeTest |
 | `php -r 'echo bin2hex(random_bytes(32));'` (APP_KEY) ve 16 bayt (INSTALL_KEY) → `sed ... .env.example > .env` | Yerel `.env` oluşturuldu (APP_ENV=local, DB tfb_pdf / root); `git check-ignore .env` ile ignore edildiği doğrulandı |
+| `git add -A; git commit; git push` | 2eec75c — Aşama 3 |
+
+## Aşama 4 — Localization
+
+| Komut | Sonuç |
+|---|---|
+| `php vendor/bin/phpunit` | OK (34 tests, 100 assertions) |
+| `php bin/check-translations.php` | tr: 127, en: 127 anahtar — "OK: çeviriler eksiksiz.", exit 0 |
