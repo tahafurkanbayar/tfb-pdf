@@ -1,0 +1,49 @@
+# tfb-pdf — public/.htaccess (front controller)
+
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+# PDF.js ES module dosyaları için doğru MIME tipi (bazı sunucularda tanımlı değil)
+<IfModule mod_mime.c>
+    AddType application/javascript .js .mjs
+    AddType application/wasm .wasm
+</IfModule>
+
+# Gizli dosyalar
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^\.well-known/ - [L]
+
+    # HTTPS yönlendirmesi: sertifika kurulduktan sonra açın.
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Var olan statik dosyalar doğrudan sunulur, geri kalan her şey index.php'ye gider
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L,QSA]
+</IfModule>
+
+# Statik dosyalar için tarayıcı önbelleği
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType font/woff2 "access plus 30 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>

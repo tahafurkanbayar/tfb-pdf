@@ -7,7 +7,7 @@ Son güncelleme: 2026-10-07
 | # | Aşama | Durum | Not |
 |---|---|---|---|
 | 0 | Repo, dokümantasyon iskeleti, GitHub | [x] | docs/, CLAUDE.md, LICENSE (MIT), .gitignore |
-| 1 | Proje yapısı | [ ] | |
+| 1 | Proje yapısı | [x] | Dizinler, kök + public .htaccess, private dizinlerde deny-all, front controller |
 | 2 | Composer | [ ] | |
 | 3 | Configuration | [ ] | |
 | 4 | Localization sistemi | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 1: proje yapısı (dizinler, `.htaccess` dosyaları, front controller iskeleti).
+Aşama 2: Composer (composer.phar, FPDI/FPDF, PHPUnit).
 
 ## Aşama notları
 

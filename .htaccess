@@ -1,0 +1,38 @@
+# tfb-pdf — proje kökü .htaccess
+#
+# ÖNERİLEN kurulum: alan adının document root'u doğrudan public/ dizinini gösterir.
+# Bu dosya yalnızca proje kökünün web root olduğu durumlar için (ör. tüm dosyalar
+# public_html içine yüklendiyse veya XAMPP'de http://localhost/tfb-pdf/) güvenlik ağıdır:
+# her isteği public/ altına yönlendirir, böylece storage/, src/, .env gibi
+# dosyalara doğrudan erişilemez.
+#
+# Recommended: point the document root to public/. This file is a safety net for
+# setups where the project root itself is web-accessible.
+
+Options -Indexes
+
+# Hassas dosyalar (mod_rewrite olmasa bile)
+<FilesMatch "(^\.|\.(env|ini|log|sql|md|lock|json|xml|dist|sh|bat|phar)$|^composer\.)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # cPanel AutoSSL / Let's Encrypt doğrulaması
+    RewriteRule ^\.well-known/ - [L]
+
+    # HTTPS yönlendirmesi: sertifika kurulduktan sonra aşağıdaki iki satırın başındaki # işaretini kaldırın.
+    # Uygulama ayrıca .env içindeki FORCE_HTTPS=true ile PHP tarafında da yönlendirebilir.
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Her şeyi public/ altına yönlendir
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
