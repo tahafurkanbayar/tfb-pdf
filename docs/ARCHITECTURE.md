@@ -89,3 +89,20 @@ yetki + girdi doğrulama → rate limit → operation kaydı (processing)
 - Eksik anahtar: önce Türkçe yedeğe, sonra anahtarın kendisine düşer; istek içinde `missingKeys()` ile raporlanır.
 - Dil seçimi (`LocaleNegotiator`): URL öneki → `tfb_locale` cookie → `Accept-Language` → `tr`.
 - Kontrol: `php bin/check-translations.php` (ve `TranslationCompletenessTest`): iki dilde anahtar eşitliği, boş değer, `:yer_tutucu` uyumu, kodda kullanılan ama tanımsız anahtarlar. PHP'de ilk bölümü bir dil grubu olan tüm string sabitleri, JS'de `t('...')` çağrıları taranır.
+
+## Çekirdek (Aşama 7)
+
+| Bileşen | Dosya | Not |
+|---|---|---|
+| Önyükleme | `bootstrap/app.php`, `bootstrap/services.php` | Env → Config → Container; servisler açıkça tanımlı, autowiring yok |
+| Uygulama | `src/Core/Application.php` | `handle(Request): Response` (testlerde web sunucusuz çalışır), `runHttp()`, istek sonrası görevler (`after_response`) |
+| HTTP | `src/Http/{Request,Response,FileResponse,UploadedFile,Router}.php` | FileResponse: streaming + tek aralıklı Range, `Content-Disposition` RFC 6266 |
+| Middleware | `ForceHttps` → `ResolveLocale` → `VerifyCsrfToken` → controller | Güvenlik başlıkları ve owner cookie hata yanıtları dahil `Application::finalize` içinde |
+| Oturum / CSRF | `src/Core/{Session,Csrf}.php` | strict mode, HttpOnly, SameSite=Lax, `storage/sessions`; token + Origin kontrolü |
+| Sahiplik | `src/Security/{OwnerContext,Hmac}.php` | `tfb_owner` cookie, DB'de HMAC |
+| View | `src/Core/View.php`, `resources/views` | düz PHP, `extend/section/partial`, `icon()` (SVG sprite) |
+| Hata | `src/Core/ErrorHandler.php`, `src/Exceptions/*` | kategori → HTTP kodu + çevrilmiş mesaj + hata kodu; ayrıntı yalnızca log'da |
+| Log | `src/Core/Logger.php` | JSON satır, request id, hassas anahtarlar maskelenir, argümansız stack trace |
+
+Controller kuralı: `[Sınıf, 'metod']`, imza `metod(Request $request, array $params): Response`.
+Frontend: `public/assets/js/app.js` (ES module: `t()`, `api()`, `toast()`), sayfa verisi `<script type="application/json" id="tfb-config">` ile (inline script yok, CSP `script-src 'self'`).

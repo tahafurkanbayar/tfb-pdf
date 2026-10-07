@@ -13,7 +13,7 @@ Son güncelleme: 2026-10-07
 | 4 | Localization sistemi | [x] | Translator, LocaleNegotiator, __()/trans_choice(), 8 dil grubu, bin/check-translations.php |
 | 5 | MySQL bağlantısı | [x] | Database (PDO, strict+UTC oturum, transaction), hata kategorileri, entegrasyon testleri |
 | 6 | Migration sistemi | [x] | 8 migration (tüm tablolar), Migrator (checksum, GET_LOCK), bin/migrate.php, schema.sql |
-| 7 | Core PHP architecture | [ ] | |
+| 7 | Core PHP architecture | [x] | Request/Response/Router, middleware, Session/CSRF, OwnerContext, View+layout, ErrorHandler, Logger, Bootstrap 5.3.8 + ikonlar |
 | 8 | Storage sistemi | [ ] | |
 | 9 | Upload validation | [ ] | |
 | 10 | Document management | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 7: Core PHP architecture (Request, Response, Router, Container, Session, CSRF, View, Logger, ErrorHandler, bootstrap).
+Aşama 8: Storage sistemi (StorageService: güvenli yol çözümleme, rastgele kimlikler, atomik yazma, storage dizinleri). Kullanıcı mola verdi; devam komutunu bekle.
 
 ## Aşama notları
 

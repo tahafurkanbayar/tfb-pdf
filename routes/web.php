@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Core\Config;
+use App\Core\Container;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Router;
+
+/*
+ * Sayfa rotaları. Herkese açık sayfalar dil önekli: /tr/..., /en/...
+ */
+return static function (Router $router, Container $c): void {
+    $locales = implode('|', array_keys($c->get(Config::class)->get('i18n.locales')));
+    $l = '/{locale:' . $locales . '}';
+
+    $router->get('/', [HomeController::class, 'root']);
+    $router->get('/language/{target:' . $locales . '}', [LanguageController::class, 'switch']);
+
+    $router->get($l, [HomeController::class, 'index']);
+    $router->get($l . '/about', [HomeController::class, 'about']);
+    $router->get($l . '/privacy', [HomeController::class, 'privacy']);
+};

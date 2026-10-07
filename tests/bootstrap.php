@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+define('TFB_TESTING', true);
+
 if (!defined('APP_ROOT')) {
     define('APP_ROOT', dirname(__DIR__));
 }

@@ -1,0 +1,114 @@
+/* tfb-pdf — uygulama stilleri (Bootstrap 5 üzerine). Inline style kullanılmaz (CSP). */
+
+:root {
+    --tfb-brand: #d63a2f;
+    --tfb-brand-dark: #b02c23;
+    --tfb-brand-soft: #fdecea;
+    --tfb-radius: 0.9rem;
+    --bs-primary: var(--tfb-brand);
+    --bs-primary-rgb: 214, 58, 47;
+    --bs-link-color: var(--tfb-brand-dark);
+    --bs-link-color-rgb: 176, 44, 35;
+    --bs-link-hover-color: #8c231c;
+    --bs-body-bg: #f7f7f9;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--tfb-brand);
+    --bs-btn-border-color: var(--tfb-brand);
+    --bs-btn-hover-bg: var(--tfb-brand-dark);
+    --bs-btn-hover-border-color: var(--tfb-brand-dark);
+    --bs-btn-active-bg: var(--tfb-brand-dark);
+    --bs-btn-active-border-color: var(--tfb-brand-dark);
+    --bs-btn-disabled-bg: var(--tfb-brand);
+    --bs-btn-disabled-border-color: var(--tfb-brand);
+}
+
+.bi {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    vertical-align: -0.125em;
+}
+
+/* Klavye ile gezinme: görünür odak */
+:focus-visible {
+    outline: 3px solid rgba(var(--bs-primary-rgb), 0.55);
+    outline-offset: 2px;
+}
+
+.skip-link {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 2000;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border-radius: 0.5rem;
+}
+
+main:focus {
+    outline: none;
+}
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.55rem;
+    background: var(--tfb-brand);
+    color: #fff;
+}
+
+.hero {
+    background: linear-gradient(180deg, var(--tfb-brand-soft) 0%, var(--bs-body-bg) 100%);
+}
+
+.hero-lead {
+    max-width: 42rem;
+}
+
+.page-narrow {
+    max-width: 52rem;
+}
+
+.card {
+    border-radius: var(--tfb-radius);
+    border-color: rgba(0, 0, 0, 0.07);
+}
+
+.tool-card {
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.tool-card:hover,
+.tool-card:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.08);
+    border-color: rgba(var(--bs-primary-rgb), 0.35);
+}
+
+.tool-card-disabled {
+    opacity: 0.65;
+}
+
+.tool-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    background: var(--tfb-brand-soft);
+    color: var(--tfb-brand-dark);
+    font-size: 1.3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tool-card {
+        transition: none;
+    }
+}

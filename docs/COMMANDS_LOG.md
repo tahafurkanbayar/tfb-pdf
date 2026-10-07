@@ -82,3 +82,17 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php bin/migrate.php` (tekrar) | "Bekleyen migration yok" |
 | `php bin/migrate.php status` | 8/8 [x] |
 | `php bin/migrate.php bogus` | "Bilinmeyen komut", exit 2 |
+| `git add -A; git commit; git push` | 74108aa — Aşama 6 |
+
+## Aşama 7 — Core PHP architecture
+
+| Komut | Sonuç |
+|---|---|
+| `curl https://registry.npmjs.org/bootstrap/latest`, `.../pdfjs-dist/latest` | bootstrap 5.3.8, pdfjs-dist 6.4.299 |
+| `curl -o bootstrap.tgz ...bootstrap-5.3.8.tgz; openssl dgst -sha512` + `tar -xzf` + `cp` | Integrity npm kaydıyla eşleşti; `public/assets/vendor/bootstrap/` (min.css, bundle.min.js, LICENSE) |
+| `curl bootstrap-icons 1.13.1 tgz; openssl dgst -sha512; tar -xzf` | Integrity eşleşti |
+| `php scratchpad/build-sprite.php ... ` | 40 ikonluk `public/assets/img/icons.svg` |
+| `php composer.phar dump-autoload` + `php vendor/bin/phpunit` | **2 failure + 1 error**: Router `{32}` kısıt ayrıştırma hatası, Content-Disposition Türkçe karakter, app.js yorumunda tanımsız çeviri anahtarı |
+| `php vendor/bin/phpunit --filter RouterTest` | Hata ayrıntısı incelendi |
+| `php vendor/bin/phpunit` (düzeltmeler sonrası) | OK (84 tests, 251 assertions) |
+| `curl` ile Apache smoke test (13 yol) | `/`→302 `/en/` (Accept-Language en); `/tr/`, `/en/about`, `/tr/privacy` 200; `/tr/yok` 404; `/.env`, `/storage/logs/`, `/src/helpers.php`, `/composer.json`, `/database/schema.sql` 403; `/vendor/autoload.php` 404; CSP, X-Frame-Options, HttpOnly session cookie mevcut |
