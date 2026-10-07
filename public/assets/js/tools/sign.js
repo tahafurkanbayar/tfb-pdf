@@ -38,14 +38,19 @@ function addSigner() {
     }
     const id = nextId++;
     const row = document.createElement('div');
-    row.className = 'row g-2 align-items-end mb-2 signer-row';
+    row.className = 'signer-row mb-3 ps-3';
     row.dataset.color = String(signers.length % 5);
     row.innerHTML = `
-        <div class="col-auto"><input class="form-check-input mt-0" type="radio" name="active-signer" value="${id}" aria-label=""></div>
-        <div class="col-sm-5"><label class="form-label small" for="signer-name-${id}"></label><input class="form-control form-control-sm" id="signer-name-${id}" data-name maxlength="150"></div>
-        <div class="col-sm-4"><label class="form-label small" for="signer-email-${id}"></label><input class="form-control form-control-sm" type="email" id="signer-email-${id}" data-email maxlength="254"></div>
-        <div class="col-auto" data-remove-slot></div>`;
-    row.querySelector('input[type="radio"]').setAttribute('aria-label', t('signature.active_signer'));
+        <div class="form-check mb-1">
+            <input class="form-check-input" type="radio" name="active-signer" value="${id}" id="signer-active-${id}">
+            <label class="form-check-label small" for="signer-active-${id}"></label>
+        </div>
+        <div class="row g-2 align-items-end">
+            <div class="col-sm-5"><label class="form-label small" for="signer-name-${id}"></label><input class="form-control form-control-sm" id="signer-name-${id}" data-name maxlength="150"></div>
+            <div class="col col-sm-5"><label class="form-label small" for="signer-email-${id}"></label><input class="form-control form-control-sm" type="email" id="signer-email-${id}" data-email maxlength="254"></div>
+            <div class="col-auto" data-remove-slot></div>
+        </div>`;
+    row.querySelector(`label[for="signer-active-${id}"]`).textContent = t('signature.active_signer');
     row.querySelector(`label[for="signer-name-${id}"]`).textContent = t('signature.signer_name');
     row.querySelector(`label[for="signer-email-${id}"]`).textContent = t('signature.signer_email');
     const remove = iconButton('trash', t('signature.remove_signer'), 'btn btn-sm btn-outline-danger');

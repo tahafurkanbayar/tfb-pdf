@@ -34,7 +34,7 @@ Son güncelleme: 2026-10-07
 | 25 | Export | [x] | Belge ve tüm veriler ZIP: dosyalar, sürümler, metadata, işlem geçmişi, audit (silinmişler dahil), SHA-256 manifest; zip yoksa açık mesaj |
 | 26 | Signature workflow | [x] | Alanlar, imzalayanlar, davet (SMTP opsiyonel), consent kaydı, çizim/yazılı imza, ret/iptal/süre, final PDF + sertifika + SHA-256, audit; nitelikli e-imza değil |
 | 27 | Security hardening | [x] | Rate limiting (DB, HMAC'li), yapılandırma koruması, post_max_size tespiti, erken hata sayfası düzeltmesi, güvenlik testleri + Apache erişim kontrolleri |
-| 28 | Responsive UI | [ ] | |
+| 28 | Responsive UI | [x] | 320/390/820 px ve masaüstünde 15 sayfa yatay taşmasız; `[hidden]` ile Bootstrap `.d-flex` çakışması, mobil menü kenar boşluğu, yığılan kart boşluğu, etiketsiz imzalayan seçimi düzeltildi; küçük resimler, imzalayan önizlemesi ve temel erişilebilirlik taraması gerçek Chrome'da doğrulandı |
 | 29 | Türkçe/İngilizce UI kontrolü | [ ] | |
 | 30 | Tests | [ ] | |
 | 31 | cPanel deployment | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 28: Responsive UI (mobil/tablet gözden geçirme, gerçek tarayıcıda ekran görüntüleri ile kontrol, erişilebilirlik).
+Aşama 29: Türkçe/İngilizce UI kontrolü (her iki dilde tüm sayfaların gerçek tarayıcıda gözden geçirilmesi, JS mesajları, tarih/sayı biçimleri, dil değiştirme akışı).
 
 ## Aşama notları
 

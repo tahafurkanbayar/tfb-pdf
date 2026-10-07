@@ -13,6 +13,11 @@
     --bs-body-bg: #f7f7f9;
 }
 
+/* `hidden` özniteliği Bootstrap görünüm yardımcılarından (.d-flex vb. !important) her zaman üstün olmalı */
+[hidden] {
+    display: none !important;
+}
+
 .btn-primary {
     --bs-btn-bg: var(--tfb-brand);
     --bs-btn-border-color: var(--tfb-brand);

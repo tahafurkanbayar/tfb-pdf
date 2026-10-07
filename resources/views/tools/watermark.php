@@ -15,8 +15,8 @@ $view->section('scripts', '<script type="module" src="' . e($url->asset('js/tool
     <?= $view->partial('partials/tool-header', ['tool' => $tool]) ?>
 
     <div class="row g-4">
-        <div class="col-lg-7">
-            <section class="card mb-4" aria-labelledby="source-heading">
+        <div class="col-lg-7 d-flex flex-column gap-4">
+            <section class="card" aria-labelledby="source-heading">
                 <div class="card-body">
                     <h2 id="source-heading" class="h5"><?= e(__('tools.ui.source_heading')) ?></h2>
                     <?= $view->partial('partials/source-picker', ['preselected' => $preselected, 'inputId' => 'watermark-file']) ?>

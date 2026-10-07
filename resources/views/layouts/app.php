@@ -45,37 +45,39 @@ $jsConfig = [
 <a class="visually-hidden-focusable skip-link" href="#main"><?= e(__('common.skip_to_content')) ?></a>
 
 <header class="site-header border-bottom bg-body">
-    <nav class="navbar navbar-expand-lg container" aria-label="<?= e(__('nav.main')) ?>">
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="<?= e($url->page('/')) ?>">
-            <span class="brand-mark" aria-hidden="true"><?= $view->icon('file-earmark-pdf') ?></span>
-            <span><?= e($appName) ?></span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
-                aria-controls="main-nav" aria-expanded="false" aria-label="<?= e(__('nav.toggle_menu')) ?>">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="main-nav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/')) ?>#tools"><?= e(__('nav.tools')) ?></a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/documents')) ?>"><?= e(__('nav.documents')) ?></a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/about')) ?>"><?= e(__('nav.about')) ?></a></li>
-            </ul>
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false" aria-label="<?= e(__('language.switch')) ?>">
-                    <?= $view->icon('translate') ?>
-                    <span><?= e($locales[$locale]) ?></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <?php foreach ($locales as $code => $label): ?>
-                        <li>
-                            <a class="dropdown-item<?= $code === $locale ? ' active' : '' ?>" lang="<?= e($code) ?>"
-                               hreflang="<?= e($code) ?>"
-                               <?= $code === $locale ? 'aria-current="true"' : '' ?>
-                               href="<?= e($url->to('/language/' . $code, ['return' => $currentPath])) ?>"><?= e($label) ?></a>
-                        </li>
-                    <?php endforeach; ?>
+    <nav class="navbar navbar-expand-lg" aria-label="<?= e(__('nav.main')) ?>">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="<?= e($url->page('/')) ?>">
+                <span class="brand-mark" aria-hidden="true"><?= $view->icon('file-earmark-pdf') ?></span>
+                <span><?= e($appName) ?></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
+                    aria-controls="main-nav" aria-expanded="false" aria-label="<?= e(__('nav.toggle_menu')) ?>">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="main-nav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/')) ?>#tools"><?= e(__('nav.tools')) ?></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/documents')) ?>"><?= e(__('nav.documents')) ?></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/about')) ?>"><?= e(__('nav.about')) ?></a></li>
                 </ul>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" aria-label="<?= e(__('language.switch')) ?>">
+                        <?= $view->icon('translate') ?>
+                        <span><?= e($locales[$locale]) ?></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <?php foreach ($locales as $code => $label): ?>
+                            <li>
+                                <a class="dropdown-item<?= $code === $locale ? ' active' : '' ?>" lang="<?= e($code) ?>"
+                                   hreflang="<?= e($code) ?>"
+                                   <?= $code === $locale ? 'aria-current="true"' : '' ?>
+                                   href="<?= e($url->to('/language/' . $code, ['return' => $currentPath])) ?>"><?= e($label) ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>

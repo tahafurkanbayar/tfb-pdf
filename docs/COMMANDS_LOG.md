@@ -335,3 +335,26 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit --filter SecurityHardeningTest` | OK (5 tests, 31 assertions) |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (253 tests, 1052 assertions, 3 skipped); çeviriler eksiksiz |
 | curl (Apache): 16 yol, başlıklar, CSRF'siz POST, DELETE | .env/.env.example/storage/src/config/database/composer.lock/docs/bin/cron/tests/resources/.git → 403; CSP, X-Frame-Options, nosniff, Referrer/Permissions/COOP başlıkları; CSRF'siz POST 403 (çevrilmiş mesaj) |
+| `git add -A; git commit; git push` | 9ffc2e4 — Aşama 27 |
+
+## Aşama 28 — Responsive UI
+
+| Komut | Sonuç |
+|---|---|
+| headless Chrome `--window-size=390/1366 --screenshot` (6 sayfa × 2) | Masaüstü sorunsuz; mobil görüntüler sağdan kesik → headless pencerenin en küçük genişliği (~500 px) yüzünden, uygulama hatası değil |
+| geçici `__smoke.html` (iframe `src`) | Rapor gelmedi: uygulama sayfaları `frame-ancestors 'none'` ile çerçevelenemiyor (beklenen güvenlik davranışı); ilk denemede yanlış URL (`/public/assets`) |
+| geçici `__smoke.html` (fetch + iframe `srcdoc`) 320/390/820 px × 15 sayfa | 45/45 yatay taşma yok |
+| `php -r` örnek PDF (Fpdi doğrudan / APP_ROOT'suz TestPdf) | 3 başarısız deneme (FPDF sınıfı yok, APP_ROOT tanımsız, helvetica tanımı yok); `define("APP_ROOT") + TestPdf::create` ile oluşturuldu |
+| geçici `__shots.html` yan yana 390 px ekran görüntüleri (m1–m6) | Bulunanlar: `hidden` + `.d-flex` çakışması (seçili dosya satırı her zaman görünüyordu), mobil menü kenara yapışık, kaynak/ayar kartları arasında çift boşluk, imzalayan radyosunun görünür etiketi yok. Türkçe dosya adı bozuk göründü → test sayfasında `charset` yoktu; düzeltilince ad doğru kaydedildi (uygulama hatası değil) |
+| `mysql -e "SELECT original_name, HEX(...)"` | Bozuk ad test sayfasından geldiği doğrulandı |
+| düzeltmeler + aynı ekran görüntüleri | Dört sorun giderildi |
+| küçük resim ölçümü (`--virtual-time-budget`, srcdoc) | 0/3: PDF hiç indirilmedi → ölçüm yapaylığı (sanal zaman + `about:srcdoc` adresi) |
+| bağımsız modül testi (`ThumbnailSource` → `openPdf` → blob) | Çalışıyor (~400 ms) |
+| popup ile ölçüm | İlk denemede rapor yok: COOP `same-origin` popup erişimini kesiyor; test sayfasına geçici `.htaccess` ile aynı COOP verildi |
+| popup: split/reorder/rotate/redact/sign/watermark/compress | Küçük resimler 155×220 çiziliyor (ekran dışındakiler tembel, kaydırınca 3/3); tüm sayfalar 375/375 taşmasız |
+| popup erişilebilirlik taraması (15 sayfa: etiket, erişilebilir ad, tekrarlı id, başlık atlama, tek h1, alt) | 15/15 temiz |
+| imza talebi (POST /api/signatures) + imzalayan sayfası popup | 201; 375/375 taşmasız, 3 sayfa canvas (351 px), 1 alan vurgusu; `--timeout` ekran görüntüsü önizlemeden önce alınmıştı |
+| `--timeout` masaüstü ekran görüntüsü (navbar) | İçerikle hizalı |
+| geçici dosyaların silinmesi (`__smoke.html`, `__shots.html`, `__s.pdf`, `assets/.htaccess`, Chrome profilleri) | Silindi; `git status` yalnızca 5 kaynak dosyası |
+| `php bin/check-translations.php` | OK (579 anahtar) |
+| `php vendor/bin/phpunit` | OK (253 tests, 1052 assertions, 3 skipped — zip) |
