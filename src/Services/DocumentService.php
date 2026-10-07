@@ -170,6 +170,29 @@ final class DocumentService
     }
 
     /**
+     * Bütünlük doğrulaması: her sürümün SHA-256'sı diskten yeniden hesaplanır ve kayıtla karşılaştırılır.
+     * Özet yalnızca dosyanın kaydedildiğinden beri değişip değişmediğini gösterir; hukuki doğrulama değildir.
+     *
+     * @return list<array{version: int, expected: string, actual: ?string, status: string}> status: ok | mismatch | missing
+     */
+    public function verifyIntegrity(Document $document): array
+    {
+        $results = [];
+        foreach ($this->versions($document) as $version) {
+            $path = $this->storage->resolve($version->storagePath);
+            $actual = is_file($path) ? $this->hash->file($path) : null;
+            $results[] = [
+                'version' => $version->versionNumber,
+                'expected' => $version->sha256,
+                'actual' => $actual,
+                'status' => $actual === null ? 'missing' : (hash_equals($version->sha256, $actual) ? 'ok' : 'mismatch'),
+            ];
+        }
+
+        return $results;
+    }
+
+    /**
      * Sürümlerin kökeni: her sürüm hangi sürüm(ler)den hangi işlemle üretildi.
      *
      * @param list<DocumentVersion> $versions

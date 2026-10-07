@@ -28,7 +28,7 @@ Son güncelleme: 2026-10-07
 | 19 | OCR capability detection | [x] | Tesseract + Ghostscript/pdftoppm tespiti; varsa 300 DPI OCR (dil kesişimi, sayfa PDF'lerini birleştirme); yoksa açık mesaj ve 503; araç yokken uygulamanın çalıştığı test edildi |
 | 20 | Office conversion capability detection | [x] | LibreOffice headless (ayrı profil, kabuksuz, zaman aşımı); orijinal Office dosyası sürüm 0, PDF sürüm 1; yoksa yükleme 503 + açık mesaj |
 | 21 | Versioning | [x] | Sıralı, değiştirilemez sürümler; köken (kaynak sürüm) gösterimi; araçlarla belirli sürüm seçimi; DB tekillik ve üzerine yazma reddi testleri |
-| 22 | Hashing | [ ] | |
+| 22 | Hashing | [x] | Sunucuda tüm sürümlerin bütünlük doğrulaması (ok/mismatch/missing), tarayıcıda yerel dosya karşılaştırma (WebCrypto, PHP ile birebir) |
 | 23 | Audit logging | [ ] | |
 | 24 | Expiration | [ ] | |
 | 25 | Export | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 22: Hashing (bütünlük doğrulama: sunucuda tüm sürümleri yeniden hesaplama + tarayıcıda yerel dosyayı sürümlerle karşılaştırma).
+Aşama 23: Audit logging (audit zinciri doğrulama CLI, olay kapsamı kontrolü, hassas veri olmadığının testi).
 
 ## Aşama notları
 

@@ -14,7 +14,7 @@
 $view->extend('layouts/app');
 $view->section('title', $document->originalName);
 $view->section('robots', 'noindex');
-$view->section('i18n', 'preview');
+$view->section('i18n', 'preview,hash');
 $view->section('scripts', '<script type="module" src="' . e($url->asset('js/pages/document.js')) . '"></script>');
 
 $latest = $versions === [] ? null : $versions[array_key_last($versions)];
@@ -131,6 +131,30 @@ $pdfVersions = array_values(array_filter($versions, static fn (App\Domain\Docume
                     <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
+            <p class="small text-body-secondary mt-3 mb-0"><?= e(__('notices.hash')) ?></p>
+        </div>
+    </section>
+
+    <section class="card mb-4" aria-labelledby="integrity-heading" data-integrity
+             data-hashes="<?= e((string) json_encode(array_map(static fn (App\Domain\DocumentVersion $v): array => [
+                 'label' => $v->isOriginal() ? __('documents.original') : __('documents.version_n', ['number' => $v->versionNumber]),
+                 'sha256' => $v->sha256,
+             ], $versions), JSON_UNESCAPED_UNICODE)) ?>">
+        <div class="card-body">
+            <h2 id="integrity-heading" class="h5"><?= $view->icon('shield-check') ?> <?= e(__('hash.title')) ?></h2>
+            <p class="small text-body-secondary"><?= e(__('hash.intro')) ?></p>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-primary" data-verify><?= e(__('hash.verify_server')) ?></button>
+                    <div class="small mt-2" data-verify-result role="status" aria-live="polite"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small" for="compare-file"><?= e(__('hash.compare_local')) ?></label>
+                    <input class="form-control form-control-sm" type="file" id="compare-file" data-compare aria-describedby="compare-help">
+                    <div class="form-text" id="compare-help"><?= e(__('hash.compare_help')) ?></div>
+                    <div class="small mt-2" data-compare-result role="status" aria-live="polite"></div>
+                </div>
             </div>
             <p class="small text-body-secondary mt-3 mb-0"><?= e(__('notices.hash')) ?></p>
         </div>

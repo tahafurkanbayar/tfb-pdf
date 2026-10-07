@@ -141,8 +141,9 @@ final class TranslationChecker
                 }
 
                 $source = (string) file_get_contents($file->getPathname());
+                // Noktayla biten dinamik önekler ('hash.status.' + durum) anahtar sayılmaz
                 $pattern = $ext === 'js'
-                    ? '/\bt\(\s*[\'"]([a-z_]+\.[a-z0-9_.]+)[\'"]/'
+                    ? '/\bt\(\s*[\'"]([a-z_]+(?:\.[a-z0-9_]+)+)[\'"]/'
                     : '/[\'"]([a-z_]+\.[a-z0-9_]+(?:\.[a-z0-9_]+)*)[\'"]/';
 
                 if (!preg_match_all($pattern, $source, $matches)) {

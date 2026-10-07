@@ -20,6 +20,7 @@ return static function (Router $router, Container $c): void {
     $router->get($doc, [DocumentApiController::class, 'show']);
     $router->delete($doc, [DocumentApiController::class, 'destroy']);
     $router->put($doc . '/expiry', [DocumentApiController::class, 'expiry']);
+    $router->get($doc . '/verify', [DocumentApiController::class, 'verify']);
     $router->get($doc . '/versions/{number:\d{1,6}}/download', [DocumentApiController::class, 'download']);
 
     $router->post('/api/operations/merge', [OperationApiController::class, 'merge']);

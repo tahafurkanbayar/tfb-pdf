@@ -93,3 +93,55 @@ if (previewSection) {
     select.addEventListener('change', () => load(Number(select.value)));
     load(Number(select.value));
 }
+
+// Bütünlük: sunucuda yeniden hesaplama ve tarayıcıda yerel dosya karşılaştırma (dosya gönderilmez)
+const integrity = document.querySelector('[data-integrity]');
+if (integrity) {
+    const verifyButton = integrity.querySelector('[data-verify]');
+    const verifyResult = integrity.querySelector('[data-verify-result]');
+    verifyButton.addEventListener('click', async () => {
+        verifyButton.disabled = true;
+        verifyResult.textContent = t('hash.verifying');
+        const result = await api('/documents/' + documentId + '/verify');
+        verifyButton.disabled = false;
+        if (!result.ok) {
+            verifyResult.textContent = result.error.message;
+            return;
+        }
+        verifyResult.replaceChildren();
+        const summary = document.createElement('p');
+        summary.className = result.intact ? 'text-success mb-1' : 'text-danger mb-1';
+        summary.textContent = result.message;
+        verifyResult.append(summary);
+        if (!result.intact) {
+            const list = document.createElement('ul');
+            list.className = 'mb-0';
+            for (const row of result.results.filter((r) => r.status !== 'ok')) {
+                const li = document.createElement('li');
+                li.textContent = 'v' + String(row.version).padStart(3, '0') + ': ' + t('hash.status.' + row.status);
+                list.append(li);
+            }
+            verifyResult.append(list);
+        }
+    });
+
+    const hashes = JSON.parse(integrity.dataset.hashes || '[]');
+    const compareInput = integrity.querySelector('[data-compare]');
+    const compareResult = integrity.querySelector('[data-compare-result]');
+    compareInput.addEventListener('change', async () => {
+        const file = compareInput.files?.[0];
+        if (!file) {
+            return;
+        }
+        if (!window.crypto?.subtle) {
+            compareResult.textContent = t('hash.compare_unsupported');
+            return;
+        }
+        compareResult.textContent = t('hash.computing');
+        const digest = await window.crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+        const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+        const match = hashes.find((h) => h.sha256 === hex);
+        compareResult.className = 'small mt-2 ' + (match ? 'text-success' : 'text-body-secondary');
+        compareResult.textContent = match ? t('hash.compare_match', { version: match.label }) : t('hash.compare_no_match', { hash: hex });
+    });
+}

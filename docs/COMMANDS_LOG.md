@@ -265,3 +265,14 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -r` (`?version=` desteği, köken gösterimi, sürüm başına araç menüsü, çeviriler) + `php -l` (5 dosya) | Temiz |
 | `php vendor/bin/phpunit --filter VersioningTest` | OK (3 tests, 16 assertions) |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (230 tests, 837 assertions, 1 skipped); çeviriler eksiksiz |
+| `git add -A; git commit; git push` | d1a8d45 — Aşama 21 |
+
+## Aşama 22 — Hashing
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (verify API + route) + `php -l` | Temiz |
+| `php -r` (belge sayfasına bütünlük kartı, preg_replace) | **Eklenmedi**: kabukta `$pdfVersions` değişken olarak yorumlandı → Edit ile eklendi |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | 1 failure: kontrolcü dinamik `'hash.status.' + durum` önekini anahtar sandı → JS deseni noktayla biten önekleri yok sayacak şekilde düzeltildi |
+| aynı komutlar | OK (231 tests, 841 assertions, 1 skipped); çeviriler eksiksiz |
+| headless Chrome WebCrypto SHA-256 vs `php hash_file` | Birebir aynı (bf94d11a…a9c3); localhost güvenli bağlam (isSecureContext=true) |

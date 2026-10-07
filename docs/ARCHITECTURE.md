@@ -164,3 +164,11 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - Sürüm 0 = orijinal (yalnızca yüklemede yazılır), işlemler `nextNumber()` (belge satırı `FOR UPDATE` kilidi) ile 1, 2, 3 ... alır; `(document_id, version_number)` ve `storage_path` tekil indeksli; `moveIntoPlace` mevcut dosyanın üzerine yazmaz. `no_change` işlemler numara tüketmez.
 - Köken: `operations.input_versions` → `DocumentService::versionSources()`; belge sayfasında "Kaynak: Sürüm N" ve birleştirmelerde başka belgeden gelen girdi sayısı.
 - Araçlar belirli sürümle çalışabilir: `/{l}/tools/{tool}?document=<id>&version=<n>` (verilmezse en son PDF sürümü). Belge sayfasında her PDF sürümü için araç menüsü.
+
+## SHA-256 (Aşama 22)
+
+- Her orijinal ve sürüm için yüklemede/işlemde hesaplanır (`HashService`, akışlı), `document_versions.sha256`'da ve audit olaylarında (`input_hash`, `output_hash`) saklanır.
+- İşlem girdileri işlemden önce yeniden doğrulanır (`operations.integrity_failed`).
+- `GET /api/documents/{id}/verify`: tüm sürümleri diskten yeniden hesaplar (ok / mismatch / missing).
+- Belge sayfasında yerel dosya karşılaştırma: tarayıcıda WebCrypto (dosya gönderilmez; HTTPS veya localhost gerekir).
+- Uyarı metni (`notices.hash`): özet yalnızca bütünlük/sürüm kontrolüdür, hukuki doğrulama değildir.

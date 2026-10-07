@@ -106,6 +106,22 @@ final class DocumentApiController extends Controller
     }
 
     /**
+     * GET /api/documents/{id}/verify — tüm sürümlerin SHA-256 bütünlük kontrolü (salt okunur)
+     */
+    public function verify(Request $request, array $params): Response
+    {
+        $document = $this->documents()->get($params['id'], $this->owner()->hash());
+        $results = $this->documents()->verifyIntegrity($document);
+        $allOk = array_filter($results, static fn (array $r): bool => $r['status'] !== 'ok') === [];
+
+        return $this->json([
+            'intact' => $allOk,
+            'message' => $allOk ? __('hash.verify_ok') : __('hash.verify_failed'),
+            'results' => $results,
+        ]);
+    }
+
+    /**
      * GET /api/documents/{id}/versions/{number}/download[?inline=1]
      *
      * inline=1: tarayıcı içi önizleme (PDF.js) — Range istekleri desteklenir, audit kaydı oluşturulmaz.
