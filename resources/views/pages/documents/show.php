@@ -13,12 +13,14 @@
 $view->extend('layouts/app');
 $view->section('title', $document->originalName);
 $view->section('robots', 'noindex');
+$view->section('i18n', 'preview');
 $view->section('scripts', '<script type="module" src="' . e($url->asset('js/pages/document.js')) . '"></script>');
 
 $latest = $versions === [] ? null : $versions[array_key_last($versions)];
 $hasPdf = array_filter($versions, static fn (App\Domain\DocumentVersion $v): bool => $v->isPdf()) !== [];
 $downloadUrl = static fn (App\Domain\DocumentVersion $v): string => $url->to('/api/documents/' . $document->publicId . '/versions/' . $v->versionNumber . '/download');
 $policy = $expiry['policy'] ?? 'never';
+$pdfVersions = array_values(array_filter($versions, static fn (App\Domain\DocumentVersion $v): bool => $v->isPdf()));
 ?>
 <div class="container py-4" data-document="<?= e($document->publicId) ?>">
     <nav aria-label="breadcrumb">
@@ -112,6 +114,26 @@ $policy = $expiry['policy'] ?? 'never';
         </div>
     </section>
 
+    <?php if ($pdfVersions !== []): ?>
+        <section class="card mb-4" aria-labelledby="preview-heading" data-preview>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <h2 id="preview-heading" class="h5 mb-0"><?= $view->icon('eye') ?> <?= e(__('preview.title')) ?></h2>
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="small text-body-secondary text-nowrap" for="preview-version"><?= e(__('preview.version_select')) ?></label>
+                        <select class="form-select form-select-sm" id="preview-version" data-preview-version>
+                            <?php foreach (array_reverse($pdfVersions) as $v): ?>
+                                <option value="<?= (int) $v->versionNumber ?>"><?= e($v->isOriginal() ? __('documents.original') : __('documents.version_n', ['number' => $v->versionNumber])) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="thumb-grid" data-preview-grid aria-live="polite"></div>
+                <p class="small text-body-secondary mt-3 mb-0"><?= e(__('preview.browser_note')) ?></p>
+            </div>
+        </section>
+    <?php endif; ?>
+
     <div class="row g-4">
         <section class="col-lg-5" aria-labelledby="expiry-heading">
             <div class="card h-100">
@@ -195,6 +217,8 @@ $policy = $expiry['policy'] ?? 'never';
         </div>
     </section>
 </div>
+
+<?= $view->partial('partials/page-viewer') ?>
 
 <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="delete-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

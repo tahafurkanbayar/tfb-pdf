@@ -33,6 +33,7 @@ use App\Repositories\OperationRepository;
 use App\Repositories\VersionRepository;
 use App\Services\AuditService;
 use App\Services\DocumentService;
+use App\Services\ThumbnailService;
 use App\Services\ToolCatalog;
 use App\Services\Upload\UploadValidator;
 use App\Support\DateFormatter;
@@ -158,6 +159,7 @@ return static function (Container $c, Config $config): void {
         (int) $config->get('limits.max_storage_per_owner'),
         (string) $config->get('storage.default_expiry', '7d')
     ));
+    $c->set(ThumbnailService::class, fn (Container $c) => new ThumbnailService($c->get(StorageService::class)));
     $c->set(DateFormatter::class, fn () => new DateFormatter((string) $config->get('app.timezone', 'Europe/Istanbul')));
 
     $c->set(Router::class, function () use ($c): Router {

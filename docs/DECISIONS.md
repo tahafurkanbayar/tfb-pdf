@@ -45,3 +45,9 @@ tFPDF font ölçü önbelleğini (`*.mtx.php`, çalıştırılan PHP) font dizin
 
 ## 2026-10-07 — Upload doğrulama
 Uzantı yalnızca ön eleme; asıl karar içerikten: PDF için `%PDF-` imzası (ilk 1024 bayt) + fileinfo MIME (varsa) + tam ayrıştırma + sayfa sayısı. Office için OOXML ZIP imzası + merkezi dizinde `[Content_Types].xml` ve uzantıya uygun ana bölüm (word/ xl/ ppt/), makro (`vbaProject.bin`) reddi; eski formatlarda OLE imzası + UTF-16LE akış adı. ext-zip gerekmez. Etkin boyut sınırı = min(MAX_UPLOAD_SIZE, upload_max_filesize, post_max_size).
+
+## 2026-10-07 — PDF önizleme ve küçük resim önbelleği (Aşama 11)
+- PDF.js 6.4.299 **legacy** build (`public/assets/vendor/pdfjs/`, npm integrity doğrulandı): eski tarayıcı ve mobil uyumluluğu için. cmaps, standard_fonts, wasm (openjpeg/jbig2/qcms), iccs dahil; PDF içi JavaScript çalıştırma (quickjs) dosyaları bilinçli olarak kaldırıldı.
+- CSP'ye yalnızca `'wasm-unsafe-eval'` eklendi (WebAssembly derleme; JS `eval` değil). PDF.js'in görüntü çözücüleri için gerekli.
+- Küçük resimler sunucuda üretilemeyebilir (Ghostscript/Imagick yok). Bu yüzden tarayıcıda PDF.js ile bir kez çizilir, JPEG olarak sunucuya PUT edilir; GD ile yeniden kodlanıp (meta veri / polyglot içerik atılır, en fazla 400 px, 400 KB) `storage/previews/` altına yazılır. Sonraki açılışlarda PDF yerine bu görseller gelir. GD yoksa önbellek kapalıdır, önizleme yine tarayıcıda çalışır.
+- Önizleme için PDF `?inline=1` + HTTP Range ile alınır (`disableAutoFetch`): büyük dosyada yalnızca gereken bölümler iner; bu istekler audit'e "indirme" olarak yazılmaz.

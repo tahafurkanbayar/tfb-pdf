@@ -51,7 +51,9 @@ final class Request
 
         $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
         $contentType = $headers['content-type'] ?? '';
-        $rawBody = str_contains($contentType, 'application/json') ? (string) file_get_contents('php://input', false, null, 0, 1024 * 1024) : '';
+        // JSON ve görsel gövdeleri (küçük resim önbelleği) okunur; üst sınır 1 MB
+        $readBody = str_contains($contentType, 'application/json') || str_starts_with($contentType, 'image/');
+        $rawBody = $readBody ? (string) file_get_contents('php://input', false, null, 0, 1024 * 1024) : '';
 
         return new self(
             $method,
@@ -88,6 +90,11 @@ final class Request
 
         // Sondaki / kaldırılır: "/tr/" ve "/tr" aynı rotadır
         return '/' . trim($path, '/');
+    }
+
+    public function rawBody(): string
+    {
+        return $this->rawBody;
     }
 
     public function header(string $name, ?string $default = null): ?string

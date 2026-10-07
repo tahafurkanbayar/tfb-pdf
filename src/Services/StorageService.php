@@ -245,6 +245,8 @@ final class StorageService
             if (is_dir($path)) {
                 $this->removeTree($path);
             }
+            // Boş kalan "ab" alt dizinini de kaldır (doluysa rmdir zaten başarısız olur)
+            @rmdir(dirname($path));
         }
     }
 

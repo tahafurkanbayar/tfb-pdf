@@ -132,3 +132,20 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php scratchpad/make-pdf.php` + curl smoke (ilk deneme) | Yükleme yanıtı boş: Git Bash curl `-F file=@/c/...` yolunu okuyamadı (uygulama hatası değil) |
 | curl smoke (göreli yol ile, Apache) | upload 201; indirme 200, SHA-256 eşit; Range 206 (`%PDF-1.3`); sayfa 200; owner'sız 404; storage doğrudan 403; CSRF'siz DELETE 403; DELETE 200; silme sonrası 404; audit: upload/download/delete. Not: ilk denemedeki 1 test belgesi geliştirme DB'sinde kaldı (7 günlük süreyle silinecek) |
 | `curl -sI` başlık kontrolü | `X-Content-Type-Options` çift gönderiliyordu → public/.htaccess yalnızca statik dosyalara uygulanacak şekilde düzeltildi; sonrası 1 adet |
+| `git add -A; git commit; git push` | 8a82532 — Aşama 10 |
+
+## Aşama 11 — PDF preview
+
+| Komut | Sonuç |
+|---|---|
+| `curl -o pdfjs.tgz .../pdfjs-dist-6.4.299.tgz; openssl dgst -sha512; tar -xzf` | Integrity eşleşti (AVl138z…) |
+| `cp legacy/build/pdf.min.mjs pdf.worker.min.mjs + cmaps, standard_fonts, wasm, iccs` → `public/assets/vendor/pdfjs` | 5.6 MB; quickjs-eval.* silindi |
+| `php -r gd_info()` | GD: JPEG/PNG/WebP destekli |
+| `grep api.d.ts` (PDF.js 6 parametreleri) | `canvas`, `wasmUrl`, `iccUrl`, `standardFontDataUrl`, `cMapUrl` doğrulandı; `isEvalSupported` artık yok → kaldırıldı |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (155 tests, 526 assertions); çeviriler eksiksiz (273 anahtar) |
+| `curl` PDF.js varlık MIME kontrolü | `.mjs` application/javascript, `.wasm` application/wasm, 200 |
+| headless Chrome `--dump-dom` / `--virtual-time-budget` / `--timeout` / `--screenshot` denemeleri (geçici `public/assets/__smoke.html`) | **Sonuç alınamadı**: sanal zaman worker'ı ilerletmiyor; `--screenshot` sayfa yüklenince kapanıyor (geçersiz deneme) |
+| `timeout 20 chrome --headless=new --remote-debugging-port=9333 __smoke.html` + Apache access.log | **OK**: klasik ve sıkıştırılmış PDF 3 sayfa açıldı, 90° döndürmeli çizim 200x141, iki dosyada da nonWhite=1034. Geçici dosyalar silindi; arkada Chrome süreci kalmadığı doğrulandı |
+| curl önizleme API smoke (Apache) | previews 200 (cache_enabled), PUT 201, aralık dışı sayfa 404, GET image/jpeg 200, owner'sız 404, belge sayfası 200, silme 200 |
+| `rmdir` boş shard dizinleri | Silmede boş üst dizin kalıyordu → `deleteDocumentFiles` artık boş üst dizini de kaldırıyor |
+| `php vendor/bin/phpunit` | OK (155 tests, 526 assertions) |

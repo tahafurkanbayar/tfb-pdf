@@ -38,3 +38,58 @@ expiryForm?.addEventListener('submit', async (event) => {
         toast(result.error.message, 'danger');
     }
 });
+
+// Önizleme: seçili sürümün sayfa küçük resimleri (tembel yükleme + sunucu önbelleği) ve büyük görüntüleyici
+const previewSection = document.querySelector('[data-preview]');
+if (previewSection) {
+    const [{ ThumbnailSource, lazyThumbnails }, { PageViewer }] = await Promise.all([
+        import('../pdf-preview.js'),
+        import('../viewer.js'),
+    ]);
+    const grid = previewSection.querySelector('[data-preview-grid]');
+    const select = previewSection.querySelector('[data-preview-version]');
+    const viewerElement = document.getElementById('page-viewer');
+    const viewer = viewerElement ? new PageViewer(viewerElement) : null;
+    let observer = null;
+
+    const showMessage = (key) => {
+        const p = document.createElement('p');
+        p.className = 'small text-body-secondary mb-0';
+        p.textContent = t(key);
+        grid.replaceChildren(p);
+    };
+
+    const load = async (version) => {
+        observer?.disconnect();
+        showMessage('preview.loading');
+        let source;
+        try {
+            source = await new ThumbnailSource({ documentId, version }).init();
+        } catch {
+            showMessage('preview.failed');
+            return;
+        }
+
+        grid.replaceChildren();
+        for (let page = 1; page <= source.pageCount; page++) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'thumb is-loading';
+            button.setAttribute('aria-label', t('preview.open_page', { number: page }));
+            const img = document.createElement('img');
+            img.alt = '';
+            img.dataset.page = String(page);
+            img.loading = 'lazy';
+            const label = document.createElement('span');
+            label.className = 'thumb-label';
+            label.textContent = String(page);
+            button.append(img, label);
+            button.addEventListener('click', () => viewer?.open(source, page));
+            grid.append(button);
+        }
+        observer = lazyThumbnails(grid, source, { onError: () => showMessage('preview.failed') });
+    };
+
+    select.addEventListener('change', () => load(Number(select.value)));
+    load(Number(select.value));
+}

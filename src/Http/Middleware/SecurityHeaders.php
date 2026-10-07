@@ -14,7 +14,7 @@ use App\Http\Response;
 final class SecurityHeaders
 {
     public const CSP = "default-src 'self'; "
-        . "script-src 'self'; "
+        . "script-src 'self' 'wasm-unsafe-eval'; "
         . "style-src 'self'; "
         . "img-src 'self' data: blob:; "
         . "font-src 'self' data:; "

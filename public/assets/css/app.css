@@ -145,3 +145,72 @@ progress.upload-progress {
 .min-w-0 {
     min-width: 0;
 }
+
+/* Sayfa küçük resimleri */
+.thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.75rem;
+}
+
+.thumb {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 3 / 4;
+    padding: 0.35rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.6rem;
+    background: #fff;
+    overflow: hidden;
+}
+
+.thumb img {
+    max-width: 100%;
+    max-height: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.thumb.is-loading {
+    background: linear-gradient(90deg, #f1f1f3 25%, #fafafa 50%, #f1f1f3 75%);
+    background-size: 200% 100%;
+    animation: thumb-shimmer 1.2s infinite;
+}
+
+.thumb-label {
+    position: absolute;
+    bottom: 0.3rem;
+    right: 0.4rem;
+    padding: 0 0.4rem;
+    border-radius: 1rem;
+    background: rgba(33, 37, 41, 0.75);
+    color: #fff;
+    font-size: 0.75rem;
+}
+
+button.thumb {
+    cursor: pointer;
+}
+
+button.thumb:hover {
+    border-color: rgba(var(--bs-primary-rgb), 0.5);
+}
+
+.viewer-canvas {
+    max-width: 100%;
+    height: auto;
+    background: #fff;
+}
+
+@keyframes thumb-shimmer {
+    to {
+        background-position: -200% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .thumb.is-loading {
+        animation: none;
+    }
+}

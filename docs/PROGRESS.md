@@ -17,7 +17,7 @@ Son güncelleme: 2026-10-07
 | 8 | Storage sistemi | [x] | StorageService (güvenli yol, üzerine yazmayı reddeden atomik taşıma), FilenameSanitizer, HashService |
 | 9 | Upload validation | [x] | UploadValidator (PDF + Office), PdfInspector, xref stream / object stream / hybrid parser uzantısı, `App\Pdf\Fpdi` (tFPDF+DejaVu) |
 | 10 | Document management | [x] | Repository katmanı, DocumentService, AuditService (hash zinciri), upload/liste/detay/indirme (Range)/silme/saklama API + sayfalar, dashboard |
-| 11 | PDF preview | [ ] | |
+| 11 | PDF preview | [x] | PDF.js 6.4.299 legacy (yerel), tembel küçük resimler + sunucu önbelleği (GD ile yeniden kodlama), sayfa görüntüleyici; headless Chrome ile doğrulandı |
 | 12 | Merge | [ ] | |
 | 13 | Split | [ ] | |
 | 14 | Reorder | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 11: PDF preview (PDF.js yerel kopya, sayfa küçük resimleri, thumbnail cache).
+Aşama 12: Merge (OperationService + PdfService temeli, birleştirme aracı sayfası).
 
 ## Aşama notları
 

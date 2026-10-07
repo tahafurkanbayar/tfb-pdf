@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Container;
 use App\Http\Controllers\Api\DocumentApiController;
+use App\Http\Controllers\Api\PreviewApiController;
 use App\Http\Router;
 
 /*
@@ -19,4 +20,9 @@ return static function (Router $router, Container $c): void {
     $router->delete($doc, [DocumentApiController::class, 'destroy']);
     $router->put($doc . '/expiry', [DocumentApiController::class, 'expiry']);
     $router->get($doc . '/versions/{number:\d{1,6}}/download', [DocumentApiController::class, 'download']);
+
+    $previews = $doc . '/versions/{number:\d{1,6}}/previews';
+    $router->get($previews, [PreviewApiController::class, 'index']);
+    $router->get($previews . '/{page:\d{1,5}}', [PreviewApiController::class, 'show']);
+    $router->put($previews . '/{page:\d{1,5}}', [PreviewApiController::class, 'store']);
 };
