@@ -29,7 +29,7 @@ Son güncelleme: 2026-10-07
 | 20 | Office conversion capability detection | [x] | LibreOffice headless (ayrı profil, kabuksuz, zaman aşımı); orijinal Office dosyası sürüm 0, PDF sürüm 1; yoksa yükleme 503 + açık mesaj |
 | 21 | Versioning | [x] | Sıralı, değiştirilemez sürümler; köken (kaynak sürüm) gösterimi; araçlarla belirli sürüm seçimi; DB tekillik ve üzerine yazma reddi testleri |
 | 22 | Hashing | [x] | Sunucuda tüm sürümlerin bütünlük doğrulaması (ok/mismatch/missing), tarayıcıda yerel dosya karşılaştırma (WebCrypto, PHP ile birebir) |
-| 23 | Audit logging | [ ] | |
+| 23 | Audit logging | [x] | Append-only + hash zinciri, bin/verify-audit.php, tüm işlem türlerinin kapsam testi, audit ve log'larda hassas veri olmadığı testleri |
 | 24 | Expiration | [ ] | |
 | 25 | Export | [ ] | |
 | 26 | Signature workflow | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 23: Audit logging (audit zinciri doğrulama CLI, olay kapsamı kontrolü, hassas veri olmadığının testi).
+Aşama 24: Expiration (cron/cleanup.php, fırsatçı temizlik, yetim dosyalar, geçici/önizleme/export temizliği).
 
 ## Aşama notları
 

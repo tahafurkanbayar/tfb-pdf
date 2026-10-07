@@ -276,3 +276,13 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | 1 failure: kontrolcü dinamik `'hash.status.' + durum` önekini anahtar sandı → JS deseni noktayla biten önekleri yok sayacak şekilde düzeltildi |
 | aynı komutlar | OK (231 tests, 841 assertions, 1 skipped); çeviriler eksiksiz |
 | headless Chrome WebCrypto SHA-256 vs `php hash_file` | Birebir aynı (bf94d11a…a9c3); localhost güvenli bağlam (isSecureContext=true) |
+| `git add -A; git commit; git push` | dea1e99 — Aşama 22 |
+
+## Aşama 23 — Audit logging
+
+| Komut | Sonuç |
+|---|---|
+| `php bin/verify-audit.php` (geliştirme DB) | "OK: 6 audit kaydı doğrulandı, zincir sağlam.", exit 0 |
+| `mysql ... SELECT COUNT(*), audit_chain_head` | 6 olay, zincir başı 64fcfdb8… |
+| `php vendor/bin/phpunit --filter "AuditCoverageTest\|LoggerTest"` | OK (4 tests, 89 assertions) |
+| `php vendor/bin/phpunit` | OK (tam paket) |

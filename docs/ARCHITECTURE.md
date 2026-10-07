@@ -172,3 +172,9 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - `GET /api/documents/{id}/verify`: tüm sürümleri diskten yeniden hesaplar (ok / mismatch / missing).
 - Belge sayfasında yerel dosya karşılaştırma: tarayıcıda WebCrypto (dosya gönderilmez; HTTPS veya localhost gerekir).
 - Uyarı metni (`notices.hash`): özet yalnızca bütünlük/sürüm kontrolüdür, hukuki doğrulama değildir.
+
+## Audit (Aşama 23)
+
+- Olaylar: upload, merge, split, reorder, rotate, compress, watermark, redact, ocr, office_convert, download, export, delete, expiry, expiry_changed, signature_* (imza aşamasında). Her kayıt: event_id, document/operation public id, event_type, created_at, input_hash, output_hash, status (success/failed/no_change), metadata (kanonik JSON), error_message (kategori:anahtar).
+- Gizlilik: dosya adları, filigran metni, PDF içeriği audit'e yazılmaz; IP ve tarayıcı bilgisi yalnızca imza olaylarında (imza kanıtı) tutulur.
+- `php bin/verify-audit.php`: zinciri doğrular (0 sağlam / 1 bozulma / 2 hata). Değişiklik, silme ve son kaydın silinmesi (zincir başı uyuşmazlığı) tespit edilir.
