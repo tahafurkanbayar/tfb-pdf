@@ -21,7 +21,7 @@ Son güncelleme: 2026-10-07
 | 12 | Merge | [x] | OperationService (ortak işlem akışı, girdi hash kontrolü), PdfService, PdfToolService, WarningCollector, araç sayfası iskeleti + birleştirme UI (sürükle-bırak, klavye) |
 | 13 | Split | [x] | PageRangeParser (PHP+JS eşdeğer), each/ranges/extract modları, ZIP indirme (ext-zip varsa), küçük resimden sayfa seçimi |
 | 14 | Reorder | [x] | Sayfa sıralama + kaldırma, değişmeyen sıra = yeni sürüm yok, sürükle-bırak Chrome ile doğrulandı |
-| 15 | Rotate | [ ] | |
+| 15 | Rotate | [x] | Sayfa bazında ve toplu 90° adımlar, /Rotate ile kayıpsız; önceden döndürülmüş kaynakta piksel karşılaştırmasıyla doğrulandı |
 | 16 | Compress | [ ] | |
 | 17 | Watermark | [ ] | |
 | 18 | Redaction | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 15: Rotate (seçili sayfalar, 90/180/270, önizlemede döndürme).
+Aşama 16: Compress (Ghostscript varsa, yoksa PHP tabanlı gerçek optimizasyon; küçülmezse yeni sürüm yok).
 
 ## Aşama notları
 

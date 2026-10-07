@@ -74,6 +74,18 @@ final class OperationApiController extends Controller
         ));
     }
 
+    public function rotate(Request $request): Response
+    {
+        $rotations = $request->input('rotations');
+
+        return $this->respond($this->tools()->rotate(
+            $this->requireOwner(),
+            (string) $request->input('document', ''),
+            self::versionInput($request),
+            is_array($rotations) ? $rotations : []
+        ));
+    }
+
     /**
      * GET /api/operations/{id}/download — işlemin tüm çıktıları tek ZIP.
      */

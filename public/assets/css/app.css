@@ -334,3 +334,26 @@ button.thumb:hover {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+.page-card-handle.is-static {
+    cursor: default;
+    touch-action: auto;
+}
+
+.page-card-handle img {
+    transition: transform 0.2s ease;
+}
+
+.page-card-badge[data-angle] {
+    display: inline-block;
+}
+
+.page-card-badge[hidden] {
+    display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-card-handle img {
+        transition: none;
+    }
+}

@@ -187,3 +187,13 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (192 tests, 639 assertions, 1 skipped — ext-zip); 369 anahtar |
 | `php -r` (sortable.js setPointerCapture try/catch) + headless Chrome sürükle-bırak testi (geçici `__smoke.html`) | drag=2314 (1. kart 3. kartın sağına), moveItem=3214, onEnd 1 kez — beklenen |
 | bash komutu (PROGRESS sed) | **Başarısız**: tek tırnaklı sed içinde kesme işareti; çift tırnakla yeniden çalıştırıldı |
+| `git add -A; git commit; git push` | 2461dbf — Aşama 14 |
+
+## Aşama 15 — Rotate
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (rotate API + route) + `php -l` | Temiz |
+| `php vendor/bin/phpunit --filter RotateOperationTest` | OK (3 tests, 12 assertions) |
+| `php scratchpad/rotate-fixture.php` + headless Chrome piksel karşılaştırması (kaynak +90° PDF.js çizimi vs sonuç dosyası) | src-rot (kaynakta /Rotate 90): 80x120 vs 80x120, **0 farklı piksel**; src-plain: 120x80 vs 120x80, **0 farklı piksel**. Geçici dosyalar silindi |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |

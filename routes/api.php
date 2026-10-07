@@ -25,6 +25,7 @@ return static function (Router $router, Container $c): void {
     $router->post('/api/operations/merge', [OperationApiController::class, 'merge']);
     $router->post('/api/operations/split', [OperationApiController::class, 'split']);
     $router->post('/api/operations/reorder', [OperationApiController::class, 'reorder']);
+    $router->post('/api/operations/rotate', [OperationApiController::class, 'rotate']);
     $router->get('/api/operations/{id:[a-f0-9]{32}}/download', [OperationApiController::class, 'download']);
 
     $previews = $doc . '/versions/{number:\d{1,6}}/previews';

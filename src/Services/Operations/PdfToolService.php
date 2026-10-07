@@ -185,6 +185,52 @@ final class PdfToolService
     }
 
     /**
+     * Sayfa döndürme. $rotations: sayfa no => saat yönünde derece (90/180/270; 0 = değişmez).
+     * Döndürme sayfanın /Rotate değeriyle yapılır: içerik yeniden çizilmez, kalite kaybı olmaz.
+     *
+     * @param array<int|string, int|string> $rotations
+     */
+    public function rotate(string $ownerHash, string $documentId, ?int $versionNumber, array $rotations): OperationResult
+    {
+        [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+        $total = (int) $version->pageCount;
+
+        $normalized = [];
+        foreach ($rotations as $page => $degrees) {
+            $page = (int) $page;
+            if ($page < 1 || $page > $total || !is_numeric($degrees)) {
+                throw new ValidationException('Invalid page rotation', 'operations.page_out_of_range', ['page' => $page, 'total' => $total]);
+            }
+            $deg = PdfService::normalizeRotation((int) $degrees);
+            if ($deg !== 0) {
+                $normalized[$page] = $deg;
+            }
+        }
+        ksort($normalized);
+
+        return $this->operations->run(
+            'rotate',
+            $ownerHash,
+            [[$document, $version]],
+            ['rotations' => $normalized],
+            function (string $tmp, array $paths) use ($normalized, $total): ProcessResult {
+                if ($normalized === []) {
+                    return new ProcessResult([], 'fpdi', ['pages' => $total], changed: false);
+                }
+                $file = $tmp . '/rotated.pdf';
+                $this->pdf->extract($paths[0], $file, range(1, $total), $normalized);
+
+                return new ProcessResult(
+                    [new OperationOutput($file, $total)],
+                    'fpdi',
+                    ['pages' => $total, 'rotated_pages' => count($normalized)],
+                    $this->rebuildWarnings($paths)
+                );
+            }
+        );
+    }
+
+    /**
      * @param list<string> $paths
      * @return list<string>
      */
