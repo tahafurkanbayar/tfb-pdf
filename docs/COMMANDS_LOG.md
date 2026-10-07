@@ -177,3 +177,13 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -d extension=zip vendor/bin/phpunit --filter SplitOperationTest` | OK (4 tests, 27 assertions) — ZIP içeriği doğrulandı |
 | `php bin/check-translations.php` | OK (357 anahtar) |
 | headless Chrome + `range-php.php`: JS ve PHP aralık ayrıştırıcı karşılaştırması (19 girdi) | **Birebir aynı**; source.js modülü hatasız yüklendi |
+| `git add -A; git commit; git push` | baf6fb5 — Aşama 13 |
+
+## Aşama 14 — Reorder
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (reorder API + route) + `php -l` | Sözdizimi temiz |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (192 tests, 639 assertions, 1 skipped — ext-zip); 369 anahtar |
+| `php -r` (sortable.js setPointerCapture try/catch) + headless Chrome sürükle-bırak testi (geçici `__smoke.html`) | drag=2314 (1. kart 3. kartın sağına), moveItem=3214, onEnd 1 kez — beklenen |
+| bash komutu (PROGRESS sed) | **Başarısız**: tek tırnaklı sed içinde kesme işareti; çift tırnakla yeniden çalıştırıldı |

@@ -20,7 +20,7 @@ Son güncelleme: 2026-10-07
 | 11 | PDF preview | [x] | PDF.js 6.4.299 legacy (yerel), tembel küçük resimler + sunucu önbelleği (GD ile yeniden kodlama), sayfa görüntüleyici; headless Chrome ile doğrulandı |
 | 12 | Merge | [x] | OperationService (ortak işlem akışı, girdi hash kontrolü), PdfService, PdfToolService, WarningCollector, araç sayfası iskeleti + birleştirme UI (sürükle-bırak, klavye) |
 | 13 | Split | [x] | PageRangeParser (PHP+JS eşdeğer), each/ranges/extract modları, ZIP indirme (ext-zip varsa), küçük resimden sayfa seçimi |
-| 14 | Reorder | [ ] | |
+| 14 | Reorder | [x] | Sayfa sıralama + kaldırma, değişmeyen sıra = yeni sürüm yok, sürükle-bırak Chrome ile doğrulandı |
 | 15 | Rotate | [ ] | |
 | 16 | Compress | [ ] | |
 | 17 | Watermark | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 14: Reorder (sayfa sıralama + sayfa silme, sürükle-bırak ızgara).
+Aşama 15: Rotate (seçili sayfalar, 90/180/270, önizlemede döndürme).
 
 ## Aşama notları
 

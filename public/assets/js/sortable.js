@@ -23,7 +23,11 @@ export function makeSortable(container, { items, handle, onEnd = () => {} }) {
         }
         event.preventDefault();
         pointerId = event.pointerId;
-        grip.setPointerCapture(pointerId);
+        try {
+            grip.setPointerCapture(pointerId);
+        } catch {
+            // Bazı tarayıcılarda/olaylarda yakalama desteklenmez; sürükleme yine çalışır
+        }
         dragging.classList.add('is-dragging');
         container.classList.add('is-sorting');
     });

@@ -62,6 +62,18 @@ final class OperationApiController extends Controller
         ));
     }
 
+    public function reorder(Request $request): Response
+    {
+        $order = $request->input('order');
+
+        return $this->respond($this->tools()->reorder(
+            $this->requireOwner(),
+            (string) $request->input('document', ''),
+            self::versionInput($request),
+            is_array($order) ? array_values(array_filter($order, 'is_numeric')) : []
+        ));
+    }
+
     /**
      * GET /api/operations/{id}/download — işlemin tüm çıktıları tek ZIP.
      */

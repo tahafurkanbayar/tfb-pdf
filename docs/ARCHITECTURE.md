@@ -147,3 +147,8 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - Geçersiz aralık işlemden ÖNCE reddedilir: operation kaydı oluşmaz.
 - Çok çıktılı işlemler: `GET /api/operations/{id}/download` → ZIP (ext-zip varsa; yoksa `zip_url` null, dosyalar tek tek indirilir). Geçici ZIP yanıt sonrası silinir; indirme audit'e yazılır.
 - Ortak tek-belge bileşenleri: `partials/source-picker` + `tools/source.js` (`setupSource`, `renderPageGrid`).
+
+## Sayfa düzenleme (Aşama 14)
+
+- `PdfToolService::reorder($order)`: `$order` yeni sıradaki kaynak sayfa numaraları; listede olmayanlar kaldırılır. Tekrarlı / aralık dışı sıra reddedilir; boş liste = `reorder.all_removed`; sıra aynıysa `no_change` (sürüm yok).
+- UI: `tools/page-cards.js` (sayfa kartı ızgarası, sıralama/döndürme/karartma araçlarında ortak), `tools/reorder.js` (sürükle-bırak + ←/→ butonları + kaldır/geri al, aria-live duyuruları, mobilde 2 sütun).

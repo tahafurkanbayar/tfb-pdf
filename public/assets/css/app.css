@@ -283,3 +283,54 @@ button.thumb:hover {
     background: var(--tfb-brand);
     box-shadow: 0 0 0 2px #fff;
 }
+
+/* Sayfa kartları (sıralama, döndürme, karartma) */
+.page-sort-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+}
+
+.page-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.page-card-handle {
+    cursor: grab;
+    touch-action: none;
+}
+
+.page-card-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.page-card-badge {
+    position: absolute;
+    top: 0.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+}
+
+.page-card.is-removed .page-card-handle img {
+    opacity: 0.25;
+}
+
+.page-card.is-removed .page-card-badge {
+    display: inline-block;
+}
+
+.page-card.is-removed .page-card-handle {
+    border-style: dashed;
+    border-color: var(--bs-danger);
+}
+
+@media (max-width: 575.98px) {
+    .page-sort-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

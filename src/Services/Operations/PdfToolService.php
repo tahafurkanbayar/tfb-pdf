@@ -142,6 +142,49 @@ final class PdfToolService
     }
 
     /**
+     * Sayfa sıralama ve kaldırma. $order yeni sıradaki kaynak sayfa numaralarıdır; listede olmayan
+     * sayfalar yeni sürümde yer almaz. Sıra değişmemişse yeni sürüm oluşturulmaz.
+     *
+     * @param list<int> $order
+     */
+    public function reorder(string $ownerHash, string $documentId, ?int $versionNumber, array $order): OperationResult
+    {
+        [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+        $total = (int) $version->pageCount;
+        $order = array_values(array_map('intval', $order));
+
+        if ($order === []) {
+            throw new ValidationException('All pages removed', 'reorder.all_removed');
+        }
+        if (count($order) !== count(array_unique($order)) || min($order) < 1 || max($order) > $total) {
+            throw new ValidationException('Invalid page order', 'reorder.invalid_order');
+        }
+
+        $unchanged = $order === range(1, $total);
+
+        return $this->operations->run(
+            'reorder',
+            $ownerHash,
+            [[$document, $version]],
+            ['order' => $order, 'removed' => array_values(array_diff(range(1, $total), $order))],
+            function (string $tmp, array $paths) use ($order, $unchanged, $total): ProcessResult {
+                if ($unchanged) {
+                    return new ProcessResult([], 'fpdi', ['pages' => $total], changed: false);
+                }
+                $file = $tmp . '/reordered.pdf';
+                $this->pdf->extract($paths[0], $file, $order);
+
+                return new ProcessResult(
+                    [new OperationOutput($file, count($order))],
+                    'fpdi',
+                    ['pages' => count($order), 'removed' => $total - count($order)],
+                    $this->rebuildWarnings($paths)
+                );
+            }
+        );
+    }
+
+    /**
      * @param list<string> $paths
      * @return list<string>
      */
