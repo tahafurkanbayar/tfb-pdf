@@ -30,9 +30,7 @@ expiryForm?.addEventListener('submit', async (event) => {
         toast(result.message, 'success');
         const status = document.querySelector('[data-expiry-status]');
         if (status) {
-            status.textContent = result.expiry.expires_at
-                ? t('js.expires_on', { date: new Date(result.expiry.expires_at).toLocaleString(document.documentElement.lang) })
-                : t('js.expires_never');
+            status.textContent = result.expiry.status;
         }
     } else {
         toast(result.error.message, 'danger');

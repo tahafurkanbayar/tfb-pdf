@@ -358,3 +358,23 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | geçici dosyaların silinmesi (`__smoke.html`, `__shots.html`, `__s.pdf`, `assets/.htaccess`, Chrome profilleri) | Silindi; `git status` yalnızca 5 kaynak dosyası |
 | `php bin/check-translations.php` | OK (579 anahtar) |
 | `php vendor/bin/phpunit` | OK (253 tests, 1052 assertions, 3 skipped — zip) |
+| `git add -A; git commit; git push` | 89f6c0c — Aşama 28 |
+
+## Aşama 29 — Türkçe/İngilizce UI kontrolü
+
+| Komut | Sonuç |
+|---|---|
+| curl ile örnek belge yükleme (cookie jar) | 201 |
+| `php scratchpad/lang-scan.php` (26 yol × TR/EN: görünür metin, aria-label/title/placeholder/alt, meta description, `<html lang>`, JS'e giden çeviri JSON'u) | 51/52 temiz; tek işaret TR Hakkında'daki bilinçli "(enterprise document governance)" terim açıklaması |
+| `php scratchpad/js-groups.php` (sayfa başına JS modül ağacı → kullanılan `t()/tc()` anahtarları sayfaya gönderilmiş mi) | 15/15 sayfa tam; 3 dinamik çağrı (page-range hata anahtarları, reorder etiketleri) elle doğrulandı. İlk denemede imza token'ı boş (JSON'daki `\/` kaçışı) → php ile ayrıştırıldı |
+| curl `/language/en?return=...` (7 durum) | İlk denemede `/tr/documents/..`, `/en/about` ana sayfaya düştü → **Git Bash MSYS yol dönüşümü** argümanı `C:/Program Files/Git/...` yapmıştı; elle kodlanmış URL ve `MSYS_NO_PATHCONV=1` ile: yol + sorgu korunuyor, `https://`, `//`, `/\` dış adresleri ana sayfaya düşüyor; `tfb_locale` cookie (HttpOnly, Lax, 1 yıl); Accept-Language en→/en/, tr→/tr/, de→/tr/ |
+| curl API hataları (`X-Locale: tr/en`, 404 ve CSRF'siz POST) | Her iki dilde çevrilmiş mesaj, teknik ayrıntı yok |
+| boyut/tarih biçimleri incelemesi | TR'de "13.5 KB" (nokta) ve süre uzatma sonrası JS'in `toLocaleString` ile farklı biçim/saat dilimi kullandığı bulundu → `common.decimal_separator`, `Size::format` dil duyarlı, JS `formatSize` Intl ile, API `expiry.status` sunucuda biçimleniyor; kullanılmayan `js.expires_on`/`js.expires_never` kaldırıldı |
+| `php vendor/bin/phpunit` | 1 failure: `SizeTest::testFormat` eski davranışı ('1.5 KB') sabitliyordu → ayırıcı açık verildi, dil duyarlılığı için yeni test (TR/EN, binlik ayırıcı yok) |
+| `php vendor/bin/phpunit --filter SizeTest` / `--filter DocumentHttpTest` | OK (11 tests, 15 assertions) / OK (4 tests, 45 assertions — `expiry.status` EN biçimi) |
+| curl TR/EN `/documents` | "13,0 KB" / "13.0 KB" |
+| geçici popup taraması (JS çalıştıktan sonra 13 EN sayfa: innerText + öznitelikler) | 13/13 temiz; aynı tarama TR sayfada Türkçe metinleri yakaladı (hassasiyet doğrulandı) |
+| geçici modül testi (`formatSize`, TR/EN) | TR `512 B / 1,5 KB / 1023,5 KB / 25,0 MB`, EN `... 1.5 KB / 1023.5 KB / 25.0 MB`; sunucu ile aynı |
+| geçici dosyaların silinmesi | Silindi |
+| `php bin/check-translations.php` | OK (578 anahtar) |
+| `php vendor/bin/phpunit` | OK (254 tests, 1056 assertions, 3 skipped — zip) |

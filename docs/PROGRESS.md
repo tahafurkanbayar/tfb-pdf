@@ -35,7 +35,7 @@ Son güncelleme: 2026-10-07
 | 26 | Signature workflow | [x] | Alanlar, imzalayanlar, davet (SMTP opsiyonel), consent kaydı, çizim/yazılı imza, ret/iptal/süre, final PDF + sertifika + SHA-256, audit; nitelikli e-imza değil |
 | 27 | Security hardening | [x] | Rate limiting (DB, HMAC'li), yapılandırma koruması, post_max_size tespiti, erken hata sayfası düzeltmesi, güvenlik testleri + Apache erişim kontrolleri |
 | 28 | Responsive UI | [x] | 320/390/820 px ve masaüstünde 15 sayfa yatay taşmasız; `[hidden]` ile Bootstrap `.d-flex` çakışması, mobil menü kenar boşluğu, yığılan kart boşluğu, etiketsiz imzalayan seçimi düzeltildi; küçük resimler, imzalayan önizlemesi ve temel erişilebilirlik taraması gerçek Chrome'da doğrulandı |
-| 29 | Türkçe/İngilizce UI kontrolü | [ ] | |
+| 29 | Türkçe/İngilizce UI kontrolü | [x] | 26 sayfa × 2 dilde sunucu ve JS sonrası tarama (sızıntı yok), sayfa başına JS çeviri grubu kapsamı, dil değiştirme (yol + sorgu korunuyor, açık yönlendirme yok), çevrilmiş API hataları; TR ondalık virgül (sunucu + JS aynı), süre metni sunucuda biçimleniyor |
 | 30 | Tests | [ ] | |
 | 31 | cPanel deployment | [ ] | |
 | 32 | README | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 29: Türkçe/İngilizce UI kontrolü (her iki dilde tüm sayfaların gerçek tarayıcıda gözden geçirilmesi, JS mesajları, tarih/sayı biçimleri, dil değiştirme akışı).
+Aşama 30: Tests (spec §45'e göre unit/integration/E2E kapsam gözden geçirmesi, eksik testlerin eklenmesi, zip eklentili ve eklentisiz tam çalıştırma).
 
 ## Aşama notları
 

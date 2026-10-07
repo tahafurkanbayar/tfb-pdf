@@ -159,5 +159,7 @@ final class DocumentHttpTest extends AppTestCase
         $data = json_decode($response->content(), true);
         self::assertSame('Retention period updated.', $data['message']);
         self::assertSame('30d', $data['expiry']['policy']);
+        // Görünen metin sayfadakiyle aynı biçimde sunucuda üretilir (EN: Y-m-d H:i)
+        self::assertMatchesRegularExpression('/^Will be deleted on \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $data['expiry']['status']);
     }
 }

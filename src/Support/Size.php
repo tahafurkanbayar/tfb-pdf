@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Support;
 
+use App\I18n\Lang;
+
 /**
  * "25M", "512K", "1G" veya bayt cinsinden değerleri çözer ve okunabilir biçime çevirir.
  */
@@ -43,8 +45,12 @@ final class Size
         return self::parse($value);
     }
 
-    public static function format(int $bytes, int $precision = 1): string
+    /**
+     * Ondalık ayırıcı verilmezse etkin dilinki kullanılır (TR "13,5 KB", EN "13.5 KB").
+     */
+    public static function format(int $bytes, int $precision = 1, ?string $decimalSeparator = null): string
     {
+        $decimalSeparator ??= Lang::translator()->get('common.decimal_separator');
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
         $i = 0;
         $size = (float) max(0, $bytes);
@@ -53,6 +59,6 @@ final class Size
             $i++;
         }
 
-        return ($i === 0 ? (string) (int) $size : number_format($size, $precision, '.', '')) . ' ' . $units[$i];
+        return ($i === 0 ? (string) (int) $size : number_format($size, $precision, $decimalSeparator, '')) . ' ' . $units[$i];
     }
 }

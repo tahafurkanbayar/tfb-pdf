@@ -34,6 +34,7 @@ return [
     'file' => 'Dosya',
     'file_count' => ':count dosya',
     'size' => 'Boyut',
+    'decimal_separator' => ',',
     'created_at' => 'Oluşturulma',
     'actions' => 'İşlemler',
     'optional' => 'isteğe bağlı',

@@ -7,6 +7,4 @@ return [
     'dismiss' => 'Dismiss',
     'deleting' => 'Deleting...',
     'delete_retry' => 'Try again',
-    'expires_on' => 'Will be deleted on :date',
-    'expires_never' => 'Will not be deleted automatically',
 ];

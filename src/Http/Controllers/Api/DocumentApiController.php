@@ -106,9 +106,15 @@ final class DocumentApiController extends Controller
         $policy = $request->input('policy');
         $expiresAt = $this->documents()->setExpiry($document, is_string($policy) ? $policy : '');
 
+        // Görünen metin sunucuda üretilir: sayfadaki ile aynı saat dilimi ve tarih biçimi
+        $dates = $this->service(\App\Support\DateFormatter::class);
+        $status = $expiresAt === null
+            ? __('documents.expires_never')
+            : __('documents.expires_at', ['date' => $dates->format($expiresAt, \App\I18n\Lang::translator()->locale())]);
+
         return $this->json([
             'message' => __('documents.expiry_saved'),
-            'expiry' => ['policy' => $policy, 'expires_at' => \App\Support\DateFormatter::iso($expiresAt)],
+            'expiry' => ['policy' => $policy, 'expires_at' => \App\Support\DateFormatter::iso($expiresAt), 'status' => $status],
         ]);
     }
 

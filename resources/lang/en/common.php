@@ -34,6 +34,7 @@ return [
     'file' => 'File',
     'file_count' => ':count file|:count files',
     'size' => 'Size',
+    'decimal_separator' => '.',
     'created_at' => 'Created',
     'actions' => 'Actions',
     'optional' => 'optional',
