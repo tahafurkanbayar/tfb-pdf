@@ -21,6 +21,8 @@ return static function (Router $router, Container $c): void {
     $router->delete($doc, [DocumentApiController::class, 'destroy']);
     $router->put($doc . '/expiry', [DocumentApiController::class, 'expiry']);
     $router->get($doc . '/verify', [DocumentApiController::class, 'verify']);
+    $router->get($doc . '/export', [DocumentApiController::class, 'export']);
+    $router->get('/api/export', [DocumentApiController::class, 'exportAll']);
     $router->get($doc . '/versions/{number:\d{1,6}}/download', [DocumentApiController::class, 'download']);
 
     $router->post('/api/operations/merge', [OperationApiController::class, 'merge']);

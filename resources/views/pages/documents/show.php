@@ -45,6 +45,14 @@ $pdfVersions = array_values(array_filter($versions, static fn (App\Domain\Docume
                     <?= $view->icon('download') ?> <?= e(__('documents.download_version', ['version' => $latest->isOriginal() ? __('documents.original') : __('documents.version_n', ['number' => $latest->versionNumber])])) ?>
                 </a>
             <?php endif; ?>
+            <?php if (App\Services\ExportService::available()): ?>
+                <a class="btn btn-outline-secondary" href="<?= e($url->to('/api/documents/' . $document->publicId . '/export')) ?>" title="<?= e(__('export.help')) ?>">
+                    <?= $view->icon('file-zip') ?> <?= e(__('export.document')) ?>
+                </a>
+            <?php else: ?>
+                <button type="button" class="btn btn-outline-secondary" disabled aria-describedby="export-unavailable"><?= $view->icon('file-zip') ?> <?= e(__('export.document')) ?></button>
+                <span class="visually-hidden" id="export-unavailable"><?= e(__('export.unavailable')) ?></span>
+            <?php endif; ?>
             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
                 <?= $view->icon('trash') ?> <?= e(__('documents.delete')) ?>
             </button>

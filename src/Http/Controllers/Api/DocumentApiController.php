@@ -11,6 +11,7 @@ use App\Http\Presenters\DocumentPresenter;
 use App\Http\Request;
 use App\Http\Response;
 use App\Services\DocumentService;
+use App\Services\ExportService;
 
 final class DocumentApiController extends Controller
 {
@@ -103,6 +104,41 @@ final class DocumentApiController extends Controller
             'message' => __('documents.expiry_saved'),
             'expiry' => ['policy' => $policy, 'expires_at' => \App\Support\DateFormatter::iso($expiresAt)],
         ]);
+    }
+
+    /**
+     * GET /api/documents/{id}/export — belgenin tüm sürümleri, metadata, geçmiş ve audit (ZIP)
+     */
+    public function export(Request $request, array $params): Response
+    {
+        $document = $this->documents()->get($params['id'], $this->owner()->hash());
+
+        return $this->zipResponse($this->service(ExportService::class)->exportDocument($document));
+    }
+
+    /**
+     * GET /api/export — tarayıcının (owner) tüm verileri (ZIP)
+     */
+    public function exportAll(Request $request): Response
+    {
+        $owner = $this->owner()->hash();
+        if ($owner === null) {
+            throw new \App\Exceptions\NotFoundException('No owner');
+        }
+
+        return $this->zipResponse($this->service(ExportService::class)->exportAll($owner));
+    }
+
+    /**
+     * @param array{path: string, name: string} $zip
+     */
+    private function zipResponse(array $zip): Response
+    {
+        // Geçici ZIP yanıt gönderildikten sonra silinir
+        $storage = $this->service(\App\Services\StorageService::class);
+        register_shutdown_function(static fn () => $storage->deleteTempDirectory(dirname($zip['path'])));
+
+        return new FileResponse($zip['path'], $zip['name'], 'application/zip');
     }
 
     /**

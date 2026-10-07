@@ -298,3 +298,14 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php bin/verify-audit.php` | OK, zincir sağlam |
 | 120 × `curl /tr/about` (Apache) + log kontrolü | Fırsatçı temizlik 2 kez çalıştı (actor=system), error/critical log yok |
 | `php vendor/bin/phpunit` | OK (tam paket) |
+| `git add -A; git commit; git push` | 2b975df — Aşama 24 |
+
+## Aşama 25 — Export
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (export API, route, servis; çeviri dosyaları; belge sayfaları butonları) + `php -l` (7 dosya) | Temiz |
+| `php vendor/bin/phpunit --filter ExportTest` (zip yok) | OK (3 tests, 2 skipped — zip gerektirenler); "kullanılamıyor" yolu doğrulandı |
+| `php -d extension=zip vendor/bin/phpunit --filter "ExportTest\|SplitOperationTest"` | OK (7 tests, 54 assertions, 1 skipped — zip yok testi) |
+| `php vendor/bin/phpunit` / `php -d extension=zip vendor/bin/phpunit` | zip yok: 242 tests, 957 assertions, 3 skipped · zip var: 242 tests, 988 assertions, 1 skipped |
+| `php bin/check-translations.php` | OK |

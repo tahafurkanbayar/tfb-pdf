@@ -14,7 +14,12 @@ $view->section('robots', 'noindex');
 <div class="container py-4">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <h1 class="h3 mb-0"><?= e(__('documents.title')) ?></h1>
-        <a class="btn btn-primary" href="<?= e($url->page('/')) ?>"><?= $view->icon('cloud-arrow-up') ?> <?= e(__('documents.upload_new')) ?></a>
+        <div class="d-flex flex-wrap gap-2">
+            <?php if ($documents !== [] && App\Services\ExportService::available()): ?>
+                <a class="btn btn-outline-secondary" href="<?= e($url->to('/api/export')) ?>" title="<?= e(__('export.help')) ?>"><?= $view->icon('file-zip') ?> <?= e(__('export.all')) ?></a>
+            <?php endif; ?>
+            <a class="btn btn-primary" href="<?= e($url->page('/')) ?>"><?= $view->icon('cloud-arrow-up') ?> <?= e(__('documents.upload_new')) ?></a>
+        </div>
     </div>
 
     <?php if ($documents === []): ?>
@@ -63,5 +68,8 @@ $view->section('robots', 'noindex');
         <p class="small text-body-secondary mt-3"><?= e(__('dashboard.storage_used_unlimited', ['used' => App\Support\Size::format($storageUsed)])) ?></p>
     <?php endif; ?>
 
+    <?php if ($documents !== [] && !App\Services\ExportService::available()): ?>
+        <p class="small text-body-secondary mt-3"><?= e(__('export.unavailable')) ?></p>
+    <?php endif; ?>
     <p class="small text-body-secondary mt-3 d-flex gap-2"><?= $view->icon('info-circle', 'flex-shrink-0 mt-1') ?><span><?= e(__('notices.cookie')) ?></span></p>
 </div>

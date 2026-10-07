@@ -184,3 +184,8 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - `ExpiryPolicy`: 1d / 7d / 30d / never; süre seçildiği andan itibaren. Varsayılan `DEFAULT_EXPIRY`.
 - `CleanupService::run()` (flock ile tekil): süresi dolan belgeler → `DocumentService::delete(..., 'expiry', actor)`; `temporary/` ve `exports/` (TEMPORARY_TTL_HOURS), `previews/` (PREVIEW_TTL_DAYS), `sessions/` (24 saat); yetim belge dizinleri (DB kaydı yok, 6 saat bekleme süresi); 2 günden eski `rate_limits`.
 - Tetikleme: `cron/cleanup.php` (cPanel Cron, 240 sn bütçe), fırsatçı (istek gönderildikten sonra ~1/50, 3 sn, en fazla 5 belge; `OPPORTUNISTIC_CLEANUP`).
+
+## Dışa aktarma (Aşama 25)
+
+- `ExportService` (ext-zip gerekir): `exportDocument()` ve `exportAll(owner)`. ZIP: `documents/<id>/{original.*, vNNN.pdf, metadata.json, operations.json}`, `audit-log.json` (silinmiş belgelerinki dahil), `documents.json`, `manifest.json` (her dosyanın SHA-256'sı), `README.txt` (TR/EN).
+- `GET /api/documents/{id}/export`, `GET /api/export`; geçici ZIP yanıt sonrası silinir; `export` olayı audit'e yazılır. zip yoksa butonlar pasif + açıklama, API 503 (`export.unavailable`).

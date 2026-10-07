@@ -41,6 +41,7 @@ use App\Repositories\OperationRepository;
 use App\Repositories\VersionRepository;
 use App\Services\AuditService;
 use App\Services\CleanupService;
+use App\Services\ExportService;
 use App\Services\DocumentService;
 use App\Services\ThumbnailService;
 use App\Services\ToolCatalog;
@@ -267,6 +268,14 @@ return static function (Container $c, Config $config): void {
     ));
     $c->set(VerifyCsrfToken::class, fn (Container $c) => new VerifyCsrfToken($c->get(Csrf::class)));
 
+    $c->set(ExportService::class, fn (Container $c) => new ExportService(
+        $c->get(DocumentRepository::class),
+        $c->get(OperationRepository::class),
+        $c->get(DocumentService::class),
+        $c->get(AuditService::class),
+        $c->get(StorageService::class),
+        (string) $config->get('app.name')
+    ));
     $c->set(CleanupService::class, fn (Container $c) => new CleanupService(
         $c->get(Database::class),
         $c->get(DocumentRepository::class),
