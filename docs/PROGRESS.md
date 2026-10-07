@@ -15,7 +15,7 @@ Son güncelleme: 2026-10-07
 | 6 | Migration sistemi | [x] | 8 migration (tüm tablolar), Migrator (checksum, GET_LOCK), bin/migrate.php, schema.sql |
 | 7 | Core PHP architecture | [x] | Request/Response/Router, middleware, Session/CSRF, OwnerContext, View+layout, ErrorHandler, Logger, Bootstrap 5.3.8 + ikonlar |
 | 8 | Storage sistemi | [x] | StorageService (güvenli yol, üzerine yazmayı reddeden atomik taşıma), FilenameSanitizer, HashService |
-| 9 | Upload validation | [ ] | |
+| 9 | Upload validation | [x] | UploadValidator (PDF + Office), PdfInspector, xref stream / object stream / hybrid parser uzantısı, AppPdfFpdi (tFPDF+DejaVu) |
 | 10 | Document management | [ ] | |
 | 11 | PDF preview | [ ] | |
 | 12 | Merge | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 9: Upload validation.
+Aşama 10: Document management (repository, DocumentService, upload API, belge listesi/detayı, indirme, silme).
 
 ## Aşama notları
 

@@ -40,3 +40,8 @@ backup*.sql
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# tFPDF font önbelleği (çalışma anında üretilir)
+/resources/fonts/unifont/*.mtx.php
+/resources/fonts/unifont/*.cw.dat
+/resources/fonts/unifont/*.cw127.php

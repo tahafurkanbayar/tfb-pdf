@@ -36,3 +36,12 @@ Doğrulandı: FPDI 2.6.8 ücretsiz parser'ı cross-reference stream (PDF 1.5+, o
 
 ## 2026-10-07 — Composer çalıştırma ve zip eklentisi
 Composer sisteme kurulmadı; `composer.phar` proje kökünde (gitignore'da), SHA-256 doğrulandı. Yerel XAMPP'te `ext-zip` kapalı; `php.ini` değiştirilmeden komutlar `php -d extension=zip` ile çalıştırılıyor. Uygulama zip yoksa export özelliğini kapatıp nedenini gösterecek. `config.platform.php = 8.2.12` ile kilit dosyası 8.2 sunucularla uyumlu tutulur.
+
+## 2026-10-07 — Sıkıştırılmış xref desteği uygulandı (Aşama 9)
+`src/Pdf/Parser/`: `XrefStreamReader` (W/Index, tip 0/1/2, FlateDecode + PNG predictor), `HybridReader` (klasik tablo + /XRefStm), `ExtendedCrossReference` (object stream nesneleri, okuyucu önceliği), `ExtendedPdfParser`. `App\Pdf\Fpdi` bunu `getPdfParserInstance()` ile kullanır. Testte stok FPDI'nin aynı dosyayı `COMPRESSED_XREF` ile reddettiği, bizim sınıfımızın okuyup sayfa içe aktarabildiği doğrulanıyor. Test dosyaları `tests/Support/CompressedPdfWriter.php` ile üretiliyor (makinede Word/LibreOffice yok; gerçek Office çıktısıyla test yapılamadı).
+
+## 2026-10-07 — Fontlar resources/fonts altında
+tFPDF font ölçü önbelleğini (`*.mtx.php`, çalıştırılan PHP) font dizinine yazar. `vendor/` içine yazmasın diye DejaVu Sans (Regular/Bold) `resources/fonts/unifont/`'a kopyalandı; `App\Pdf\Fpdi` `fontpath`'i buraya ayarlar; önbellek dosyaları gitignore'da. `resources/` web'e kapalıdır.
+
+## 2026-10-07 — Upload doğrulama
+Uzantı yalnızca ön eleme; asıl karar içerikten: PDF için `%PDF-` imzası (ilk 1024 bayt) + fileinfo MIME (varsa) + tam ayrıştırma + sayfa sayısı. Office için OOXML ZIP imzası + merkezi dizinde `[Content_Types].xml` ve uzantıya uygun ana bölüm (word/ xl/ ppt/), makro (`vbaProject.bin`) reddi; eski formatlarda OLE imzası + UTF-16LE akış adı. ext-zip gerekmez. Etkin boyut sınırı = min(MAX_UPLOAD_SIZE, upload_max_filesize, post_max_size).

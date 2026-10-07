@@ -106,3 +106,15 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit` | **2 failure**: FilenameSanitizer test beklentileri (`.env`→`env`, bozuk UTF-8 baytı atılıyor) — kod davranışı daha güvenli olduğu için beklentiler güncellendi |
 | `sed` + Edit (test beklentisi) + `php vendor/bin/phpunit` | 1 failure kaldı (sed ikinci satırı değiştiremedi), Edit ile düzeltildi |
 | `php vendor/bin/phpunit` | OK (119 tests, 376 assertions) |
+| `git add -A; git commit; git push` | 6a463f8 — Aşama 8 |
+
+## Aşama 9 — Upload validation
+
+| Komut | Sonuç |
+|---|---|
+| `grep/sed` ile FPDI kaynak incelemesi (PdfStream, StreamReader, FixedReader, Page, FpdiTrait::writePdfType) | API'ler doğrulandı |
+| `grep` tFPDF font yükleme | Önbelleği font dizinine yazdığı görüldü |
+| `mkdir resources/fonts/unifont; cp DejaVuSans*.ttf DejaVu_LICENSE.txt` + `.gitignore` ekleme | Tamam |
+| `php vendor/bin/phpunit --filter PdfParsingTest` | OK (12 tests, 29 assertions) |
+| `sed` (docblock silme) + `ls` Office/LibreOffice/Ghostscript + `where tesseract gswin64c soffice` | Hiçbiri kurulu değil. sed docblock'u bozdu (açık `/**`), Edit ile düzeltildi |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (139 tests, 432 assertions); çeviriler eksiksiz |

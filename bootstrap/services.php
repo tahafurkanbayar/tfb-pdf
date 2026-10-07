@@ -25,7 +25,9 @@ use App\I18n\LocaleNegotiator;
 use App\I18n\Translator;
 use App\Security\Hmac;
 use App\Security\OwnerContext;
+use App\Pdf\PdfInspector;
 use App\Services\HashService;
+use App\Services\Upload\UploadValidator;
 use App\Services\StorageService;
 
 return static function (Container $c, Config $config): void {
@@ -116,6 +118,12 @@ return static function (Container $c, Config $config): void {
 
     $c->set(StorageService::class, fn () => new StorageService($storage));
     $c->set(HashService::class, fn () => new HashService());
+    $c->set(PdfInspector::class, fn () => new PdfInspector());
+    $c->set(UploadValidator::class, fn (Container $c) => new UploadValidator(
+        $c->get(PdfInspector::class),
+        (int) $config->get('limits.max_upload_size'),
+        (int) $config->get('limits.max_pages_per_document')
+    ));
 
     $c->set(Router::class, function () use ($c): Router {
         $router = new Router();
