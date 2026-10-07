@@ -70,3 +70,8 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 ## 2026-10-08 — Sayı ve tarih biçimleri (Aşama 29)
 - Boyutlar: ondalık ayırıcı çeviri anahtarı `common.decimal_separator` (TR `,`, EN `.`); `Size::format` etkin dili kullanır, JS `formatSize` aynı kuralı `Intl.NumberFormat(locale, {useGrouping: false})` ile uygular (TR "13,5 KB", EN "13.5 KB"). Yüzdeler çeviri metninde (TR "%30", EN "30%").
 - Tarihler yalnızca sunucuda `DateFormatter` ile (uygulama saat dilimi; TR `d.m.Y H:i`, EN `Y-m-d H:i`) biçimlenir. Saklama süresi güncellendiğinde API görünen metni (`expiry.status`) döndürür; JS tarayıcı saat dilimiyle ayrıca biçimlendirme yapmaz (sayfa ile JS arasında tutarsızlık olmaz).
+
+## 2026-10-08 — Test kapsamı ve uçtan uca testler (Aşama 30)
+- Spec §45 uçtan uca akış `Feature\HappyPathTest` ile **süreç içi HTTP** üzerinden test edilir (gerçek PDF, gerçek test veritabanı ve storage; yükle → döndür → sürüm → hash → audit → indir). Tarayıcı otomasyonu (Selenium/Playwright) Node/npm yasağı ve cPanel hedefi nedeniyle test paketinde yok; tarayıcı tarafı Aşama 11, 28 ve 29'da headless Chrome ile elle doğrulandı.
+- `Feature\LocalizationPagesTest`: 25 yol × TR/EN; eksik anahtar (`Translator::missingKeys`), çözülmemiş `grup.anahtar` metni, EN sayfada Türkçe harf, `<html lang>`, menü ve JS'e giden çevirilerin sayfa diliyle aynı olması. Aşama 29'daki elle taramanın kalıcı hali.
+- Zip eklentisine bağlı testler eklenti yoksa atlanır, "zip yokken" davranış testi eklenti varsa atlanır; tam doğrulama için paket iki kez çalıştırılır: `php vendor/bin/phpunit` ve `php -d extension=zip vendor/bin/phpunit`.

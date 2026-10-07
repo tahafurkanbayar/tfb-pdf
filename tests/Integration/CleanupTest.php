@@ -8,7 +8,6 @@ use App\Core\Logger;
 use App\Repositories\DocumentRepository;
 use App\Repositories\ExpiryRepository;
 use App\Services\CleanupService;
-use App\Services\ExpiryPolicy;
 use App\Services\StorageService;
 use Tests\Support\DatabaseTestCase;
 use Tests\Support\Services;
@@ -51,17 +50,6 @@ final class CleanupTest extends DatabaseTestCase
             6,
             14
         );
-    }
-
-    public function testExpiryPolicyCalculation(): void
-    {
-        $now = 1_800_000_000;
-        self::assertSame(gmdate('Y-m-d H:i:s', $now + 86400), ExpiryPolicy::expiresAt('1d', $now));
-        self::assertSame(gmdate('Y-m-d H:i:s', $now + 30 * 86400), ExpiryPolicy::expiresAt('30d', $now));
-        self::assertNull(ExpiryPolicy::expiresAt('never', $now));
-        self::assertTrue(ExpiryPolicy::isExpired(gmdate('Y-m-d H:i:s', $now - 1), $now));
-        self::assertFalse(ExpiryPolicy::isExpired(gmdate('Y-m-d H:i:s', $now + 1), $now));
-        self::assertFalse(ExpiryPolicy::isExpired(null, $now));
     }
 
     public function testExpiredDocumentsAreDeletedWithAuditAndOthersKept(): void

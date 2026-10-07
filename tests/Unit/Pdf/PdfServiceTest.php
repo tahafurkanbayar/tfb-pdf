@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Pdf;
 
 use App\Exceptions\ValidationException;
+use App\Pdf\PageRangeParser;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
 use PHPUnit\Framework\TestCase;
@@ -80,6 +81,26 @@ final class PdfServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
         $this->pdf->extract($src, $this->dir . '/bad.pdf', [5]);
+    }
+
+    public function testSplitIntoRangesProducesOneFilePerRangeInOrder(): void
+    {
+        // Her sayfa farklı genişlikte: çıktılardaki sayfaların hangi kaynak sayfadan geldiği ölçülebilir
+        $sizes = array_map(static fn (int $i): array => [300.0 + $i * 10, 500.0], range(1, 6));
+        $src = TestPdf::create($this->dir . '/src.pdf', 6, $sizes);
+        $before = sha1_file($src);
+
+        $ranges = PageRangeParser::parse('1-2, 5, 3-4', 6);
+        $inspector = new PdfInspector();
+        $widths = [];
+        foreach ($ranges as $i => $range) {
+            $out = $this->dir . '/part-' . ($i + 1) . '.pdf';
+            self::assertSame(count(PageRangeParser::pages($range)), $this->pdf->extract($src, $out, PageRangeParser::pages($range)));
+            $widths[] = array_map(static fn (array $p): int => (int) round($p['width']), $inspector->inspect($out)->pages);
+        }
+
+        self::assertSame([[310, 320], [350], [330, 340]], $widths);
+        self::assertSame($before, sha1_file($src), 'Kaynak dosya değişmemeli');
     }
 
     public function testRotationNormalization(): void

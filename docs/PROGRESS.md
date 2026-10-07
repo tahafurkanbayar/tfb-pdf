@@ -2,7 +2,7 @@
 
 Durum işaretleri: `[x]` tamamlandı · `[~]` devam ediyor · `[ ]` bekliyor · `[!]` sorunlu / kısmi
 
-Son güncelleme: 2026-10-07
+Son güncelleme: 2026-10-08
 
 | # | Aşama | Durum | Not |
 |---|---|---|---|
@@ -36,14 +36,14 @@ Son güncelleme: 2026-10-07
 | 27 | Security hardening | [x] | Rate limiting (DB, HMAC'li), yapılandırma koruması, post_max_size tespiti, erken hata sayfası düzeltmesi, güvenlik testleri + Apache erişim kontrolleri |
 | 28 | Responsive UI | [x] | 320/390/820 px ve masaüstünde 15 sayfa yatay taşmasız; `[hidden]` ile Bootstrap `.d-flex` çakışması, mobil menü kenar boşluğu, yığılan kart boşluğu, etiketsiz imzalayan seçimi düzeltildi; küçük resimler, imzalayan önizlemesi ve temel erişilebilirlik taraması gerçek Chrome'da doğrulandı |
 | 29 | Türkçe/İngilizce UI kontrolü | [x] | 26 sayfa × 2 dilde sunucu ve JS sonrası tarama (sızıntı yok), sayfa başına JS çeviri grubu kapsamı, dil değiştirme (yol + sorgu korunuyor, açık yönlendirme yok), çevrilmiş API hataları; TR ondalık virgül (sunucu + JS aynı), süre metni sunucuda biçimleniyor |
-| 30 | Tests | [ ] | |
+| 30 | Tests | [x] | §45 eşlemesi: HashService, ExpiryPolicy, sürüm numaralama, PdfService bölme unit testleri; Upload→DB→işlem→sürüm→hash→audit entegrasyon testi; HTTP üzerinden uçtan uca happy path (indirme + audit zinciri); §46 için 25 yol × TR/EN otomatik çeviri taraması; mutasyonla hassasiyet kontrolü; zip eklentisiz 271 test (3 atlandı) ve eklentili 271 test (1 atlandı) geçti |
 | 31 | cPanel deployment | [ ] | |
 | 32 | README | [ ] | |
 | 33 | Final verification | [ ] | |
 
 ## Sıradaki adım
 
-Aşama 30: Tests (spec §45'e göre unit/integration/E2E kapsam gözden geçirmesi, eksik testlerin eklenmesi, zip eklentili ve eklentisiz tam çalıştırma).
+Aşama 31: cPanel deployment (web kurulum sihirbazı `/install` + INSTALL_KEY, ortam kontrolü, SSH olmadan kurulum adımları).
 
 ## Aşama notları
 

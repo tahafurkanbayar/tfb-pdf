@@ -378,3 +378,19 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | geçici dosyaların silinmesi | Silindi |
 | `php bin/check-translations.php` | OK (578 anahtar) |
 | `php vendor/bin/phpunit` | OK (254 tests, 1056 assertions, 3 skipped — zip) |
+| `git add -A; git commit; git push` | 7d1fedf — Aşama 29 |
+
+## Aşama 30 — Testler
+
+| Komut | Sonuç |
+|---|---|
+| spec §45/§46 ↔ `tests/` karşılaştırması | Var: dosya adı, doğrulama, sayfa aralığı, birleştirme, döndürme, çeviri. Eksik/dağınık: SHA-256 `StorageServiceTest` içinde, süre hesabı entegrasyon testinde, PdfService düzeyinde bölme yok, sürüm numaralama kuralları ayrı değil, §45 zinciri ve audit'i doğrulayan uçtan uca test yok, §46 sayfa taraması yalnızca elle (Aşama 29) |
+| yeni testler: `Unit/Services/HashServiceTest`, `Unit/Services/ExpiryPolicyTest`, `Unit/Domain/VersionNumberingTest`, `PdfServiceTest::testSplitIntoRanges...`, `Integration/ProcessingPipelineTest`, `Feature/HappyPathTest`, `Feature/LocalizationPagesTest` | Yinelenen eski hash/süre testleri yeni dosyalara taşındı |
+| `php vendor/bin/phpunit --filter 'HashServiceTest\|ExpiryPolicyTest\|...'` (8 sınıf) | OK (42 tests, 200 assertions) |
+| `php vendor/bin/phpunit --filter LocalizationPagesTest` | 1 failure: testte yanlış anahtar adı (`dashboard.storage_usage`, doğrusu `dashboard.storage`) → düzeltildi; OK (2 tests, 21045 assertions) |
+| mutasyon kontrolü: EN `common.skip_to_content` Türkçe yapıldı, `ExpiryPolicy::isExpired` `<=` → `<`, audit `outputHash` girdi hash'i yapıldı | 6 test düştü (LocalizationPages, ExpiryPolicy ×2, ProcessingPipeline ×2, HappyPath); `git checkout --` ile geri alındı |
+| `php -m \| grep zip` | Boş (zip eklentisi yüklü değil; `ext/php_zip.dll` var) |
+| `php vendor/bin/phpunit` | OK (271 tests, 22200 assertions, 3 skipped — zip gerektiren testler) |
+| `php -d extension=zip vendor/bin/phpunit` | OK (271 tests, 22234 assertions, 1 skipped) |
+| `php -d extension=zip vendor/bin/phpunit --display-skipped` | Atlanan: `ExportTest::testUnavailableWithoutZipExtension` (zip yokken davranış testi) — iki çalıştırma birlikte tüm dalları kapsıyor |
+| `php bin/check-translations.php` | OK (578 anahtar) |

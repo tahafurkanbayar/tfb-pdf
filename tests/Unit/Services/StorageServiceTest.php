@@ -143,17 +143,4 @@ final class StorageServiceTest extends TestCase
         $this->expectException(StorageException::class);
         $this->storage->purgeOlderThan('documents', 0);
     }
-
-    public function testHashService(): void
-    {
-        $file = $this->root . '/temporary/h.txt';
-        file_put_contents($file, 'abc');
-        $hash = new HashService();
-
-        self::assertSame('ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad', $hash->file($file));
-        self::assertTrue($hash->verify($file, 'BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD'));
-        self::assertFalse($hash->verify($file, str_repeat('0', 64)));
-        self::assertTrue(HashService::isValid(hash('sha256', 'x')));
-        self::assertFalse(HashService::isValid('xyz'));
-    }
 }
