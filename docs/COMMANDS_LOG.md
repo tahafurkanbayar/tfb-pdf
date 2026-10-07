@@ -58,3 +58,14 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 |---|---|
 | `php vendor/bin/phpunit` | OK (34 tests, 100 assertions) |
 | `php bin/check-translations.php` | tr: 127, en: 127 anahtar — "OK: çeviriler eksiksiz.", exit 0 |
+| `git add -A; git commit; git push` | b1d85e4 — Aşama 4 |
+
+## Aşama 5 — MySQL bağlantısı
+
+| Komut | Sonuç |
+|---|---|
+| `mysql -u root -h 127.0.0.1 -e "SELECT VERSION(); SHOW DATABASES;"` | 10.4.32-MariaDB çalışıyor |
+| `mysql ... -e "CREATE DATABASE IF NOT EXISTS tfb_pdf ...; CREATE DATABASE IF NOT EXISTS tfb_pdf_test ...; SELECT @@sql_mode, @@time_zone"` | İki veritabanı oluşturuldu (utf8mb4_unicode_ci). Sunucu sql_mode strict değil, time_zone SYSTEM |
+| `php vendor/bin/phpunit` | OK (39 tests, 110 assertions) — fakat EnvTest'in .env değerlerini sildiği fark edildi |
+| `php vendor/bin/phpunit` (EnvTest düzeltmesi sonrası) | OK (39 tests, 110 assertions) |
+| `php bin/check-translations.php` | OK |

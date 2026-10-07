@@ -7,3 +7,6 @@ if (!defined('APP_ROOT')) {
 }
 
 require APP_ROOT . '/vendor/autoload.php';
+
+// Veritabanı bağlantı bilgileri için (.env yoksa varsayılanlar kullanılır)
+App\Core\Env::load(APP_ROOT . '/.env');

@@ -122,8 +122,16 @@ final class Env
     }
 
     /**
-     * Testler için.
+     * Testler için: mevcut değerleri saklayıp geri yüklemek.
      *
+     * @return array<string, string>
+     */
+    public static function all(): array
+    {
+        return self::$values;
+    }
+
+    /**
      * @param array<string, string> $values
      */
     public static function replace(array $values): void

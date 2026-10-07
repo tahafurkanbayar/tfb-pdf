@@ -11,7 +11,7 @@ Son güncelleme: 2026-10-07
 | 2 | Composer | [x] | fpdi 2.6.8, tfpdf 1.33, phpmailer 7.1.1, phpunit 11.5 (dev); composer.phar yerelde |
 | 3 | Configuration | [x] | Env okuyucu, Config (nokta notasyonu), config/*.php, .env.example, Size |
 | 4 | Localization sistemi | [x] | Translator, LocaleNegotiator, __()/trans_choice(), 8 dil grubu, bin/check-translations.php |
-| 5 | MySQL bağlantısı | [ ] | |
+| 5 | MySQL bağlantısı | [x] | Database (PDO, strict+UTC oturum, transaction), hata kategorileri, entegrasyon testleri |
 | 6 | Migration sistemi | [ ] | |
 | 7 | Core PHP architecture | [ ] | |
 | 8 | Storage sistemi | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 5: MySQL bağlantısı (Database sınıfı, PDO ayarları, yerel veritabanı oluşturma).
+Aşama 6: Migration sistemi (database/migrations/*.sql, Migrator, bin/migrate.php, schema.sql).
 
 ## Aşama notları
 

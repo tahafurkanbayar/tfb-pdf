@@ -9,9 +9,17 @@ use PHPUnit\Framework\TestCase;
 
 final class EnvTest extends TestCase
 {
+    /** @var array<string, string> */
+    private array $original = [];
+
+    protected function setUp(): void
+    {
+        $this->original = Env::all();
+    }
+
     protected function tearDown(): void
     {
-        Env::replace([]);
+        Env::replace($this->original);
     }
 
     public function testParsesQuotedUnquotedAndCommentedValues(): void
