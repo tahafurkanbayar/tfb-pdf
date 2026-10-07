@@ -282,12 +282,15 @@ final class StorageService
      */
     public function purgeOlderThan(string $directory, int $maxAgeSeconds, int $limit = 500): int
     {
-        if (!in_array($directory, ['temporary', 'exports', 'previews', 'cache'], true)) {
+        if (!in_array($directory, ['temporary', 'exports', 'previews', 'cache', 'sessions'], true)) {
             throw new StorageException('Purge not allowed for: ' . $directory);
         }
 
-        $base = $this->resolve($directory . '/x');
-        $base = dirname($base);
+        // $directory yukarıdaki sabit listeden geldiği için yol doğrudan kurulur
+        $base = $this->root . '/' . $directory;
+        if (!is_dir($base)) {
+            return 0;
+        }
         $threshold = time() - $maxAgeSeconds;
         $deleted = 0;
 
@@ -302,6 +305,26 @@ final class StorageService
         }
 
         return $deleted;
+    }
+
+    /**
+     * Diskte dizini bulunan belge kimlikleri ve en yeni değişiklik zamanları (yetim dosya temizliği için).
+     *
+     * @return array<string, int> belge id => mtime
+     */
+    public function documentIdsOnDisk(): array
+    {
+        $ids = [];
+        foreach (['documents', 'versions', 'previews', 'signatures'] as $area) {
+            foreach (glob($this->root . '/' . $area . '/*/*', GLOB_ONLYDIR) ?: [] as $dir) {
+                $id = basename($dir);
+                if (preg_match('/^[a-f0-9]{32}$/', $id) && basename(dirname($dir)) === substr($id, 0, 2)) {
+                    $ids[$id] = max($ids[$id] ?? 0, (int) filemtime($dir));
+                }
+            }
+        }
+
+        return $ids;
     }
 
     public function freeSpace(): ?int

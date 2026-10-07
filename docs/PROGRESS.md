@@ -30,7 +30,7 @@ Son güncelleme: 2026-10-07
 | 21 | Versioning | [x] | Sıralı, değiştirilemez sürümler; köken (kaynak sürüm) gösterimi; araçlarla belirli sürüm seçimi; DB tekillik ve üzerine yazma reddi testleri |
 | 22 | Hashing | [x] | Sunucuda tüm sürümlerin bütünlük doğrulaması (ok/mismatch/missing), tarayıcıda yerel dosya karşılaştırma (WebCrypto, PHP ile birebir) |
 | 23 | Audit logging | [x] | Append-only + hash zinciri, bin/verify-audit.php, tüm işlem türlerinin kapsam testi, audit ve log'larda hassas veri olmadığı testleri |
-| 24 | Expiration | [ ] | |
+| 24 | Expiration | [x] | CleanupService (süresi dolan belgeler + audit 'expiry', geçici/export/önizleme/oturum, yetim dizinler, rate limit), cron/cleanup.php, fırsatçı temizlik (gerçek isteklerle doğrulandı) |
 | 25 | Export | [ ] | |
 | 26 | Signature workflow | [ ] | |
 | 27 | Security hardening | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 24: Expiration (cron/cleanup.php, fırsatçı temizlik, yetim dosyalar, geçici/önizleme/export temizliği).
+Aşama 25: Export (belge ve tüm veriler: PDF'ler, sürümler, metadata, işlem geçmişi, audit log — ZIP).
 
 ## Aşama notları
 

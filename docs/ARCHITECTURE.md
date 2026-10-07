@@ -178,3 +178,9 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - Olaylar: upload, merge, split, reorder, rotate, compress, watermark, redact, ocr, office_convert, download, export, delete, expiry, expiry_changed, signature_* (imza aşamasında). Her kayıt: event_id, document/operation public id, event_type, created_at, input_hash, output_hash, status (success/failed/no_change), metadata (kanonik JSON), error_message (kategori:anahtar).
 - Gizlilik: dosya adları, filigran metni, PDF içeriği audit'e yazılmaz; IP ve tarayıcı bilgisi yalnızca imza olaylarında (imza kanıtı) tutulur.
 - `php bin/verify-audit.php`: zinciri doğrular (0 sağlam / 1 bozulma / 2 hata). Değişiklik, silme ve son kaydın silinmesi (zincir başı uyuşmazlığı) tespit edilir.
+
+## Süre dolumu ve temizlik (Aşama 24)
+
+- `ExpiryPolicy`: 1d / 7d / 30d / never; süre seçildiği andan itibaren. Varsayılan `DEFAULT_EXPIRY`.
+- `CleanupService::run()` (flock ile tekil): süresi dolan belgeler → `DocumentService::delete(..., 'expiry', actor)`; `temporary/` ve `exports/` (TEMPORARY_TTL_HOURS), `previews/` (PREVIEW_TTL_DAYS), `sessions/` (24 saat); yetim belge dizinleri (DB kaydı yok, 6 saat bekleme süresi); 2 günden eski `rate_limits`.
+- Tetikleme: `cron/cleanup.php` (cPanel Cron, 240 sn bütçe), fırsatçı (istek gönderildikten sonra ~1/50, 3 sn, en fazla 5 belge; `OPPORTUNISTIC_CLEANUP`).

@@ -40,6 +40,7 @@ use App\Repositories\ExpiryRepository;
 use App\Repositories\OperationRepository;
 use App\Repositories\VersionRepository;
 use App\Services\AuditService;
+use App\Services\CleanupService;
 use App\Services\DocumentService;
 use App\Services\ThumbnailService;
 use App\Services\ToolCatalog;
@@ -266,6 +267,19 @@ return static function (Container $c, Config $config): void {
     ));
     $c->set(VerifyCsrfToken::class, fn (Container $c) => new VerifyCsrfToken($c->get(Csrf::class)));
 
-    // İstek gönderildikten sonra çalışacak görevler (ör. fırsatçı temizlik)
-    $c->set('after_response', fn () => []);
+    $c->set(CleanupService::class, fn (Container $c) => new CleanupService(
+        $c->get(Database::class),
+        $c->get(DocumentRepository::class),
+        $c->get(ExpiryRepository::class),
+        $c->get(DocumentService::class),
+        $c->get(StorageService::class),
+        $c->get(Logger::class),
+        (int) $config->get('storage.temporary_ttl_hours', 6),
+        (int) $config->get('storage.preview_ttl_days', 14)
+    ));
+
+    // İstek gönderildikten sonra çalışacak görevler: cron kurulamayan sunucularda fırsatçı temizlik
+    $c->set('after_response', fn (Container $c) => (bool) $config->get('storage.opportunistic_cleanup', true) && $c->get(Database::class)->isConfigured()
+        ? [static fn () => $c->get(CleanupService::class)->maybeRunOpportunistic()]
+        : []);
 };

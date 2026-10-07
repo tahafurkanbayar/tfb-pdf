@@ -286,3 +286,15 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `mysql ... SELECT COUNT(*), audit_chain_head` | 6 olay, zincir başı 64fcfdb8… |
 | `php vendor/bin/phpunit --filter "AuditCoverageTest\|LoggerTest"` | OK (4 tests, 89 assertions) |
 | `php vendor/bin/phpunit` | OK (tam paket) |
+| `git add -A; git commit; git push` | 932b988 — Aşama 23 |
+
+## Aşama 24 — Expiration
+
+| Komut | Sonuç |
+|---|---|
+| `sed` (RELATIVE_PATTERN'e sessions) + `php -r` (CleanupService ve after_response bağlama) + `php -l` | Temiz; ancak sessions'ı çözümleyiciye eklemek mevcut güvenlik testine aykırıydı → geri alındı, purge yolu izinli listeden doğrudan kuruluyor |
+| `php vendor/bin/phpunit --filter "CleanupTest\|StorageServiceTest"` | OK (22 tests, 85 assertions) |
+| `php cron/cleanup.php` (geliştirme) | Rapor: hepsi 0, completed evet, exit 0; belge sayısı değişmedi (1) |
+| `php bin/verify-audit.php` | OK, zincir sağlam |
+| 120 × `curl /tr/about` (Apache) + log kontrolü | Fırsatçı temizlik 2 kez çalıştı (actor=system), error/critical log yok |
+| `php vendor/bin/phpunit` | OK (tam paket) |
