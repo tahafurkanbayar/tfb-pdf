@@ -1,6 +1,6 @@
 # Mimari
 
-> Yaşayan belge. Kod değiştikçe güncellenir. "Planlanan" diye işaretli kısımlar henüz yazılmamıştır.
+> Yaşayan belge. Kod değiştikçe güncellenir.
 
 ## Genel bakış
 
@@ -20,14 +20,14 @@ HTTP isteği
 
 PDF işleme `src/Pdf/` altında, view'lardan ve controller'lardan bağımsızdır. Gelecekte REST API veya mobil istemci aynı servisleri kullanır.
 
-## Dizin yapısı (planlanan)
+## Dizin yapısı
 
 ```text
 tfb-pdf/
 ├── .htaccess              # Proje kökü web root olursa: her şeyi public/'e yönlendirir, gerisini kapatır
 ├── .env.example
 ├── composer.json
-├── bin/                   # CLI: migrate.php, check-translations.php, check-env.php, verify-audit.php
+├── bin/                   # CLI: migrate.php, check-translations.php, verify-audit.php (ortam kontrolü: web /install)
 ├── bootstrap/app.php
 ├── config/                # .env'den okunan yapılandırma dizileri
 ├── cron/cleanup.php       # cPanel Cron Job
@@ -36,32 +36,36 @@ tfb-pdf/
 │   └── schema.sql         # phpMyAdmin ile içe aktarım için birleşik şema (üretilen)
 ├── docs/
 ├── public/                # Tek web'e açık dizin
-│   ├── index.php
+│   ├── index.php          # app-root.php varsa uygulama kökünü oradan alır (public_html yerleşimi)
 │   ├── .htaccess
-│   └── assets/            # css, js, vendor/bootstrap, vendor/pdfjs (yerel kopya, CDN yok)
+│   └── assets/            # css, js, img, vendor/bootstrap, vendor/pdfjs (yerel kopya, CDN yok)
 ├── resources/
+│   ├── fonts/unifont/     # DejaVu (tFPDF Unicode)
 │   ├── lang/{tr,en}/*.php # Çeviri dosyaları (grup başına bir dosya)
-│   └── views/             # Düz PHP şablonları
-├── routes/
+│   └── views/             # Düz PHP şablonları (layouts, pages, tools, partials, errors)
+├── routes/                # web.php (sayfalar, /install), api.php
 ├── src/                   # Namespace App\ (PSR-4)
-│   ├── Core/              # Request, Response, Router, Container, Config, Env, Session, Csrf, View, Logger, Database, ErrorHandler
-│   ├── Http/Controllers/
-│   ├── Http/Middleware/
-│   ├── Services/
+│   ├── Core/              # Application, Container, Config, Env, Session, Csrf, View, Logger, Database, ErrorHandler, Url
+│   ├── Database/          # Migrator
+│   ├── Domain/            # Document, DocumentVersion (salt okunur değer nesneleri)
+│   ├── Http/              # Request, Response, Router, Controllers/, Controllers/Api/, Middleware/, Presenters/
+│   ├── Services/          # Document, Operations/, Audit, Cleanup, Export, Signature, Storage, Hash, Upload/, Install/ ...
 │   ├── Repositories/
-│   ├── Pdf/               # PDF okuma/normalizasyon, işlemler (merge, split ...)
+│   ├── Pdf/               # Parser/, PdfInspector, PdfService, Compression/, Redaction/, Ocr/, Office/, Signature/
+│   ├── Security/          # OwnerContext, Hmac, RateLimiter
+│   ├── Support/           # FilenameSanitizer, Size, DateFormatter
 │   ├── Tools/             # Harici araç tespiti ve çalıştırma (gs, soffice, tesseract)
 │   ├── I18n/
 │   └── Exceptions/
-├── storage/               # Web'e kapalı
+├── storage/               # Web'e kapalı (.htaccess: Require all denied)
 │   ├── documents/         # Orijinaller: documents/ab/<id>/original.pdf
 │   ├── versions/          # versions/ab/<id>/v001.pdf ...
 │   ├── previews/          # Thumbnail cache
 │   ├── temporary/         # İşlem sırasında geçici dosyalar
 │   ├── exports/           # Hazırlanan ZIP export'lar
-│   ├── sessions/
-│   └── logs/
-└── tests/
+│   ├── signatures/        # İmza görselleri
+│   ├── sessions/  cache/  logs/
+└── tests/                 # Unit/, Integration/, Feature/, Support/
 ```
 
 ## Temel kavramlar

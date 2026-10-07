@@ -413,3 +413,18 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -d extension=zip vendor/bin/phpunit` | OK (289 tests, 22344 assertions, 1 skipped) |
 | headless Chrome ekran görüntüsü (giriş yapılmış sayfanın geçici statik kopyası, 1280 ve 500 px) | Düzgün, taşma yok; geçici dosya ve profil silindi |
 | eski PHP sürüm kontrolü (`bootstrap/app.php`, `bin/migrate.php`) | Yalnızca PHP 8.2.12 ile sözdizimi kontrolü yapıldı; yerelde eski PHP olmadığından < 8.2 mesajı **denenmedi** |
+| `git add -A; git commit; git push` (ilk deneme: bash ayrıştırma hatası, belge eklemeleri yapılmış commit yapılmamıştı) | 001e6e1 — Aşama 31 |
+
+## Aşama 32 — README
+
+| Komut | Sonuç |
+|---|---|
+| spec §21, §25, §28, §37–39, §47–48, §54 + `docs/LIMITATIONS.md` incelemesi | README bölümleri ve içerik kaynakları belirlendi |
+| `php composer.phar licenses --no-dev` + `public/assets/vendor/**/LICENSE*`, `icons.LICENSE.txt`, `DejaVu_LICENSE.txt` başlıkları | fpdi MIT, tfpdf LGPL-2.1, phpmailer LGPL-2.1-only, Bootstrap/Bootstrap Icons MIT, PDF.js Apache-2.0 (alt bileşenler kendi lisanslarıyla), DejaVu Bitstream Vera/Arev |
+| config `Env::` anahtarları ↔ `.env.example` karşılaştırması | `SMTP_TIMEOUT`, `TOOL_DETECTION_CACHE_TTL` örnekte yoktu → eklendi |
+| `php bin/migrate.php schema` + `git diff --stat database/schema.sql` | Fark yok (şema güncel) |
+| `mysql` ile boş `tfb_pdf_schema_test` veritabanına `database/schema.sql` içe aktarma + Migrator kontrolü | 12 tablo, 8 migration kaydı, `pending=0 modified=0`; geçici veritabanı silindi |
+| README iddialarının kodla karşılaştırılması (HSTS, güvenlik başlıkları, log maskeleme, PHPUnit lisansı, dil ekleme, test atlama) | 3 düzeltme: PDF.js alt lisansları "OFL" değil (Liberation kendi lisansı), kurulum kontrol sayısı ortama bağlı (sabit sayı kaldırıldı), yeni dilde tarih biçimi `DateFormatter`'da (not eklendi) |
+| `php vendor/bin/phpunit --testsuite Unit` + `grep` (unit testlerde DB kullanımı) | OK (193 tests, 573 assertions); unit testler gerçek veritabanı kullanmıyor |
+| `docs/ARCHITECTURE.md` | "planlanan" dizin ağacı ve var olmayan `bin/check-env.php` gerçek yapıya göre düzeltildi |
+| `gh api /markdown ...` | İlk deneme: Git Bash yolu dönüştürdü ("invalid API endpoint"); `gh api markdown` ile render edildi ancak API başlık kimliği üretmediği için içindekiler bağlantıları bu yolla doğrulanamadı |
