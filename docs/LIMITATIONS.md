@@ -21,3 +21,4 @@
 - Karartma yalnızca seçilen alanlara uygulanır; aynı bilgi diğer sayfalarda geçiyorsa kullanıcının onları da seçmesi gerekir (arayüzde açık uyarı var). Otomatik hassas veri arama yoktur.
 - Ghostscript yoksa karartılan sayfanın görüntüsü tarayıcıdaki PDF.js çizimidir; PDF.js'in desteklemediği öğeler (nadir) görüntüde eksik çıkabilir. Kullanıcı bunu önizlemede görür.
 - Karartma düzenleyicisinde alan seçimi işaretçi (fare/dokunmatik) gerektirir; klavye kullanıcıları için "tüm sayfayı karart" seçeneği vardır, serbest alan seçimi yoktur.
+- OCR yalnızca sunucuda Tesseract + (Ghostscript veya pdftoppm) varsa çalışır; geliştirme makinesinde bu araçlar olmadığından OCR akışı sahte çalıştırıcıyla (komutlar, dil seçimi, birleştirme) test edildi, gerçek Tesseract ile test edilmedi. Tek seferde en fazla 50 sayfa. OCR çıktısı sayfaları görüntü + görünmez metin katmanı olarak yeniden oluşturur.

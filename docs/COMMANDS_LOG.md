@@ -234,3 +234,14 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -r` (test: yalnızca `Do` ile çizilen nesneler + tüm akışlarda gizli metin araması) + `php vendor/bin/phpunit --filter RedactOperationTest` | OK (5 tests, 44 assertions) — gizli numara çıktının hiçbir akışında yok, kaynakta var |
 | headless Chrome: tüm araç JS modülleri import | Sözdizimi hatası yok (sayfa modüllerinde beklenen TypeError) |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |
+| `git add -A; git commit; git push` | 9a9efcb — Aşama 18 |
+
+## Aşama 19 — OCR capability detection
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (OcrEngine bağlama: servis, container, API, route) + `php -l` (4 dosya) | Temiz |
+| `php vendor/bin/phpunit --filter "OcrEngineTest\|OptionalToolsHttpTest"` | 1 failure: "kullanılamıyor" kelimesi JS çeviri verisinde her sayfada geçtiği için kontrol hatalıydı → görünür `role="alert"` kutusuna özel hale getirildi |
+| aynı komut | OK (6 tests, 29 assertions) |
+| `php -r` (bootstrap + Capabilities + ToolDetector, gerçek tespit) | ghostscript/office/ocr/zip: yok; gd ve proc_open: var; tespit 0.03 sn, `storage/cache/tools.json` yazıldı |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |

@@ -27,6 +27,7 @@ use App\Security\Hmac;
 use App\Security\OwnerContext;
 use App\Pdf\Compression\Compressor;
 use App\Pdf\PdfInspector;
+use App\Pdf\Ocr\OcrEngine;
 use App\Pdf\PdfService;
 use App\Pdf\Redaction\Redactor;
 use App\Services\Operations\OperationArchiveService;
@@ -209,7 +210,17 @@ return static function (Container $c, Config $config): void {
         $c->get(PdfInspector::class),
         (int) $config->get('limits.max_files_per_operation'),
         $c->get(Compressor::class),
-        $c->get(Redactor::class)
+        $c->get(Redactor::class),
+        $c->get(OcrEngine::class)
+    ));
+    $c->set(OcrEngine::class, fn (Container $c) => new OcrEngine(
+        $c->get(ProcessRunner::class),
+        $c->get(PdfService::class),
+        $c->get(ToolDetector::class)->path(ToolDetector::TESSERACT),
+        $c->get(ToolDetector::class)->path(ToolDetector::GHOSTSCRIPT),
+        $c->get(ToolDetector::class)->path(ToolDetector::PDFTOPPM),
+        (string) $config->get('tools.tesseract_languages', 'tur+eng'),
+        (int) $config->get('tools.timeout', 120)
     ));
     $c->set(Redactor::class, fn (Container $c) => new Redactor(
         $c->get(ProcessRunner::class),

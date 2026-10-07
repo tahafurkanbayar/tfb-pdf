@@ -9,6 +9,7 @@ use App\Domain\DocumentVersion;
 use App\Http\UploadedFile;
 use App\Exceptions\ValidationException;
 use App\Pdf\Compression\Compressor;
+use App\Pdf\Ocr\OcrEngine;
 use App\Pdf\PageRangeParser;
 use App\Pdf\Redaction\RedactionBoxes;
 use App\Pdf\Redaction\Redactor;
@@ -33,6 +34,7 @@ final class PdfToolService
         private readonly int $maxFilesPerOperation,
         private readonly ?Compressor $compressor = null,
         private readonly ?Redactor $redactor = null,
+        private readonly ?OcrEngine $ocr = null,
     ) {
     }
 
@@ -314,6 +316,39 @@ final class PdfToolService
                     $this->redactor->serverRendering() ? 'ghostscript+gd' : 'browser+gd',
                     ['pages' => $count, 'redacted_pages' => $boxes->pageNumbers(), 'boxes' => $boxes->boxCount()],
                     array_values(array_unique(['warnings.rasterized_pages', 'redact.residual_warning', ...$this->rebuildWarnings($paths)]))
+                );
+            }
+        );
+    }
+
+    /**
+     * OCR: taranmış PDF'i aranabilir hale getirir. Araçlar yoksa ToolUnavailableException (503).
+     */
+    public function ocr(string $ownerHash, string $documentId, ?int $versionNumber): OperationResult
+    {
+        if ($this->ocr === null || !$this->ocr->available()) {
+            throw new \App\Exceptions\ToolUnavailableException('OCR unavailable', 'errors.tool_unavailable');
+        }
+
+        [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+        if ((int) $version->pageCount > OcrEngine::MAX_PAGES) {
+            throw new ValidationException('Too many pages for OCR', 'ocr.too_many_pages', ['max' => OcrEngine::MAX_PAGES]);
+        }
+
+        return $this->operations->run(
+            'ocr',
+            $ownerHash,
+            [[$document, $version]],
+            ['pages' => $version->pageCount],
+            function (string $tmp, array $paths) use ($version): ProcessResult {
+                $file = $tmp . '/ocr.pdf';
+                $info = $this->ocr->run($paths[0], $file, (int) $version->pageCount, $tmp);
+
+                return new ProcessResult(
+                    [new OperationOutput($file, $info['pages'])],
+                    'tesseract',
+                    $info,
+                    array_values(array_unique(['warnings.ocr_accuracy', 'warnings.rasterized_pages', ...$this->rebuildWarnings($paths)]))
                 );
             }
         );

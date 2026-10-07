@@ -130,6 +130,15 @@ final class OperationApiController extends Controller
         ));
     }
 
+    public function ocr(Request $request): Response
+    {
+        return $this->respond($this->tools()->ocr(
+            $this->requireOwner(),
+            (string) $request->input('document', ''),
+            self::versionInput($request)
+        ));
+    }
+
     /**
      * GET /api/operations/{id}/download — işlemin tüm çıktıları tek ZIP.
      */

@@ -25,7 +25,7 @@ Son güncelleme: 2026-10-07
 | 16 | Compress | [x] | Ghostscript (varsa, -dSAFER) + PHP optimizasyonu (JPEG yeniden örnekleme, Flate); %3'ten az küçülme = yeni sürüm yok; araç tespiti altyapısı |
 | 17 | Watermark | [x] | Metin, 8 konum + döşeme, döndürme, opaklık (ExtGState), boyut, renk, katman, sayfa aralığı; Türkçe karakter (DejaVu); Chrome ile görsel doğrulama |
 | 18 | Redaction | [x] | Karartılan sayfa görüntüye dönüştürülür + kutular piksellere yakılır (sunucu Ghostscript veya tarayıcı PDF.js; sunucu kutuları yeniden uygular); gizli metnin dosyada kalmadığı testle kanıtlandı |
-| 19 | OCR capability detection | [ ] | |
+| 19 | OCR capability detection | [x] | Tesseract + Ghostscript/pdftoppm tespiti; varsa 300 DPI OCR (dil kesişimi, sayfa PDF'lerini birleştirme); yoksa açık mesaj ve 503; araç yokken uygulamanın çalıştığı test edildi |
 | 20 | Office conversion capability detection | [ ] | |
 | 21 | Versioning | [ ] | |
 | 22 | Hashing | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 19: OCR capability detection (Tesseract + Ghostscript/pdftoppm, devre dışıyken açık mesaj; varsa çalışan OCR).
+Aşama 20: Office conversion capability detection (LibreOffice headless; varsa DOC/DOCX/XLS/XLSX/PPT/PPTX → PDF).
 
 ## Aşama notları
 
