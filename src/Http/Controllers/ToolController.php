@@ -53,11 +53,14 @@ final class ToolController extends Controller
         }
 
         try {
-            [$document, $version] = $this->service(PdfToolService::class)->resolveInput($owner, $id);
+            $number = $request->query('version');
+            [$document, $version] = $this->service(PdfToolService::class)->resolveInput($owner, $id, is_numeric($number) ? (int) $number : null);
         } catch (AppException) {
             return null;
         }
 
-        return ['id' => $document->publicId, 'name' => $document->originalName, 'version' => $version->versionNumber, 'pages' => $version->pageCount];
+        $label = $version->isOriginal() ? __('documents.original') : __('documents.version_n', ['number' => $version->versionNumber]);
+
+        return ['id' => $document->publicId, 'name' => $document->originalName . ' — ' . $label, 'version' => $version->versionNumber, 'pages' => $version->pageCount];
     }
 }

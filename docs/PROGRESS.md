@@ -27,7 +27,7 @@ Son güncelleme: 2026-10-07
 | 18 | Redaction | [x] | Karartılan sayfa görüntüye dönüştürülür + kutular piksellere yakılır (sunucu Ghostscript veya tarayıcı PDF.js; sunucu kutuları yeniden uygular); gizli metnin dosyada kalmadığı testle kanıtlandı |
 | 19 | OCR capability detection | [x] | Tesseract + Ghostscript/pdftoppm tespiti; varsa 300 DPI OCR (dil kesişimi, sayfa PDF'lerini birleştirme); yoksa açık mesaj ve 503; araç yokken uygulamanın çalıştığı test edildi |
 | 20 | Office conversion capability detection | [x] | LibreOffice headless (ayrı profil, kabuksuz, zaman aşımı); orijinal Office dosyası sürüm 0, PDF sürüm 1; yoksa yükleme 503 + açık mesaj |
-| 21 | Versioning | [ ] | |
+| 21 | Versioning | [x] | Sıralı, değiştirilemez sürümler; köken (kaynak sürüm) gösterimi; araçlarla belirli sürüm seçimi; DB tekillik ve üzerine yazma reddi testleri |
 | 22 | Hashing | [ ] | |
 | 23 | Audit logging | [ ] | |
 | 24 | Expiration | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 21: Versioning (sürüm geçmişi gözden geçirme, sürüm karşılaştırma bilgisi, belge sayfasında araçlarla sürüm seçimi).
+Aşama 22: Hashing (bütünlük doğrulama: sunucuda tüm sürümleri yeniden hesaplama + tarayıcıda yerel dosyayı sürümlerle karşılaştırma).
 
 ## Aşama notları
 

@@ -57,4 +57,7 @@ return [
         'upload_office' => 'Yüklenen Office belgesi',
         'generated' => 'Oluşturulan belge',
     ],
+    'source_versions' => 'Kaynak: :versions',
+    'source_external' => ':count başka belgeden',
+    'use_version' => 'Bu sürümle işlem yap',
 ];

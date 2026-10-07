@@ -9,6 +9,7 @@
  * @var array{policy: string, expires_at: ?string}|null $expiry
  * @var list<array<string, mixed>> $operations
  * @var list<array<string, mixed>> $auditEvents
+ * @var array<int, array{inputs: list<int>, external: int}> $sources
  */
 $view->extend('layouts/app');
 $view->section('title', $document->originalName);
@@ -90,6 +91,16 @@ $pdfVersions = array_values(array_filter($versions, static fn (App\Domain\Docume
                                     <?php if ($version->operationType !== null): ?> · <?= e(__('audit.events.' . $version->operationType)) ?><?php endif; ?>
                                     <?php if ($version->label !== null): ?> · <?= e($version->label) ?><?php endif; ?>
                                 </span>
+                                <?php if (isset($sources[$version->id])): ?>
+                                    <span class="d-block small text-body-secondary">
+                                        <?php if ($sources[$version->id]['inputs'] !== []): ?>
+                                            <?= e(__('documents.source_versions', ['versions' => implode(', ', array_map(static fn (int $n): string => $n === 0 ? __('documents.original') : __('documents.version_n', ['number' => $n]), $sources[$version->id]['inputs']))])) ?>
+                                        <?php endif; ?>
+                                        <?php if ($sources[$version->id]['external'] > 0): ?>
+                                            <?= e(trans_choice('documents.source_external', $sources[$version->id]['external'])) ?>
+                                        <?php endif; ?>
+                                    </span>
+                                <?php endif; ?>
                             </td>
                             <td class="d-none d-md-table-cell"><?= $version->pageCount === null ? '—' : (int) $version->pageCount ?></td>
                             <td class="text-nowrap"><?= e(App\Support\Size::format($version->fileSize)) ?></td>
@@ -100,10 +111,21 @@ $pdfVersions = array_values(array_filter($versions, static fn (App\Domain\Docume
                                 </button>
                             </td>
                             <td class="d-none d-md-table-cell small text-nowrap"><time datetime="<?= e(App\Support\DateFormatter::iso($version->createdAt)) ?>"><?= e($dates->format($version->createdAt, $locale)) ?></time></td>
-                            <td class="text-end">
+                            <td class="text-end text-nowrap">
                                 <a class="btn btn-sm btn-outline-primary" href="<?= e($downloadUrl($version)) ?>">
                                     <?= $view->icon('download') ?><span class="visually-hidden"> <?= e(__('documents.download')) ?></span>
                                 </a>
+                                <?php if ($version->isPdf()): ?>
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                                aria-label="<?= e(__('documents.use_version')) ?>" title="<?= e(__('documents.use_version')) ?>"><?= $view->icon('gear') ?></button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <?php foreach (['split', 'reorder', 'rotate', 'compress', 'watermark', 'redact', 'ocr', 'sign'] as $tool): ?>
+                                                <li><a class="dropdown-item" href="<?= e($url->page('/tools/' . $tool, ['document' => $document->publicId, 'version' => $version->versionNumber])) ?>"><?= e(__('pdf.' . $tool)) ?></a></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -57,4 +57,7 @@ return [
         'upload_office' => 'Uploaded Office document',
         'generated' => 'Generated document',
     ],
+    'source_versions' => 'Source: :versions',
+    'source_external' => 'from :count other document|from :count other documents',
+    'use_version' => 'Process this version',
 ];

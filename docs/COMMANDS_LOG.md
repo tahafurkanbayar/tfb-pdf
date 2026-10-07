@@ -255,3 +255,13 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -r` (test servis grafiğine sahte LibreOffice) + `php -l` | Temiz |
 | `php vendor/bin/phpunit --filter OfficeConvertOperationTest` | OK (5 tests, 21 assertions) |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (226 tests, 815 assertions, 1 skipped — ext-zip); çeviriler eksiksiz |
+| `git add -A; git commit; git push` | 91a69f9 — Aşama 20 |
+
+## Aşama 21 — Versioning
+
+| Komut | Sonuç |
+|---|---|
+| `grep` (ToolController preselected, belge sayfası araç bağlantıları) | İnceleme |
+| `php -r` (`?version=` desteği, köken gösterimi, sürüm başına araç menüsü, çeviriler) + `php -l` (5 dosya) | Temiz |
+| `php vendor/bin/phpunit --filter VersioningTest` | OK (3 tests, 16 assertions) |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (230 tests, 837 assertions, 1 skipped); çeviriler eksiksiz |

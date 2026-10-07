@@ -27,9 +27,12 @@ final class DocumentController extends Controller
         $service = $this->service(DocumentService::class);
         $document = $service->get($params['id'], $this->owner()->hash());
 
+        $versions = $service->versions($document);
+
         return $this->view('pages/documents/show', [
             'document' => $document,
-            'versions' => $service->versions($document),
+            'versions' => $versions,
+            'sources' => $service->versionSources($document, $versions),
             'expiry' => $service->expiry($document),
             'operations' => $service->operationsForDocument($document),
             'auditEvents' => $this->service(AuditService::class)->forDocument($document->publicId, 50),

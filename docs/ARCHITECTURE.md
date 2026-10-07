@@ -158,3 +158,9 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - `App\Pdf\Fpdi`: `setAlpha()` (ExtGState, PDF 1.4'e yükseltir), `saveState/restoreState`, `rotateAround()` (cm matrisi). İmza ve karartmada da kullanılır.
 - `WatermarkOptions::fromInput`: metin 1–100 karakter (kontrol karakterleri temizlenir), 8 konum (döşeme dahil), -180..180°, opaklık 0.05..1, 6..200 pt, #RRGGBB, kalın, katman (üst/alt). Operation kaydına metnin kendisi değil uzunluğu yazılır.
 - Sayfa seçimi `PageRangeParser` ile (boş = tüm sayfalar). UI'da CSS tabanlı yaklaşık canlı önizleme.
+
+## Sürümleme (Aşama 21)
+
+- Sürüm 0 = orijinal (yalnızca yüklemede yazılır), işlemler `nextNumber()` (belge satırı `FOR UPDATE` kilidi) ile 1, 2, 3 ... alır; `(document_id, version_number)` ve `storage_path` tekil indeksli; `moveIntoPlace` mevcut dosyanın üzerine yazmaz. `no_change` işlemler numara tüketmez.
+- Köken: `operations.input_versions` → `DocumentService::versionSources()`; belge sayfasında "Kaynak: Sürüm N" ve birleştirmelerde başka belgeden gelen girdi sayısı.
+- Araçlar belirli sürümle çalışabilir: `/{l}/tools/{tool}?document=<id>&version=<n>` (verilmezse en son PDF sürümü). Belge sayfasında her PDF sürümü için araç menüsü.

@@ -169,6 +169,40 @@ final class DocumentService
         return $this->versions->listForDocument($document->id);
     }
 
+    /**
+     * Sürümlerin kökeni: her sürüm hangi sürüm(ler)den hangi işlemle üretildi.
+     *
+     * @param list<DocumentVersion> $versions
+     * @return array<int, array{inputs: list<int>, external: int}> version id => [aynı belgedeki kaynak sürüm no'ları, başka belgelerden girdi sayısı]
+     */
+    public function versionSources(Document $document, array $versions): array
+    {
+        $operations = [];
+        foreach ($this->operations->listForDocument($document->id) as $op) {
+            $operations[(int) $op['id']] = json_decode((string) ($op['input_versions'] ?? '[]'), true) ?: [];
+        }
+
+        $numbers = [];
+        foreach ($versions as $v) {
+            $numbers[$v->id] = $v->versionNumber;
+        }
+
+        $sources = [];
+        foreach ($versions as $v) {
+            if ($v->operationId === null || !isset($operations[$v->operationId])) {
+                continue;
+            }
+            $inputs = [];
+            $external = 0;
+            foreach ($operations[$v->operationId] as $inputId) {
+                isset($numbers[(int) $inputId]) ? $inputs[] = $numbers[(int) $inputId] : $external++;
+            }
+            $sources[$v->id] = ['inputs' => $inputs, 'external' => $external];
+        }
+
+        return $sources;
+    }
+
     public function version(Document $document, int $versionNumber): DocumentVersion
     {
         $version = $this->versions->find($document->id, $versionNumber);
