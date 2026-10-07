@@ -42,3 +42,11 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -d extension=zip composer.phar validate --strict` | composer.json geçerli |
 | `php -d extension=zip composer.phar install --no-interaction` | 30 paket kuruldu (fpdi 2.6.8, tfpdf 1.33, phpmailer 7.x, phpunit 11.5.57) |
 | `grep COMPRESSED_XREF vendor/setasign/fpdi/src` ve kaynak incelemesi | Ücretsiz FPDI xref stream'leri reddediyor; `getPdfParserInstance()` genişletme noktası mevcut |
+| `git add -A; git commit; git push` | 33c8927 — Aşama 2 |
+
+## Aşama 3 — Configuration
+
+| Komut | Sonuç |
+|---|---|
+| `php vendor/bin/phpunit` | OK (13 tests, 27 assertions) — EnvTest, SizeTest |
+| `php -r 'echo bin2hex(random_bytes(32));'` (APP_KEY) ve 16 bayt (INSTALL_KEY) → `sed ... .env.example > .env` | Yerel `.env` oluşturuldu (APP_ENV=local, DB tfb_pdf / root); `git check-ignore .env` ile ignore edildiği doğrulandı |
