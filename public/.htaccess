@@ -44,6 +44,9 @@ DirectoryIndex index.php
     ExpiresByType font/woff2 "access plus 30 days"
 </IfModule>
 
+# Statik dosyalar için; PHP yanıtlarının güvenlik başlıklarını uygulama kendisi ekler
 <IfModule mod_headers.c>
-    Header always set X-Content-Type-Options "nosniff"
+    <FilesMatch "\.(css|js|mjs|svg|png|jpg|woff2?|wasm|txt)$">
+        Header set X-Content-Type-Options "nosniff"
+    </FilesMatch>
 </IfModule>

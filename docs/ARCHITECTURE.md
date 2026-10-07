@@ -114,3 +114,12 @@ Frontend: `public/assets/js/app.js` (ES module: `t()`, `api()`, `toast()`), sayf
 - `moveIntoPlace()`: hedef varsa reddeder (immutable), `.part-*` geçici adla atomik rename.
 - `FilenameSanitizer`: kullanıcı adı yalnızca metadata/indirme adı; yol bileşenleri, kontrol karakterleri, RTL override, baştaki noktalar temizlenir.
 - `HashService`: akışlı SHA-256 (`hash_file`), `hash_equals` ile doğrulama.
+
+## Belge yönetimi (Aşama 10)
+
+- `Domain\{Document,DocumentVersion}`; `Repositories\{Document,Version,Operation,Expiry}Repository` (yalnızca SQL).
+- `DocumentService`: upload (doğrula → kota → temp → SHA-256 → `moveIntoPlace` → transaction{document, version 0, expiry, audit}); hata olursa dosyalar silinir. `get()` sahip kontrolünü sorguda yapar; yabancı belge = 404 (varlık sızdırılmaz). `delete()`: önce DB transaction (+ audit), sonra dosyalar.
+- `AuditService`: append-only, `settings.audit_chain_head` satır kilidiyle hash zinciri; `verify()` değişiklik/silmeyi tespit eder. Metadata kanonik JSON (MySQL 8 JSON normalizasyonuna dayanıklı).
+- API: `POST/GET /api/documents`, `GET/DELETE /api/documents/{id}`, `PUT .../expiry`, `GET .../versions/{n}/download[?inline=1]` (inline: Range, audit yok; normal: attachment + `download` olayı).
+- Sayfalar: `/{l}/documents`, `/{l}/documents/{id}`, dashboard (`/{l}`): yükleme, araçlar, son belgeler/işlemler, depolama, yakında silinecekler.
+- JS: `upload.js` (XHR ilerleme, dropzone), `pages/home.js`, `pages/document.js` (silme modalı + DELETE, saklama süresi PUT).

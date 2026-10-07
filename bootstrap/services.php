@@ -27,7 +27,15 @@ use App\Security\Hmac;
 use App\Security\OwnerContext;
 use App\Pdf\PdfInspector;
 use App\Services\HashService;
+use App\Repositories\DocumentRepository;
+use App\Repositories\ExpiryRepository;
+use App\Repositories\OperationRepository;
+use App\Repositories\VersionRepository;
+use App\Services\AuditService;
+use App\Services\DocumentService;
+use App\Services\ToolCatalog;
 use App\Services\Upload\UploadValidator;
+use App\Support\DateFormatter;
 use App\Services\StorageService;
 
 return static function (Container $c, Config $config): void {
@@ -83,6 +91,8 @@ return static function (Container $c, Config $config): void {
         $view->share('locales', $config->get('i18n.locales'));
         $view->share('config', $config);
         $view->share('csrfToken', fn (): string => $c->get(Csrf::class)->token());
+        $view->share('dates', $c->get(DateFormatter::class));
+        $view->share('maxUploadSize', $c->get(UploadValidator::class)->effectiveMaxSize());
 
         return $view;
     });
@@ -124,6 +134,31 @@ return static function (Container $c, Config $config): void {
         (int) $config->get('limits.max_upload_size'),
         (int) $config->get('limits.max_pages_per_document')
     ));
+
+    // Repository'ler
+    $c->set(DocumentRepository::class, fn (Container $c) => new DocumentRepository($c->get(Database::class)));
+    $c->set(VersionRepository::class, fn (Container $c) => new VersionRepository($c->get(Database::class)));
+    $c->set(OperationRepository::class, fn (Container $c) => new OperationRepository($c->get(Database::class)));
+    $c->set(ExpiryRepository::class, fn (Container $c) => new ExpiryRepository($c->get(Database::class)));
+
+    // Servisler
+    $c->set(AuditService::class, fn (Container $c) => new AuditService($c->get(Database::class)));
+    $c->set(ToolCatalog::class, fn () => new ToolCatalog(['ocr' => false, 'office' => false]));
+    $c->set(DocumentService::class, fn (Container $c) => new DocumentService(
+        $c->get(Database::class),
+        $c->get(DocumentRepository::class),
+        $c->get(VersionRepository::class),
+        $c->get(OperationRepository::class),
+        $c->get(ExpiryRepository::class),
+        $c->get(StorageService::class),
+        $c->get(HashService::class),
+        $c->get(AuditService::class),
+        $c->get(UploadValidator::class),
+        fn (): bool => false,
+        (int) $config->get('limits.max_storage_per_owner'),
+        (string) $config->get('storage.default_expiry', '7d')
+    ));
+    $c->set(DateFormatter::class, fn () => new DateFormatter((string) $config->get('app.timezone', 'Europe/Istanbul')));
 
     $c->set(Router::class, function () use ($c): Router {
         $router = new Router();

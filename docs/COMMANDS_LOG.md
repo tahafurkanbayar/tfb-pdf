@@ -118,3 +118,17 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit --filter PdfParsingTest` | OK (12 tests, 29 assertions) |
 | `sed` (docblock silme) + `ls` Office/LibreOffice/Ghostscript + `where tesseract gswin64c soffice` | Hiçbiri kurulu değil. sed docblock'u bozdu (açık `/**`), Edit ile düzeltildi |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (139 tests, 432 assertions); çeviriler eksiksiz |
+| `git add -A; git commit; git push` | e6439c9 — Aşama 9 |
+
+## Aşama 10 — Document management
+
+| Komut | Sonuç |
+|---|---|
+| `sed` (PROGRESS düzeltmesi, LIMITATIONS yer tutucu silme) | Tamam |
+| `php -r` ile js.php çeviri ekleme; `sed` ile layout i18n değişikliği | Çeviri eklendi; **sed layout'u değiştiremedi**, Edit ile yapıldı |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | 1 failure: Translator yorumundaki örnek anahtar `documents.page_count` tanımsız → yorum düzeltildi |
+| `php vendor/bin/phpunit` | 1 failure: test varsayımı `%PDF-1.4` (tFPDF 1.3 yazıyor) → beklenti kaynaktan okunacak şekilde düzeltildi |
+| `php vendor/bin/phpunit` | OK (152 tests, 513 assertions) |
+| `php scratchpad/make-pdf.php` + curl smoke (ilk deneme) | Yükleme yanıtı boş: Git Bash curl `-F file=@/c/...` yolunu okuyamadı (uygulama hatası değil) |
+| curl smoke (göreli yol ile, Apache) | upload 201; indirme 200, SHA-256 eşit; Range 206 (`%PDF-1.3`); sayfa 200; owner'sız 404; storage doğrudan 403; CSRF'siz DELETE 403; DELETE 200; silme sonrası 404; audit: upload/download/delete. Not: ilk denemedeki 1 test belgesi geliştirme DB'sinde kaldı (7 günlük süreyle silinecek) |
+| `curl -sI` başlık kontrolü | `X-Content-Type-Options` çift gönderiliyordu → public/.htaccess yalnızca statik dosyalara uygulanacak şekilde düzeltildi; sonrası 1 adet |

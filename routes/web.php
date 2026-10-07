@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Config;
 use App\Core\Container;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Router;
@@ -21,4 +22,7 @@ return static function (Router $router, Container $c): void {
     $router->get($l, [HomeController::class, 'index']);
     $router->get($l . '/about', [HomeController::class, 'about']);
     $router->get($l . '/privacy', [HomeController::class, 'privacy']);
+
+    $router->get($l . '/documents', [DocumentController::class, 'index']);
+    $router->get($l . '/documents/{id:[a-f0-9]{32}}', [DocumentController::class, 'show']);
 };

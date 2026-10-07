@@ -9,8 +9,8 @@ namespace App\I18n;
  * dosyasıdır ve iç içe dizi döndürür.
  *
  *   __('upload.success')
- *   __('documents.pages', ['count' => 3])           → ":count" yer tutucusu
- *   trans_choice('documents.page_count', 3)          → "1 page|:count pages"
+ *   __('common.page_count', ['count' => 3])          → ":count" yer tutucusu
+ *   trans_choice('common.page_count', 3)             → "1 page|:count pages"
  */
 final class Translator
 {

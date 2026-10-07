@@ -112,3 +112,36 @@ main:focus {
         transition: none;
     }
 }
+
+/* Yükleme alanı */
+.dropzone {
+    border: 2px dashed rgba(var(--bs-primary-rgb), 0.35);
+    border-radius: var(--tfb-radius);
+    background: #fff;
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.dropzone.is-dragover {
+    background: var(--tfb-brand-soft);
+    border-color: var(--tfb-brand);
+}
+
+.dropzone-icon,
+.empty-state-icon {
+    font-size: 2.5rem;
+    color: var(--tfb-brand);
+}
+
+progress.storage-meter,
+progress.upload-progress {
+    height: 0.6rem;
+    accent-color: var(--tfb-brand);
+}
+
+.hash {
+    word-break: break-all;
+}
+
+.min-w-0 {
+    min-width: 0;
+}

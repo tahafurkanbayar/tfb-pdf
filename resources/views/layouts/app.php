@@ -17,7 +17,11 @@ $jsConfig = [
     'baseUrl' => $url->to('/'),
     'apiUrl' => $url->to('/api'),
     'csrfToken' => $csrfToken(),
-    'i18n' => App\I18n\Lang::translator()->group('js') + App\I18n\Lang::translator()->group('states') + App\I18n\Lang::translator()->group('errors'),
+    // JS'in ihtiyaç duyduğu çeviri grupları; sayfa ek gruplar isteyebilir ($view->section('i18n', 'tools,pdf'))
+    'i18n' => array_merge(...array_map(
+        static fn (string $group): array => App\I18n\Lang::translator()->group(trim($group)),
+        array_filter(['js', 'states', 'errors', 'upload', ...explode(',', $view->yield('i18n'))])
+    )),
 ];
 ?>
 <!doctype html>
