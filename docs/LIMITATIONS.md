@@ -24,3 +24,6 @@
 - OCR yalnızca sunucuda Tesseract + (Ghostscript veya pdftoppm) varsa çalışır; geliştirme makinesinde bu araçlar olmadığından OCR akışı sahte çalıştırıcıyla (komutlar, dil seçimi, birleştirme) test edildi, gerçek Tesseract ile test edilmedi. Tek seferde en fazla 50 sayfa. OCR çıktısı sayfaları görüntü + görünmez metin katmanı olarak yeniden oluşturur.
 - Office → PDF yalnızca sunucuda LibreOffice varsa çalışır; geliştirme makinesinde LibreOffice olmadığından dönüşüm sahte çalıştırıcıyla (komut, profil dizini, ortam, hata kaydı) test edildi, gerçek LibreOffice ile test edilmedi. Makro içeren OOXML paketleri reddedilir; eski formatlar (DOC/XLS/PPT) makro içerebilir ancak headless dönüşümde makrolar çalıştırılmaz.
 - Dışa aktarma (ve bölme sonuçlarının toplu ZIP indirmesi) PHP `zip` eklentisi gerektirir. Yerel XAMPP'te bu eklenti kapalı olduğundan tarayıcıdan denenemedi; testler `php -d extension=zip` ile çalıştırıldı.
+- İmza akışı basit elektronik imzadır: imzalayanın kimliği doğrulanmaz (bağlantıya sahip olan imzalayabilir), PDF'e kriptografik dijital imza (PAdES) eklenmez. Nitelikli elektronik imza / eIDAS bilinçli olarak yoktur.
+- E-posta gönderimi SMTP yapılandırmasına bağlıdır; geliştirme ortamında SMTP olmadığından gerçek gönderim test edilmedi (devre dışı yolu test edildi).
+- İmzalayan sayfasında önizleme en fazla ilk 30 sayfayı gösterir.

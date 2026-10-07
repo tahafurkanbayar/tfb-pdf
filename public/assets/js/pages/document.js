@@ -145,3 +145,55 @@ if (integrity) {
         compareResult.textContent = match ? t('hash.compare_match', { version: match.label }) : t('hash.compare_no_match', { hash: hex });
     });
 }
+
+// İmza talepleri: iptal, yeni bağlantı, imzalı PDF'i yeniden oluşturma
+document.querySelectorAll('[data-request]').forEach((box) => {
+    const requestId = box.dataset.request;
+    const output = box.querySelector('[data-link-output]');
+
+    box.querySelector('[data-cancel-request]')?.addEventListener('click', async () => {
+        if (!window.confirm(t('signature.cancel_confirm'))) {
+            return;
+        }
+        const result = await api('/signatures/' + requestId + '/cancel', { method: 'POST', json: {} });
+        if (result.ok) {
+            window.location.reload();
+        } else {
+            toast(result.error.message, 'danger');
+        }
+    });
+
+    box.querySelector('[data-finalize]')?.addEventListener('click', async () => {
+        const result = await api('/signatures/' + requestId + '/finalize', { method: 'POST', json: {} });
+        toast(result.ok ? result.message : result.error.message, result.ok && result.completed ? 'success' : 'warning');
+        if (result.ok && result.completed) {
+            window.location.reload();
+        }
+    });
+
+    box.querySelectorAll('[data-new-link]').forEach((button) => button.addEventListener('click', async () => {
+        const result = await api('/signatures/' + requestId + '/signers/' + button.dataset.newLink + '/link', { method: 'POST', json: {} });
+        if (!result.ok) {
+            toast(result.error.message, 'danger');
+            return;
+        }
+        output.replaceChildren();
+        const note = document.createElement('p');
+        note.className = 'mb-1';
+        note.textContent = result.message;
+        const group = document.createElement('div');
+        group.className = 'input-group input-group-sm mb-2';
+        const input = document.createElement('input');
+        input.className = 'form-control font-monospace';
+        input.readOnly = true;
+        input.value = result.url;
+        input.setAttribute('aria-label', t('signature.new_link'));
+        const copy = document.createElement('button');
+        copy.type = 'button';
+        copy.className = 'btn btn-outline-secondary';
+        copy.dataset.copy = result.url;
+        copy.textContent = t('signature.copy_link');
+        group.append(input, copy);
+        output.append(note, group);
+    }));
+});

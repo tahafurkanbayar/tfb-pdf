@@ -189,3 +189,12 @@ OperationApiController (POST /api/operations/{type}, JSON)
 
 - `ExportService` (ext-zip gerekir): `exportDocument()` ve `exportAll(owner)`. ZIP: `documents/<id>/{original.*, vNNN.pdf, metadata.json, operations.json}`, `audit-log.json` (silinmiş belgelerinki dahil), `documents.json`, `manifest.json` (her dosyanın SHA-256'sı), `README.txt` (TR/EN).
 - `GET /api/documents/{id}/export`, `GET /api/export`; geçici ZIP yanıt sonrası silinir; `export` olayı audit'e yazılır. zip yoksa butonlar pasif + açıklama, API 503 (`export.unavailable`).
+
+## İmza akışı (Aşama 26)
+
+- `SignatureService` + `SignatureRepository` (signature_requests / signers / fields / events), `SignaturePdfBuilder`, `MailService` (PHPMailer, SMTP yoksa kapalı).
+- Sahip: `POST /api/signatures` (1–5 imzalayan, her biri ≥1 alan; alanlar görünen sayfaya göre 0..1), `/cancel`, `/signers/{id}/link` (yeni token, eskisi geçersiz), `/finalize` (yeniden deneme). Bağlantılar yalnızca oluşturma anında gösterilir; DB'de token'ın HMAC'i.
+- İmzalayan: `/{l}/sign/{token}` (görüntüleme olayı; Referrer-Policy no-referrer, noindex), `GET /api/sign/{token}/document|final`, `POST /api/sign/{token}` (onay zorunlu; consent olayı: sürüm + onay metni SHA-256 + IP + UA; çizim PNG doğrulanıp GD ile yeniden kodlanır veya yazılı ad), `POST .../decline`.
+- Tümü imzalayınca `OperationService` ile `signature_completed` işlemi: imzalar alanlara basılır + iki dilli sertifika sayfası → yeni sürüm, `final_sha256` talep kaydına.
+- Durumlar: pending / completed / cancelled / declined / expired (temizlik görevi ve erişim anında süre kontrolü). Tüm olaylar `signature_events` ve audit'te (`signature_*`; IP/UA yalnızca imza olaylarında).
+- Nitelikli e-imza / eIDAS / kimlik doğrulama YOK; PDF'e kriptografik imza eklenmez — her ekranda ve sertifikada belirtilir.

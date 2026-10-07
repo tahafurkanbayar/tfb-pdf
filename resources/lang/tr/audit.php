@@ -26,6 +26,7 @@ return [
         'signature_declined' => 'İmza reddedildi',
         'signature_completed' => 'İmza süreci tamamlandı',
         'signature_cancelled' => 'İmza talebi iptal edildi',
+        'signature_expired' => 'İmza talebinin süresi doldu',
     ],
     'status' => [
         'success' => 'Başarılı',

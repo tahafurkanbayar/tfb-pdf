@@ -15,4 +15,6 @@ return [
     'tracking_title' => 'Tracking',
     'export_title' => 'Exporting your data',
     'export_text' => 'You can download your documents, all their versions, the processing history and audit records as a single ZIP file at any time.',
+    'signature_title' => 'Signature requests',
+    'signature_text' => 'When you sign or decline a signature request, the time of your consent, your IP address and your browser information are added to the signature record and appear on the signature certificate visible to the document owner. This information is kept until the document is deleted.',
 ];

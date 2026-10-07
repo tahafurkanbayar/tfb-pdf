@@ -23,6 +23,9 @@ $view->section('title', __('privacy.title'));
         <?php endforeach; ?>
     </ul>
 
+    <h2 class="h5 mt-4"><?= e(__('privacy.signature_title')) ?></h2>
+    <p><?= e(__('privacy.signature_text')) ?></p>
+
     <h2 class="h5 mt-4"><?= e(__('privacy.tracking_title')) ?></h2>
     <p><?= e(__('notices.no_tracking')) ?></p>
 

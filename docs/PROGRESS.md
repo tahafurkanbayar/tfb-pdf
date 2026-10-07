@@ -32,7 +32,7 @@ Son güncelleme: 2026-10-07
 | 23 | Audit logging | [x] | Append-only + hash zinciri, bin/verify-audit.php, tüm işlem türlerinin kapsam testi, audit ve log'larda hassas veri olmadığı testleri |
 | 24 | Expiration | [x] | CleanupService (süresi dolan belgeler + audit 'expiry', geçici/export/önizleme/oturum, yetim dizinler, rate limit), cron/cleanup.php, fırsatçı temizlik (gerçek isteklerle doğrulandı) |
 | 25 | Export | [x] | Belge ve tüm veriler ZIP: dosyalar, sürümler, metadata, işlem geçmişi, audit (silinmişler dahil), SHA-256 manifest; zip yoksa açık mesaj |
-| 26 | Signature workflow | [ ] | |
+| 26 | Signature workflow | [x] | Alanlar, imzalayanlar, davet (SMTP opsiyonel), consent kaydı, çizim/yazılı imza, ret/iptal/süre, final PDF + sertifika + SHA-256, audit; nitelikli e-imza değil |
 | 27 | Security hardening | [ ] | |
 | 28 | Responsive UI | [ ] | |
 | 29 | Türkçe/İngilizce UI kontrolü | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 26: Signature workflow (imza alanı, imzalayan, davet, consent, olaylar, final PDF + SHA-256, audit; nitelikli e-imza DEĞİL).
+Aşama 27: Security hardening (rate limiting, güvenlik başlıkları gözden geçirme, kurulum kontrolü, oturum yenileme).
 
 ## Aşama notları
 

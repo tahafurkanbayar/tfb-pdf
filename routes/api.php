@@ -6,6 +6,7 @@ use App\Core\Container;
 use App\Http\Controllers\Api\DocumentApiController;
 use App\Http\Controllers\Api\OperationApiController;
 use App\Http\Controllers\Api\PreviewApiController;
+use App\Http\Controllers\Api\SignatureApiController;
 use App\Http\Router;
 
 /*
@@ -35,6 +36,20 @@ return static function (Router $router, Container $c): void {
     $router->post('/api/operations/ocr', [OperationApiController::class, 'ocr']);
     $router->post('/api/operations/office', [OperationApiController::class, 'officeConvert']);
     $router->get('/api/operations/{id:[a-f0-9]{32}}/download', [OperationApiController::class, 'download']);
+
+    // İmza talepleri (sahip)
+    $sig = '/api/signatures/{id:[a-f0-9]{32}}';
+    $router->post('/api/signatures', [SignatureApiController::class, 'store']);
+    $router->post($sig . '/cancel', [SignatureApiController::class, 'cancel']);
+    $router->post($sig . '/signers/{signer:\d{1,10}}/link', [SignatureApiController::class, 'regenerate']);
+    $router->post($sig . '/finalize', [SignatureApiController::class, 'finalize']);
+
+    // İmzalayan (davet token'ı)
+    $sign = '/api/sign/{token:[a-f0-9]{64}}';
+    $router->post($sign, [SignatureApiController::class, 'sign']);
+    $router->post($sign . '/decline', [SignatureApiController::class, 'decline']);
+    $router->get($sign . '/document', [SignatureApiController::class, 'document']);
+    $router->get($sign . '/final', [SignatureApiController::class, 'final']);
 
     $previews = $doc . '/versions/{number:\d{1,6}}/previews';
     $router->get($previews, [PreviewApiController::class, 'index']);

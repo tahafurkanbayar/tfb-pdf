@@ -42,6 +42,9 @@ use App\Repositories\VersionRepository;
 use App\Services\AuditService;
 use App\Services\CleanupService;
 use App\Services\ExportService;
+use App\Services\MailService;
+use App\Services\SignatureService;
+use App\Repositories\SignatureRepository;
 use App\Services\DocumentService;
 use App\Services\ThumbnailService;
 use App\Services\ToolCatalog;
@@ -276,6 +279,24 @@ return static function (Container $c, Config $config): void {
         $c->get(StorageService::class),
         (string) $config->get('app.name')
     ));
+    $c->set(SignatureRepository::class, fn (Container $c) => new SignatureRepository($c->get(Database::class)));
+    $c->set(MailService::class, fn (Container $c) => new MailService($config->get('mail'), $c->get(Logger::class)));
+    $c->set(SignatureService::class, fn (Container $c) => new SignatureService(
+        $c->get(Database::class),
+        $c->get(SignatureRepository::class),
+        $c->get(DocumentRepository::class),
+        $c->get(DocumentService::class),
+        $c->get(PdfToolService::class),
+        $c->get(OperationService::class),
+        $c->get(StorageService::class),
+        $c->get(AuditService::class),
+        $c->get(MailService::class),
+        $c->get(Hmac::class),
+        $c->get(Url::class),
+        $c->get(Translator::class),
+        $c->get(Logger::class),
+        (int) $config->get('signing.invite_ttl_days', 14)
+    ));
     $c->set(CleanupService::class, fn (Container $c) => new CleanupService(
         $c->get(Database::class),
         $c->get(DocumentRepository::class),
@@ -284,7 +305,8 @@ return static function (Container $c, Config $config): void {
         $c->get(StorageService::class),
         $c->get(Logger::class),
         (int) $config->get('storage.temporary_ttl_hours', 6),
-        (int) $config->get('storage.preview_ttl_days', 14)
+        (int) $config->get('storage.preview_ttl_days', 14),
+        $c->get(SignatureService::class)
     ));
 
     // İstek gönderildikten sonra çalışacak görevler: cron kurulamayan sunucularda fırsatçı temizlik

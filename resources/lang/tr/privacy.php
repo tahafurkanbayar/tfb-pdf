@@ -15,4 +15,6 @@ return [
     'tracking_title' => 'İzleme',
     'export_title' => 'Verilerinizi dışa aktarma',
     'export_text' => 'Belgelerinizi, tüm sürümlerini, işlem geçmişini ve audit kayıtlarını istediğiniz zaman tek bir ZIP dosyası olarak indirebilirsiniz.',
+    'signature_title' => 'İmza talepleri',
+    'signature_text' => 'Bir imza talebini imzaladığınızda veya reddettiğinizde, onay zamanınız, IP adresiniz ve tarayıcı bilginiz imza kaydına eklenir ve belge sahibinin göreceği imza sertifikasında yer alır. Bu bilgiler belge silinene kadar saklanır.',
 ];

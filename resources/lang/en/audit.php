@@ -26,6 +26,7 @@ return [
         'signature_declined' => 'Signature declined',
         'signature_completed' => 'Signature process completed',
         'signature_cancelled' => 'Signature request cancelled',
+        'signature_expired' => 'Signature request expired',
     ],
     'status' => [
         'success' => 'Successful',

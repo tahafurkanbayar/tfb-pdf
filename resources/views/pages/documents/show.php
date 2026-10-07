@@ -10,11 +10,12 @@
  * @var list<array<string, mixed>> $operations
  * @var list<array<string, mixed>> $auditEvents
  * @var array<int, array{inputs: list<int>, external: int}> $sources
+ * @var list<array<string, mixed>> $signatureRequests
  */
 $view->extend('layouts/app');
 $view->section('title', $document->originalName);
 $view->section('robots', 'noindex');
-$view->section('i18n', 'preview,hash');
+$view->section('i18n', 'preview,hash,signature');
 $view->section('scripts', '<script type="module" src="' . e($url->asset('js/pages/document.js')) . '"></script>');
 
 $latest = $versions === [] ? null : $versions[array_key_last($versions)];
@@ -237,6 +238,53 @@ $pdfVersions = array_values(array_filter($versions, static fn (App\Domain\Docume
             </div>
         </section>
     </div>
+
+    <?php if ($signatureRequests !== []): ?>
+        <section class="card mt-4" aria-labelledby="signatures-heading" data-signature-requests>
+            <div class="card-body">
+                <h2 id="signatures-heading" class="h5"><?= $view->icon('pen') ?> <?= e(__('signature.requests_heading')) ?></h2>
+                <?php foreach ($signatureRequests as $sr): ?>
+                    <div class="border rounded p-3 mb-3" data-request="<?= e($sr['public_id']) ?>">
+                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                            <span class="badge <?= $sr['status'] === 'completed' ? 'text-bg-success' : ($sr['status'] === 'pending' ? 'text-bg-primary' : 'text-bg-secondary') ?>">
+                                <?= e(__('signature.request_status.' . $sr['status'])) ?>
+                            </span>
+                            <time class="small text-body-secondary" datetime="<?= e(App\Support\DateFormatter::iso($sr['created_at'])) ?>"><?= e($dates->format($sr['created_at'], $locale)) ?></time>
+                        </div>
+                        <ul class="list-unstyled small mb-2">
+                            <?php foreach ($sr['signers'] as $signer): ?>
+                                <li class="d-flex flex-wrap gap-2 align-items-center py-1">
+                                    <span class="fw-semibold"><?= e($signer['name']) ?></span>
+                                    <?php if ($signer['email'] !== null): ?><span class="text-body-secondary"><?= e($signer['email']) ?></span><?php endif; ?>
+                                    <span class="badge text-bg-light border"><?= e(__('signature.signer_status.' . $signer['status'])) ?></span>
+                                    <?php if ($sr['status'] === 'pending' && in_array($signer['status'], ['pending', 'viewed'], true)): ?>
+                                        <button type="button" class="btn btn-link btn-sm p-0" data-new-link="<?= (int) $signer['id'] ?>"><?= e(__('signature.new_link')) ?></button>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <div class="small" data-link-output></div>
+                        <?php if ($sr['status'] === 'completed' && $sr['final_version_id'] !== null): ?>
+                            <?php foreach ($versions as $v): ?>
+                                <?php if ($v->id === (int) $sr['final_version_id']): ?>
+                                    <a class="btn btn-sm btn-success" href="<?= e($downloadUrl($v)) ?>"><?= $view->icon('download') ?> <?= e(__('signature.final_pdf')) ?> (<?= e(__('documents.version_n', ['number' => $v->versionNumber])) ?>)</a>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                            <p class="small mt-2 mb-0"><code class="hash"><?= e(__('signature.final_hash', ['hash' => (string) $sr['final_sha256']])) ?></code></p>
+                        <?php elseif ($sr['status'] === 'pending'): ?>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-cancel-request><?= e(__('signature.cancel')) ?></button>
+                                <?php if (array_filter($sr['signers'], static fn (array $s): bool => $s['status'] !== 'signed') === []): ?>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-finalize><?= e(__('signature.retry_finalize')) ?></button>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+                <p class="small text-body-secondary mb-0"><?= e(__('signature.not_qes')) ?></p>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <section class="card mt-4" aria-labelledby="audit-heading">
         <div class="card-body">

@@ -8,6 +8,7 @@ use App\Http\Request;
 use App\Http\Response;
 use App\Services\AuditService;
 use App\Services\DocumentService;
+use App\Services\SignatureService;
 
 final class DocumentController extends Controller
 {
@@ -36,6 +37,7 @@ final class DocumentController extends Controller
             'expiry' => $service->expiry($document),
             'operations' => $service->operationsForDocument($document),
             'auditEvents' => $this->service(AuditService::class)->forDocument($document->publicId, 50),
+            'signatureRequests' => $this->service(SignatureService::class)->forDocument($document),
         ]);
     }
 }

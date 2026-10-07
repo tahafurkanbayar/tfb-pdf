@@ -309,3 +309,17 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -d extension=zip vendor/bin/phpunit --filter "ExportTest\|SplitOperationTest"` | OK (7 tests, 54 assertions, 1 skipped — zip yok testi) |
 | `php vendor/bin/phpunit` / `php -d extension=zip vendor/bin/phpunit` | zip yok: 242 tests, 957 assertions, 3 skipped · zip var: 242 tests, 988 assertions, 1 skipped |
 | `php bin/check-translations.php` | OK |
+| `git add -A; git commit; git push` | 610d682 — Aşama 25 |
+
+## Aşama 26 — Signature workflow
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (bağlantılar, çeviriler, view'lar) + `php -l` (çok sayıda dosya) | Temiz |
+| `php vendor/bin/phpunit --filter SignatureWorkflowTest` | OK (4 tests, 46 assertions) — ilk denemede |
+| `php scratchpad/sig-fixture.php` + headless Chrome | 3 sayfa; çizilmiş imza alanında 171, yazılı imza alanında 265 piksel, alan dışında 0; sertifika metni seçilebilir, 6/6 anahtar ifade (Türkçe karakterli) |
+| `php vendor/bin/phpunit --filter "SignatureHttpTest\|SignatureWorkflowTest\|CleanupTest"` | OK (10 tests, 90 assertions) |
+| `php bin/check-translations.php` | 4 sorun: dinamik önek `audit.events.signature_` ve `config/signature.php` ile `signature` çeviri grubu ad çakışması → config `signing` olarak yeniden adlandırıldı (`git mv`), kontrolcü harf/rakamla bitmeyen anahtarları önek sayıyor (php -r ile değişiklik tutmadı, Edit ile yapıldı) |
+| `php bin/check-translations.php` | OK (579 anahtar) |
+| `php vendor/bin/phpunit` / `php -d extension=zip vendor/bin/phpunit` | zip yok: 248 tests, 1021 assertions, 3 skipped · zip var: 248 tests, 1052 assertions, 1 skipped |
+| headless Chrome: tools/sign.js, pages/sign.js, pages/document.js import | Sözdizimi hatası yok |

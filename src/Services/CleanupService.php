@@ -31,6 +31,7 @@ final class CleanupService
         private readonly Logger $logger,
         private readonly int $temporaryTtlHours,
         private readonly int $previewTtlDays,
+        private readonly ?SignatureService $signatures = null,
     ) {
     }
 
@@ -58,6 +59,7 @@ final class CleanupService
             'previews' => 0,
             'sessions' => 0,
             'rate_limits' => 0,
+            'signature_requests_expired' => 0,
             'completed' => true,
         ];
 
@@ -86,7 +88,12 @@ final class CleanupService
                 $report['orphan_directories'] = $this->removeOrphans();
             }
 
-            // 4. Eski istek sınırı kayıtları
+            // 4. Süresi dolan imza talepleri
+            if ($this->signatures !== null) {
+                $report['signature_requests_expired'] = $this->signatures->expireDue();
+            }
+
+            // 5. Eski istek sınırı kayıtları
             $report['rate_limits'] = $this->db->execute('DELETE FROM rate_limits WHERE window_start < ?', [gmdate('Y-m-d H:i:s', time() - 2 * 86400)]);
         } finally {
             flock($handle, LOCK_UN);
