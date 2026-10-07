@@ -1,0 +1,18 @@
+* text=auto eol=lf
+
+*.php text eol=lf
+*.sql text eol=lf
+*.md text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.css text eol=lf
+.htaccess text eol=lf
+
+*.pdf binary
+*.png binary
+*.jpg binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.docx binary
+*.zip binary

@@ -1,0 +1,42 @@
+# Ortam ve kimlik bilgileri
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+auth.json
+
+# Composer
+/vendor/
+/composer.phar
+
+# Storage: içerik asla commit edilmez, dizinler .gitkeep ile tutulur
+/storage/*/*
+!/storage/*/.gitkeep
+!/storage/*/.htaccess
+/storage/*.lock
+
+# Veritabanı dump'ları
+*.sql.gz
+*.sql.zip
+*.dump
+/backups/
+dump*.sql
+backup*.sql
+
+# Test / araç çıktıları
+/.phpunit.cache/
+/.phpunit.result.cache
+/coverage/
+/tests/_output/
+
+# Editör / işletim sistemi
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
