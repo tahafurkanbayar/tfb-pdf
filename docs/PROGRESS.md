@@ -8,7 +8,7 @@ Son güncelleme: 2026-10-07
 |---|---|---|---|
 | 0 | Repo, dokümantasyon iskeleti, GitHub | [x] | docs/, CLAUDE.md, LICENSE (MIT), .gitignore |
 | 1 | Proje yapısı | [x] | Dizinler, kök + public .htaccess, private dizinlerde deny-all, front controller |
-| 2 | Composer | [ ] | |
+| 2 | Composer | [x] | fpdi 2.6.8, tfpdf 1.33, phpmailer 7.1.1, phpunit 11.5 (dev); composer.phar yerelde |
 | 3 | Configuration | [ ] | |
 | 4 | Localization sistemi | [ ] | |
 | 5 | MySQL bağlantısı | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 2: Composer (composer.phar, FPDI/FPDF, PHPUnit).
+Aşama 3: Configuration (.env okuyucu, config dizileri, .env.example).
 
 ## Aşama notları
 

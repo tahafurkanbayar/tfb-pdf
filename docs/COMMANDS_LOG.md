@@ -28,3 +28,17 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | Komut | Sonuç |
 |---|---|
 | `mkdir -p storage/{documents,versions,previews,temporary,exports,sessions,logs,cache} ...; touch .gitkeep; deny .htaccess yazımı` (bash döngüsü) | Dizin iskeleti ve 12 adet deny-all `.htaccess` oluşturuldu |
+| `git add -A; git commit; git push` | 4dc57fe — Aşama 1 |
+
+## Aşama 2 — Composer
+
+| Komut | Sonuç |
+|---|---|
+| `curl -sSL -o composer.phar https://getcomposer.org/download/latest-stable/composer.phar` + `.sha256sum` + `sha256sum composer.phar` | Composer 2.10.3, checksum eşleşti (7a2d379d…c8d6) |
+| `php composer.phar --version` | Composer 2.10.3, PHP 8.2.12 |
+| `php -m` | `zip`, `intl`, `sodium` yüklü değil; `gd`, `fileinfo`, `pdo_mysql`, `mbstring`, `zlib`, `openssl` yüklü |
+| `ls C:\xampp\php\ext; grep extension= php.ini; php -r ini_get(...)` | `php_zip.dll` mevcut ama php.ini'de kapalı; memory_limit 512M, upload_max_filesize 40M, post_max_size 40M |
+| `php -d extension=zip composer.phar show -a setasign/tfpdf / setasign/fpdi / phpmailer/phpmailer` | tfpdf v1.33 (LGPL-2.1), fpdi v2.6.8 (MIT), phpmailer v7.1.1 (LGPL-2.1) |
+| `php -d extension=zip composer.phar validate --strict` | composer.json geçerli |
+| `php -d extension=zip composer.phar install --no-interaction` | 30 paket kuruldu (fpdi 2.6.8, tfpdf 1.33, phpmailer 7.x, phpunit 11.5.57) |
+| `grep COMPRESSED_XREF vendor/setasign/fpdi/src` ve kaynak incelemesi | Ücretsiz FPDI xref stream'leri reddediyor; `getPdfParserInstance()` genişletme noktası mevcut |

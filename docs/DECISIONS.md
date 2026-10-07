@@ -22,3 +22,17 @@ Spec ilk sürümde kullanıcı sistemi istemiyor ama indirmede yetki kontrolü i
 
 ## 2026-10-07 — Frontend kütüphaneleri yerelde
 Bootstrap ve PDF.js `public/assets/vendor/` altına kopyalanır, CDN kullanılmaz. Neden: gizlilik (§37–38: kullanıcı IP'si üçüncü taraflara gitmesin), build adımı yok, CSP `'self'` ile sıkı tutulabilir.
+
+## 2026-10-07 — PDF kütüphaneleri
+- `setasign/fpdi` ^2.6 (MIT): mevcut PDF sayfalarını içe aktarma.
+- `setasign/tfpdf` ^1.33 (LGPL-2.1): FPDF'in UTF-8 sürümü. Çekirdek FPDF fontları cp1252 olduğundan ş, ğ, ı, İ gibi Türkçe karakterleri basamaz; tFPDF paketiyle gelen DejaVu Sans (serbest lisans) gömülü font olarak kullanılır. FPDI, tFPDF'i resmi olarak destekler (`setasign\Fpdi\Tfpdf\Fpdi`). Sayfa döndürme (`AddPage(..., $rotation)`) mevcut.
+- `phpmailer/phpmailer` ^7 (LGPL-2.1): opsiyonel SMTP. Kendi SMTP istemcimizi yazmak (STARTTLS, AUTH, header encoding, dot-stuffing) hataya açık; tek ve yaygın bir bağımlılık tercih edildi.
+- Dev: `phpunit/phpunit` ^11.5 (PHP 8.2 destekleyen son ana sürüm).
+- LGPL kütüphaneler değiştirilmeden bağımlılık olarak kullanılır; MIT lisanslı proje kodu ile uyumludur.
+
+## 2026-10-07 — Ücretsiz FPDI'nin sıkıştırılmış xref sınırlaması
+Doğrulandı: FPDI 2.6.8 ücretsiz parser'ı cross-reference stream (PDF 1.5+, object stream) kullanan dosyalarda `COMPRESSED_XREF` hatası veriyor (`CrossReference.php:268`). Word/Office gibi birçok modern üretici bu formatı kullanır; destek olmazsa uygulama gerçek dosyaların önemli bir kısmında çalışmaz. Ticari "FPDI PDF-Parser" eklentisi kullanılmayacak.
+Çözüm: FPDI'nin resmi genişletme noktası `FpdiTrait::getPdfParserInstance()` üzerinden kendi `PdfParser` / `CrossReference` alt sınıflarımız: xref stream okuma (PNG predictor dahil), object stream içindeki nesneleri çözme. Saf PHP, harici araç gerektirmez. Kapsamlı birim testleriyle doğrulanacak.
+
+## 2026-10-07 — Composer çalıştırma ve zip eklentisi
+Composer sisteme kurulmadı; `composer.phar` proje kökünde (gitignore'da), SHA-256 doğrulandı. Yerel XAMPP'te `ext-zip` kapalı; `php.ini` değiştirilmeden komutlar `php -d extension=zip` ile çalıştırılıyor. Uygulama zip yoksa export özelliğini kapatıp nedenini gösterecek. `config.platform.php = 8.2.12` ile kilit dosyası 8.2 sunucularla uyumlu tutulur.
