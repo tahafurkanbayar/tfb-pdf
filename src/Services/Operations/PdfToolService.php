@@ -6,9 +6,12 @@ namespace App\Services\Operations;
 
 use App\Domain\Document;
 use App\Domain\DocumentVersion;
+use App\Http\UploadedFile;
 use App\Exceptions\ValidationException;
 use App\Pdf\Compression\Compressor;
 use App\Pdf\PageRangeParser;
+use App\Pdf\Redaction\RedactionBoxes;
+use App\Pdf\Redaction\Redactor;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
 use App\Pdf\WarningCollector;
@@ -29,6 +32,7 @@ final class PdfToolService
         private readonly PdfInspector $inspector,
         private readonly int $maxFilesPerOperation,
         private readonly ?Compressor $compressor = null,
+        private readonly ?Redactor $redactor = null,
     ) {
     }
 
@@ -261,6 +265,55 @@ final class PdfToolService
                     'fpdi',
                     ['pages' => $count, 'watermarked_pages' => $selected === [] ? $count : count($selected)],
                     $this->rebuildWarnings($paths)
+                );
+            }
+        );
+    }
+
+    /**
+     * Kalıcı karartma. Sunucu sayfa görüntüsü üretemiyorsa (Ghostscript yok) tarayıcının ürettiği
+     * görüntüler gerekir: $pageImages[sayfa] = UploadedFile.
+     *
+     * @param array<int, UploadedFile> $pageImages
+     */
+    public function redact(string $ownerHash, string $documentId, ?int $versionNumber, mixed $boxesInput, array $pageImages = []): OperationResult
+    {
+        if ($this->redactor === null || !Redactor::available()) {
+            throw new \App\Exceptions\ToolUnavailableException('Redaction unavailable', 'errors.tool_unavailable');
+        }
+
+        [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+        $boxes = RedactionBoxes::fromInput($boxesInput, (int) $version->pageCount);
+
+        $images = [];
+        if (!$this->redactor->serverRendering()) {
+            foreach ($boxes->pageNumbers() as $page) {
+                $file = $pageImages[$page] ?? null;
+                if ($file === null || !$file->isValidUpload()) {
+                    throw new ValidationException('Missing page image for page ' . $page, 'redact.image_missing');
+                }
+                $images[$page] = $file->tmpPath;
+            }
+        }
+
+        return $this->operations->run(
+            'redact',
+            $ownerHash,
+            [[$document, $version]],
+            ['pages' => $boxes->pageNumbers(), 'boxes' => $boxes->boxCount(), 'renderer' => $this->redactor->serverRendering() ? 'server' : 'browser'],
+            function (string $tmp, array $paths) use ($boxes, $images): ProcessResult {
+                if ($boxes->isEmpty()) {
+                    return new ProcessResult([], 'gd', [], changed: false);
+                }
+                $info = $this->inspector->inspect($paths[0]);
+                $file = $tmp . '/redacted.pdf';
+                $count = $this->redactor->redact($paths[0], $file, $info, $boxes, $images, $tmp);
+
+                return new ProcessResult(
+                    [new OperationOutput($file, $count)],
+                    $this->redactor->serverRendering() ? 'ghostscript+gd' : 'browser+gd',
+                    ['pages' => $count, 'redacted_pages' => $boxes->pageNumbers(), 'boxes' => $boxes->boxCount()],
+                    array_values(array_unique(['warnings.rasterized_pages', 'redact.residual_warning', ...$this->rebuildWarnings($paths)]))
                 );
             }
         );

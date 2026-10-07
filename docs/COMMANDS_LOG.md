@@ -222,3 +222,15 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit --filter WatermarkOperationTest` | OK (3 tests, 19 assertions) |
 | `php scratchpad/wm-fixture.php` + headless Chrome piksel kontrolü | Sayfa 1 ve 3'te yarı saydam kırmızı filigran (1946 piksel), sayfa 2'de 0. Geçici dosyalar silindi |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |
+| `git add -A; git commit; git push` | 3ee1b30 — Aşama 17 |
+
+## Aşama 18 — Redaction
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (Redactor bağlama: servis, container, API, route) + `php -l` (4 dosya) | Temiz |
+| `php -r` (renderPage pixelRatio, runOperation FormData) | Tamam |
+| `php vendor/bin/phpunit --filter RedactOperationTest` | **2 failure**: test yardımcısı FPDF'in tüm sayfalarda ortak kaynak sözlüğündeki diğer sayfa şablonlarını da "sayfa içeriği" sayıyordu (karartma hatası değil) |
+| `php -r` (test: yalnızca `Do` ile çizilen nesneler + tüm akışlarda gizli metin araması) + `php vendor/bin/phpunit --filter RedactOperationTest` | OK (5 tests, 44 assertions) — gizli numara çıktının hiçbir akışında yok, kaynakta var |
+| headless Chrome: tüm araç JS modülleri import | Sözdizimi hatası yok (sayfa modüllerinde beklenen TypeError) |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |

@@ -26,12 +26,13 @@ export function openPdf(url) {
 /**
  * Sayfayı tuvale çizer. extraRotation: kullanıcı önizlemesinde ek döndürme (0/90/180/270).
  */
-export async function renderPage(pdf, pageNumber, { maxWidth = 800, maxHeight = 1100, extraRotation = 0, canvas = null } = {}) {
+export async function renderPage(pdf, pageNumber, { maxWidth = 800, maxHeight = 1100, extraRotation = 0, canvas = null, pixelRatio = null } = {}) {
     const page = await pdf.getPage(pageNumber);
     const rotation = (page.rotate + extraRotation) % 360;
     const base = page.getViewport({ scale: 1, rotation });
     const scale = Math.min(maxWidth / base.width, maxHeight / base.height);
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    // pixelRatio verilirse tam piksel boyutu istenir (ör. karartma görüntüsü); yoksa ekran yoğunluğu
+    const ratio = pixelRatio ?? Math.min(window.devicePixelRatio || 1, 2);
     const viewport = page.getViewport({ scale: scale * ratio, rotation });
 
     const target = canvas ?? document.createElement('canvas');

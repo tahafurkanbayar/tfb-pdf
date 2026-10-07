@@ -22,7 +22,10 @@ export async function runOperation(type, payload, { button, status, resultSectio
     resultSection.hidden = true;
     renderStatus(status, 'processing', t('states.processing'));
 
-    const result = await api('/operations/' + type, { method: 'POST', json: payload });
+    // FormData (dosya içeren işlemler) veya JSON
+    const result = payload instanceof FormData
+        ? await api('/operations/' + type, { method: 'POST', body: payload })
+        : await api('/operations/' + type, { method: 'POST', json: payload });
     button.disabled = false;
 
     if (!result.ok) {

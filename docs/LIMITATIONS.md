@@ -17,3 +17,7 @@
 - Birleştirme için listeye eklenen her dosya önce "Belgelerim"e yüklenir; listeden kaldırmak dosyayı silmez (saklama süresi sonunda silinir).
 - PHP tabanlı sıkıştırma (Ghostscript yokken) yalnızca JPEG görüntüleri ve filtresiz akışları optimize eder: CMYK JPEG, JPEG2000, Flate ile sıkıştırılmış görüntüler ve fontlar olduğu gibi kalır. Metin ağırlıklı PDF'lerde kazanç genellikle olmaz (bu durumda yeni sürüm oluşturulmaz).
 - Ghostscript ile sıkıştırma yolu, geliştirme makinesinde Ghostscript kurulu olmadığı için yalnızca sahte çalıştırıcıyla (komut ve geri dönüş davranışı) test edildi; gerçek Ghostscript çıktısıyla test edilmedi.
+- Karartma yapılan sayfalar görüntüye dönüşür: bu sayfalarda metin seçilemez/aranamaz, dosya boyutu artabilir, görüntü kalitesi 150 DPI ile sınırlıdır. Tek işlemde en fazla 30 sayfa karartılabilir.
+- Karartma yalnızca seçilen alanlara uygulanır; aynı bilgi diğer sayfalarda geçiyorsa kullanıcının onları da seçmesi gerekir (arayüzde açık uyarı var). Otomatik hassas veri arama yoktur.
+- Ghostscript yoksa karartılan sayfanın görüntüsü tarayıcıdaki PDF.js çizimidir; PDF.js'in desteklemediği öğeler (nadir) görüntüde eksik çıkabilir. Kullanıcı bunu önizlemede görür.
+- Karartma düzenleyicisinde alan seçimi işaretçi (fare/dokunmatik) gerektirir; klavye kullanıcıları için "tüm sayfayı karart" seçeneği vardır, serbest alan seçimi yoktur.

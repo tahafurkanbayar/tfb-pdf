@@ -12,6 +12,7 @@ use App\Pdf\Compression\Compressor;
 use App\Pdf\PdfInspector;
 use App\Tools\ProcessRunner;
 use App\Pdf\PdfService;
+use App\Pdf\Redaction\Redactor;
 use App\Repositories\DocumentRepository;
 use App\Repositories\ExpiryRepository;
 use App\Repositories\OperationRepository;
@@ -73,7 +74,7 @@ final class Services
             '7d'
         );
 
-        $this->tools = new PdfToolService($this->operations, $this->documents, $this->pdf, $inspector, 20, new Compressor(new ProcessRunner(), null, 60));
+        $this->tools = new PdfToolService($this->operations, $this->documents, $this->pdf, $inspector, 20, new Compressor(new ProcessRunner(), null, 60), new Redactor(new ProcessRunner(), null, 60));
     }
 
     /**

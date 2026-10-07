@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'intro' => 'Karartmak istediğiniz alanları sayfa üzerinde fareyle veya parmağınızla sürükleyerek seçin.',
+    'how_it_works' => 'Karartma yapılan sayfalar görüntüye dönüştürülür ve seçilen alanlar kalıcı olarak siyaha boyanır. Bu sayfalardaki asıl metin ve içerik dosyadan tamamen çıkarılır; yalnızca üstüne siyah kutu çizilmez.',
+    'residual_warning' => 'Karartma yalnızca seçtiğiniz alanlara uygulanır. Aynı bilgi başka sayfalarda, sayfa başlıklarında veya dosya adında geçiyorsa onları da kontrol edin.',
+    'renderer_server' => 'Sayfa görüntüleri sunucuda (Ghostscript) oluşturulacak.',
+    'renderer_browser' => 'Bu sunucuda Ghostscript olmadığı için sayfa görüntüleri tarayıcınızda oluşturulup sunucuya gönderilecek. Sunucu karartma alanlarını görüntüye ayrıca kendisi uygular.',
+    'edit_page' => 'Sayfa :number üzerinde alan seç',
+    'box_count' => ':count alan',
+    'editor_title' => 'Sayfa :number — karartılacak alanlar',
+    'whole_page' => 'Tüm sayfayı karart',
+    'clear' => 'Seçimleri temizle',
+    'done' => 'Tamam',
+    'remove_box' => 'Bu alanı kaldır',
+    'drag_hint' => 'Seçmek için sürükleyin. Klavye ile "Tüm sayfayı karart" düğmesini kullanabilirsiniz.',
+    'summary' => ':pages sayfada :boxes alan karartılacak.',
+    'nothing_selected' => 'Henüz karartılacak alan seçilmedi.',
+    'preparing' => 'Sayfa görüntüleri hazırlanıyor (:current/:total)...',
+    'action' => 'Kalıcı olarak karart',
+    'confirm' => 'Seçilen alanlar yeni sürümde kalıcı olarak silinecek ve geri getirilemeyecek. Orijinal dosyanız değişmez. Devam edilsin mi?',
+    'no_boxes' => 'Lütfen karartılacak en az bir alan seçin.',
+    'invalid_boxes' => 'Karartma alanları geçersiz. Sayfayı yenileyip tekrar deneyin.',
+    'too_many_pages' => 'Tek seferde en fazla :max sayfa karartılabilir.',
+    'image_missing' => 'Sayfa görüntüsü eksik. Sayfayı yenileyip tekrar deneyin.',
+    'image_invalid' => 'Sayfa görüntüsü geçersiz. Sayfayı yenileyip tekrar deneyin.',
+];

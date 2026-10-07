@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'intro' => 'Select the areas you want to redact by dragging on the page with your mouse or finger.',
+    'how_it_works' => 'Redacted pages are converted to images and the selected areas are permanently painted black. The original text and content of these pages are completely removed from the file; a black box is not simply drawn on top.',
+    'residual_warning' => 'Redaction only applies to the areas you select. If the same information appears on other pages, in page headers or in the file name, check those too.',
+    'renderer_server' => 'Page images will be generated on the server (Ghostscript).',
+    'renderer_browser' => 'Ghostscript is not available on this server, so page images will be generated in your browser and sent to the server. The server applies the redaction areas to the images again on its own.',
+    'edit_page' => 'Select areas on page :number',
+    'box_count' => ':count area|:count areas',
+    'editor_title' => 'Page :number — areas to redact',
+    'whole_page' => 'Redact the whole page',
+    'clear' => 'Clear selections',
+    'done' => 'Done',
+    'remove_box' => 'Remove this area',
+    'drag_hint' => 'Drag to select. With the keyboard, use the "Redact the whole page" button.',
+    'summary' => ':boxes areas on :pages pages will be redacted.',
+    'nothing_selected' => 'No areas selected for redaction yet.',
+    'preparing' => 'Preparing page images (:current/:total)...',
+    'action' => 'Redact permanently',
+    'confirm' => 'The selected areas will be permanently removed in the new version and cannot be recovered. Your original file is not changed. Continue?',
+    'no_boxes' => 'Please select at least one area to redact.',
+    'invalid_boxes' => 'The redaction areas are invalid. Please refresh the page and try again.',
+    'too_many_pages' => 'At most :max pages can be redacted at once.',
+    'image_missing' => 'A page image is missing. Please refresh the page and try again.',
+    'image_invalid' => 'A page image is invalid. Please refresh the page and try again.',
+];

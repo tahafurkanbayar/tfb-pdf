@@ -28,6 +28,7 @@ use App\Security\OwnerContext;
 use App\Pdf\Compression\Compressor;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
+use App\Pdf\Redaction\Redactor;
 use App\Services\Operations\OperationArchiveService;
 use App\Services\Operations\OperationService;
 use App\Services\Operations\PdfToolService;
@@ -207,7 +208,13 @@ return static function (Container $c, Config $config): void {
         $c->get(PdfService::class),
         $c->get(PdfInspector::class),
         (int) $config->get('limits.max_files_per_operation'),
-        $c->get(Compressor::class)
+        $c->get(Compressor::class),
+        $c->get(Redactor::class)
+    ));
+    $c->set(Redactor::class, fn (Container $c) => new Redactor(
+        $c->get(ProcessRunner::class),
+        $c->get(ToolDetector::class)->path(ToolDetector::GHOSTSCRIPT),
+        (int) $config->get('tools.timeout', 120)
     ));
     $c->set(OperationArchiveService::class, fn (Container $c) => new OperationArchiveService(
         $c->get(OperationRepository::class),

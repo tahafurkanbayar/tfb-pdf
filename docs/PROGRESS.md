@@ -24,7 +24,7 @@ Son güncelleme: 2026-10-07
 | 15 | Rotate | [x] | Sayfa bazında ve toplu 90° adımlar, /Rotate ile kayıpsız; önceden döndürülmüş kaynakta piksel karşılaştırmasıyla doğrulandı |
 | 16 | Compress | [x] | Ghostscript (varsa, -dSAFER) + PHP optimizasyonu (JPEG yeniden örnekleme, Flate); %3'ten az küçülme = yeni sürüm yok; araç tespiti altyapısı |
 | 17 | Watermark | [x] | Metin, 8 konum + döşeme, döndürme, opaklık (ExtGState), boyut, renk, katman, sayfa aralığı; Türkçe karakter (DejaVu); Chrome ile görsel doğrulama |
-| 18 | Redaction | [ ] | |
+| 18 | Redaction | [x] | Karartılan sayfa görüntüye dönüştürülür + kutular piksellere yakılır (sunucu Ghostscript veya tarayıcı PDF.js; sunucu kutuları yeniden uygular); gizli metnin dosyada kalmadığı testle kanıtlandı |
 | 19 | OCR capability detection | [ ] | |
 | 20 | Office conversion capability detection | [ ] | |
 | 21 | Versioning | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 18: Redaction (gerçek kaldırma: karartılan sayfa görüntüye dönüştürülür; açık uyarılar).
+Aşama 19: OCR capability detection (Tesseract + Ghostscript/pdftoppm, devre dışıyken açık mesaj; varsa çalışan OCR).
 
 ## Aşama notları
 

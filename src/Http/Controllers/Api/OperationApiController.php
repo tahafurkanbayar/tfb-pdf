@@ -110,6 +110,27 @@ final class OperationApiController extends Controller
     }
 
     /**
+     * multipart: document, version, boxes (JSON), page_<n> (tarayıcı görüntüleri; sunucu render yoksa)
+     */
+    public function redact(Request $request): Response
+    {
+        $images = [];
+        foreach (array_keys($request->files) as $field) {
+            if (preg_match('/^page_(\d{1,5})$/', (string) $field, $m) && ($file = $request->files((string) $field)[0] ?? null) !== null) {
+                $images[(int) $m[1]] = $file;
+            }
+        }
+
+        return $this->respond($this->tools()->redact(
+            $this->requireOwner(),
+            (string) $request->input('document', ''),
+            self::versionInput($request),
+            $request->input('boxes'),
+            $images
+        ));
+    }
+
+    /**
      * GET /api/operations/{id}/download — işlemin tüm çıktıları tek ZIP.
      */
     public function download(Request $request, array $params): Response

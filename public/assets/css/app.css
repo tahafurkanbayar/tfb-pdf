@@ -389,3 +389,54 @@ button.thumb:hover {
 .watermark-preview[data-position="top-right"] .watermark-preview-text { top: 10%; left: 75%; }
 .watermark-preview[data-position="bottom-left"] .watermark-preview-text { top: 90%; left: 25%; }
 .watermark-preview[data-position="bottom-right"] .watermark-preview-text { top: 90%; left: 75%; }
+
+/* Karartma düzenleyicisi */
+.redact-stage {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    background: #fff;
+}
+
+.redact-stage canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.redact-overlay {
+    position: absolute;
+    inset: 0;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.redact-box {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    outline: 1px solid #000;
+}
+
+.redact-box-remove {
+    position: absolute;
+    top: -0.75rem;
+    right: -0.75rem;
+    padding: 0.1rem 0.3rem;
+    line-height: 1;
+    border-radius: 50%;
+}
+
+.redact-thumb-boxes {
+    position: absolute;
+    inset: 0.35rem;
+    pointer-events: none;
+}
+
+.page-card.has-redactions .page-card-handle {
+    border-color: #000;
+}
+
+.page-card-badge[data-count] {
+    display: inline-block;
+}
