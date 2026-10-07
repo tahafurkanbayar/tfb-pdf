@@ -211,3 +211,14 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit` | OK (203 tests, 684 assertions, 1 skipped) |
 | `php vendor/bin/phpunit --filter CompressOperationTest` | OK (3 tests, 12 assertions) |
 | `php scratchpad/compress-fixture.php` + headless Chrome görsel karşılaştırma | 201315 → 44803 bayt (2 görüntü optimize, biri gri tonlamalı); ortalama piksel farkı 2.01/255, en büyük 67. Geçici dosyalar silindi |
+| `git add -A; git commit; git push` | f143ad0 — Aşama 16 |
+
+## Aşama 17 — Watermark
+
+| Komut | Sonuç |
+|---|---|
+| `grep` tFPDF `_putresourcedict/_putresources/_enddoc/_put/_out` | Genişletme noktaları doğrulandı |
+| `php -r` (servis importu, API, route) + `php -l` (3 dosya) | Temiz |
+| `php vendor/bin/phpunit --filter WatermarkOperationTest` | OK (3 tests, 19 assertions) |
+| `php scratchpad/wm-fixture.php` + headless Chrome piksel kontrolü | Sayfa 1 ve 3'te yarı saydam kırmızı filigran (1946 piksel), sayfa 2'de 0. Geçici dosyalar silindi |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |

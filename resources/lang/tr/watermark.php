@@ -1,0 +1,36 @@
+<?php
+
+return [
+    'text' => 'Filigran metni',
+    'text_placeholder' => 'Örn. GİZLİ, TASLAK, Kopya',
+    'text_invalid' => 'Filigran metni 1 ile 100 karakter arasında olmalıdır.',
+    'position' => 'Konum',
+    'positions' => [
+        'center' => 'Ortada',
+        'top' => 'Üstte',
+        'bottom' => 'Altta',
+        'top-left' => 'Sol üst',
+        'top-right' => 'Sağ üst',
+        'bottom-left' => 'Sol alt',
+        'bottom-right' => 'Sağ alt',
+        'tile' => 'Tüm sayfaya döşe',
+    ],
+    'position_invalid' => 'Geçersiz filigran konumu.',
+    'rotation' => 'Döndürme (derece)',
+    'opacity' => 'Opaklık',
+    'opacity_value' => '%:value',
+    'font_size' => 'Yazı boyutu (pt)',
+    'color' => 'Renk',
+    'bold' => 'Kalın yazı',
+    'layer' => 'Katman',
+    'layers' => [
+        'over' => 'İçeriğin üstünde',
+        'under' => 'İçeriğin altında',
+    ],
+    'layer_help' => '"İçeriğin altında" seçeneği, beyaz arka planı olan sayfalarda filigranı gizleyebilir.',
+    'pages' => 'Sayfalar',
+    'pages_help' => 'Boş bırakırsanız tüm sayfalara eklenir. Örnek: 1-3, 5',
+    'settings_invalid' => 'Filigran ayarları geçersiz. Lütfen değerleri kontrol edin.',
+    'preview_note' => 'Önizleme yaklaşıktır; kesin sonuç oluşturulan PDF\'tedir.',
+    'action' => 'Filigran ekle',
+];

@@ -23,7 +23,7 @@ Son güncelleme: 2026-10-07
 | 14 | Reorder | [x] | Sayfa sıralama + kaldırma, değişmeyen sıra = yeni sürüm yok, sürükle-bırak Chrome ile doğrulandı |
 | 15 | Rotate | [x] | Sayfa bazında ve toplu 90° adımlar, /Rotate ile kayıpsız; önceden döndürülmüş kaynakta piksel karşılaştırmasıyla doğrulandı |
 | 16 | Compress | [x] | Ghostscript (varsa, -dSAFER) + PHP optimizasyonu (JPEG yeniden örnekleme, Flate); %3'ten az küçülme = yeni sürüm yok; araç tespiti altyapısı |
-| 17 | Watermark | [ ] | |
+| 17 | Watermark | [x] | Metin, 8 konum + döşeme, döndürme, opaklık (ExtGState), boyut, renk, katman, sayfa aralığı; Türkçe karakter (DejaVu); Chrome ile görsel doğrulama |
 | 18 | Redaction | [ ] | |
 | 19 | OCR capability detection | [ ] | |
 | 20 | Office conversion capability detection | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 17: Watermark (metin, konum, döndürme, opaklık, font boyutu; Türkçe karakter).
+Aşama 18: Redaction (gerçek kaldırma: karartılan sayfa görüntüye dönüştürülür; açık uyarılar).
 
 ## Aşama notları
 

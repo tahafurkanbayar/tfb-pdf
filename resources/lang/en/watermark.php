@@ -1,0 +1,36 @@
+<?php
+
+return [
+    'text' => 'Watermark text',
+    'text_placeholder' => 'E.g. CONFIDENTIAL, DRAFT, Copy',
+    'text_invalid' => 'The watermark text must be between 1 and 100 characters.',
+    'position' => 'Position',
+    'positions' => [
+        'center' => 'Center',
+        'top' => 'Top',
+        'bottom' => 'Bottom',
+        'top-left' => 'Top left',
+        'top-right' => 'Top right',
+        'bottom-left' => 'Bottom left',
+        'bottom-right' => 'Bottom right',
+        'tile' => 'Tile across the page',
+    ],
+    'position_invalid' => 'Invalid watermark position.',
+    'rotation' => 'Rotation (degrees)',
+    'opacity' => 'Opacity',
+    'opacity_value' => ':value%',
+    'font_size' => 'Font size (pt)',
+    'color' => 'Color',
+    'bold' => 'Bold text',
+    'layer' => 'Layer',
+    'layers' => [
+        'over' => 'Above the content',
+        'under' => 'Below the content',
+    ],
+    'layer_help' => '"Below the content" may hide the watermark on pages with a white background.',
+    'pages' => 'Pages',
+    'pages_help' => 'Leave empty to apply to all pages. Example: 1-3, 5',
+    'settings_invalid' => 'The watermark settings are invalid. Please check the values.',
+    'preview_note' => 'The preview is approximate; the generated PDF is authoritative.',
+    'action' => 'Add watermark',
+];

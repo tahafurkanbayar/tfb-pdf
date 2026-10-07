@@ -76,6 +76,85 @@ final class PdfService
         });
     }
 
+    /**
+     * Metin filigranı. $pages boşsa tüm sayfalar.
+     *
+     * @param list<int> $pages
+     */
+    public function watermark(string $input, string $output, WatermarkOptions $options, array $pages = []): int
+    {
+        return $this->build($output, function (Fpdi $pdf) use ($input, $options, $pages): int {
+            $count = $pdf->setSourceFile($input);
+            $selected = $pages === [] ? null : array_flip($pages);
+
+            for ($page = 1; $page <= $count; $page++) {
+                $template = $pdf->importPage($page);
+                $size = $pdf->getTemplateSize($template);
+                $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+
+                $apply = $selected === null || isset($selected[$page]);
+                if ($apply && $options->under) {
+                    $this->drawWatermark($pdf, $options, $size['width'], $size['height']);
+                }
+                $pdf->useTemplate($template, 0, 0, $size['width'], $size['height']);
+                if ($apply && !$options->under) {
+                    $this->drawWatermark($pdf, $options, $size['width'], $size['height']);
+                }
+            }
+
+            return $count;
+        });
+    }
+
+    private function drawWatermark(Fpdi $pdf, WatermarkOptions $o, float $width, float $height): void
+    {
+        $pdf->useUnicodeFont($o->fontSize, $o->bold);
+        $pdf->SetTextColor(...$o->color);
+        $textWidth = $pdf->GetStringWidth($o->text);
+        $margin = max(18.0, $o->fontSize * 0.6);
+
+        $centers = match ($o->position) {
+            'center' => [[$width / 2, $height / 2]],
+            'top' => [[$width / 2, $margin + $o->fontSize / 2]],
+            'bottom' => [[$width / 2, $height - $margin - $o->fontSize / 2]],
+            'top-left' => [[$margin + $textWidth / 2, $margin + $o->fontSize / 2]],
+            'top-right' => [[$width - $margin - $textWidth / 2, $margin + $o->fontSize / 2]],
+            'bottom-left' => [[$margin + $textWidth / 2, $height - $margin - $o->fontSize / 2]],
+            'bottom-right' => [[$width - $margin - $textWidth / 2, $height - $margin - $o->fontSize / 2]],
+            'tile' => self::tileCenters($width, $height, $textWidth, $o->fontSize),
+        };
+
+        foreach ($centers as [$cx, $cy]) {
+            $pdf->saveState();
+            $pdf->setAlpha($o->opacity);
+            if ($o->rotation !== 0) {
+                $pdf->rotateAround($o->rotation, $cx, $cy);
+            }
+            // Metnin optik merkezi (cx, cy) olacak şekilde taban çizgisi
+            $pdf->Text($cx - $textWidth / 2, $cy + $o->fontSize * 0.35, $o->text);
+            $pdf->restoreState();
+        }
+    }
+
+    /**
+     * @return list<array{float, float}>
+     */
+    private static function tileCenters(float $width, float $height, float $textWidth, int $fontSize): array
+    {
+        $stepX = $textWidth + $fontSize * 2;
+        $stepY = $fontSize * 4;
+        $centers = [];
+        $row = 0;
+        for ($y = $stepY / 2; $y < $height + $stepY; $y += $stepY) {
+            $offset = ($row++ % 2) * $stepX / 2;
+            for ($x = $stepX / 2 - $offset; $x < $width + $stepX; $x += $stepX) {
+                $centers[] = [$x, $y];
+            }
+        }
+
+        return $centers;
+    }
+
     public function pageCount(string $input): int
     {
         return (new PdfInspector())->pageCount($input);

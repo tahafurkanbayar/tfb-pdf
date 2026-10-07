@@ -152,3 +152,9 @@ OperationApiController (POST /api/operations/{type}, JSON)
 
 - `PdfToolService::reorder($order)`: `$order` yeni sıradaki kaynak sayfa numaraları; listede olmayanlar kaldırılır. Tekrarlı / aralık dışı sıra reddedilir; boş liste = `reorder.all_removed`; sıra aynıysa `no_change` (sürüm yok).
 - UI: `tools/page-cards.js` (sayfa kartı ızgarası, sıralama/döndürme/karartma araçlarında ortak), `tools/reorder.js` (sürükle-bırak + ←/→ butonları + kaldır/geri al, aria-live duyuruları, mobilde 2 sütun).
+
+## Filigran (Aşama 17)
+
+- `App\Pdf\Fpdi`: `setAlpha()` (ExtGState, PDF 1.4'e yükseltir), `saveState/restoreState`, `rotateAround()` (cm matrisi). İmza ve karartmada da kullanılır.
+- `WatermarkOptions::fromInput`: metin 1–100 karakter (kontrol karakterleri temizlenir), 8 konum (döşeme dahil), -180..180°, opaklık 0.05..1, 6..200 pt, #RRGGBB, kalın, katman (üst/alt). Operation kaydına metnin kendisi değil uzunluğu yazılır.
+- Sayfa seçimi `PageRangeParser` ile (boş = tüm sayfalar). UI'da CSS tabanlı yaklaşık canlı önizleme.

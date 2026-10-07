@@ -12,6 +12,7 @@ use App\Pdf\PageRangeParser;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
 use App\Pdf\WarningCollector;
+use App\Pdf\WatermarkOptions;
 use App\Services\DocumentService;
 use App\Support\FilenameSanitizer;
 
@@ -226,6 +227,39 @@ final class PdfToolService
                     [new OperationOutput($file, $total)],
                     'fpdi',
                     ['pages' => $total, 'rotated_pages' => count($normalized)],
+                    $this->rebuildWarnings($paths)
+                );
+            }
+        );
+    }
+
+    /**
+     * Metin filigranı. $pages boş: tüm sayfalar; dolu: "1-3, 5" biçiminde aralık.
+     *
+     * @param array<string, mixed> $settings
+     */
+    public function watermark(string $ownerHash, string $documentId, ?int $versionNumber, array $settings, string $pages = ''): OperationResult
+    {
+        $options = WatermarkOptions::fromInput($settings);
+        [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+
+        $selected = trim($pages) === ''
+            ? []
+            : array_values(array_unique(array_merge(...array_map([PageRangeParser::class, 'pages'], PageRangeParser::parse($pages, (int) $version->pageCount)))));
+
+        return $this->operations->run(
+            'watermark',
+            $ownerHash,
+            [[$document, $version]],
+            $options->toArray() + ['pages' => $selected === [] ? 'all' : $pages],
+            function (string $tmp, array $paths) use ($options, $selected): ProcessResult {
+                $file = $tmp . '/watermarked.pdf';
+                $count = $this->pdf->watermark($paths[0], $file, $options, $selected);
+
+                return new ProcessResult(
+                    [new OperationOutput($file, $count)],
+                    'fpdi',
+                    ['pages' => $count, 'watermarked_pages' => $selected === [] ? $count : count($selected)],
                     $this->rebuildWarnings($paths)
                 );
             }

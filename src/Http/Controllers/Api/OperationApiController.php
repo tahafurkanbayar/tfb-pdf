@@ -96,6 +96,19 @@ final class OperationApiController extends Controller
         ));
     }
 
+    public function watermark(Request $request): Response
+    {
+        $settings = $request->input('settings');
+
+        return $this->respond($this->tools()->watermark(
+            $this->requireOwner(),
+            (string) $request->input('document', ''),
+            self::versionInput($request),
+            is_array($settings) ? $settings : [],
+            (string) $request->input('pages', '')
+        ));
+    }
+
     /**
      * GET /api/operations/{id}/download — işlemin tüm çıktıları tek ZIP.
      */

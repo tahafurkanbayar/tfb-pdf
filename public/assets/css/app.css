@@ -357,3 +357,35 @@ button.thumb:hover {
         transition: none;
     }
 }
+
+/* Filigran önizlemesi (yaklaşık) */
+.watermark-preview {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+}
+
+.watermark-preview img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.watermark-preview-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    white-space: nowrap;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.watermark-preview[data-position="top"] .watermark-preview-text { top: 10%; }
+.watermark-preview[data-position="bottom"] .watermark-preview-text { top: 90%; }
+.watermark-preview[data-position="top-left"] .watermark-preview-text { top: 10%; left: 25%; }
+.watermark-preview[data-position="top-right"] .watermark-preview-text { top: 10%; left: 75%; }
+.watermark-preview[data-position="bottom-left"] .watermark-preview-text { top: 90%; left: 25%; }
+.watermark-preview[data-position="bottom-right"] .watermark-preview-text { top: 90%; left: 75%; }
