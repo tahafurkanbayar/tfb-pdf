@@ -2,7 +2,7 @@
 import { api, t, tc } from '../app.js';
 import { renderStatus } from '../upload.js';
 
-function formatSize(bytes) {
+export function formatSize(bytes) {
     const units = ['B', 'KB', 'MB', 'GB'];
     let size = bytes;
     let i = 0;
@@ -37,6 +37,7 @@ export async function runOperation(type, payload, { button, status, resultSectio
 
 export function showResult(section, result) {
     section.hidden = false;
+    section.querySelectorAll('[data-result-extra]').forEach((el) => el.remove());
     section.classList.toggle('border-success-subtle', result.changed);
     section.classList.toggle('border-warning-subtle', !result.changed);
     section.querySelector('[data-result-message]').textContent = result.message;

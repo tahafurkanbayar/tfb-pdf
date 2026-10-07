@@ -7,6 +7,7 @@ namespace App\Services\Operations;
 use App\Domain\Document;
 use App\Domain\DocumentVersion;
 use App\Exceptions\ValidationException;
+use App\Pdf\Compression\Compressor;
 use App\Pdf\PageRangeParser;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
@@ -26,6 +27,7 @@ final class PdfToolService
         private readonly PdfService $pdf,
         private readonly PdfInspector $inspector,
         private readonly int $maxFilesPerOperation,
+        private readonly ?Compressor $compressor = null,
     ) {
     }
 
@@ -226,6 +228,63 @@ final class PdfToolService
                     ['pages' => $total, 'rotated_pages' => count($normalized)],
                     $this->rebuildWarnings($paths)
                 );
+            }
+        );
+    }
+
+    /** Sıkıştırmanın "gerçek" sayılması için gereken en az kazanç */
+    public const MIN_COMPRESSION_SAVING = 0.03;
+
+    /**
+     * Sıkıştırma. Dosya en az %3 küçülmezse yeni sürüm oluşturulmaz ve bu açıkça bildirilir.
+     */
+    public function compress(string $ownerHash, string $documentId, ?int $versionNumber, string $level): OperationResult
+    {
+        if (!in_array($level, Compressor::LEVELS, true)) {
+            throw new ValidationException('Invalid level', 'compress.invalid_level');
+        }
+        if ($this->compressor === null) {
+            throw new \LogicException('Compressor not configured');
+        }
+
+        [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+
+        return $this->operations->run(
+            'compress',
+            $ownerHash,
+            [[$document, $version]],
+            ['level' => $level],
+            function (string $tmp, array $paths) use ($level): ProcessResult {
+                $file = $tmp . '/compressed.pdf';
+                $info = $this->compressor->compress($paths[0], $file, $level);
+                $before = $info['size_before'];
+                $after = $info['size_after'];
+                $saved = $before > 0 ? 1 - $after / $before : 0.0;
+
+                $meta = [
+                    'level' => $level,
+                    'size_before' => $before,
+                    'size_after' => $after,
+                    'saved_percent' => (int) round(max(0, $saved) * 100),
+                ] + $info['details'];
+
+                if ($saved < self::MIN_COMPRESSION_SAVING) {
+                    return new ProcessResult([], $info['engine'], $meta, changed: false);
+                }
+
+                $source = $this->inspector->inspect($paths[0]);
+                $warnings = $info['engine'] === 'php'
+                    ? $this->rebuildWarnings($paths)
+                    : array_values(array_filter([
+                        $source->hasSignatures ? 'warnings.signature_invalidated' : null,
+                        $source->hasForms ? 'warnings.forms_removed' : null,
+                        'warnings.metadata_changed',
+                    ]));
+                if (($info['details']['images_optimized'] ?? 0) > 0 || $info['engine'] === 'ghostscript') {
+                    $warnings[] = 'warnings.images_recompressed';
+                }
+
+                return new ProcessResult([new OperationOutput($file, $info['pages'])], $info['engine'], $meta, $warnings);
             }
         );
     }

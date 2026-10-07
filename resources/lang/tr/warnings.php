@@ -17,4 +17,5 @@ return [
     'embedded_objects' => 'Gömülü nesneler (grafikler, OLE nesneleri, videolar) PDF\'e statik görüntü olarak aktarılabilir veya hiç aktarılmayabilir.',
     'rasterized_pages' => 'Karartılan sayfalar görüntüye dönüştürülür: bu sayfalardaki metin artık seçilemez ve aranamaz.',
     'ocr_accuracy' => 'OCR sonucu %100 doğru olmayabilir. Önemli bilgileri özgün belgeyle karşılaştırın.',
+    'images_recompressed' => 'Görüntüler daha düşük çözünürlük ve kaliteyle yeniden kaydedildi; yakınlaştırıldığında veya basıldığında fark edilebilir.',
 ];

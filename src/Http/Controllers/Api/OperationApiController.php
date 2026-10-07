@@ -86,6 +86,16 @@ final class OperationApiController extends Controller
         ));
     }
 
+    public function compress(Request $request): Response
+    {
+        return $this->respond($this->tools()->compress(
+            $this->requireOwner(),
+            (string) $request->input('document', ''),
+            self::versionInput($request),
+            (string) $request->input('level', 'medium')
+        ));
+    }
+
     /**
      * GET /api/operations/{id}/download — işlemin tüm çıktıları tek ZIP.
      */

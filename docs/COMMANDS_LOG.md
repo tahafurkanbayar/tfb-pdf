@@ -197,3 +197,17 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit --filter RotateOperationTest` | OK (3 tests, 12 assertions) |
 | `php scratchpad/rotate-fixture.php` + headless Chrome piksel karşılaştırması (kaynak +90° PDF.js çizimi vs sonuç dosyası) | src-rot (kaynakta /Rotate 90): 80x120 vs 80x120, **0 farklı piksel**; src-plain: 120x80 vs 120x80, **0 farklı piksel**. Geçici dosyalar silindi |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |
+| `git add -A; git commit; git push` | 794d11f — Aşama 15 |
+
+## Aşama 16 — Compress
+
+| Komut | Sonuç |
+|---|---|
+| `git mv` ProcessResult→CommandResult + `sed`, `php -r` (readonly ksort düzeltmesi) | Tamam |
+| `php -r` (PdfToolService::compress ekleme, nowdoc ile) | **Başarısız**: bash tırnak çakışması (parse error), değişiklik yapılmadı → Edit ile yapıldı |
+| `php -r` (services bağlama) + `php -l` | Temiz |
+| `sed`/`php -r` (uyarı metni, endpoint, route, ToolController capabilities, common.js) + `php -l` | Temiz |
+| `php vendor/bin/phpunit --filter "CompressorTest\|ProcessRunnerTest"` | OK (8 tests) fakat 545 deprecation (test kodunda float `%`) → düzeltildi |
+| `php vendor/bin/phpunit` | OK (203 tests, 684 assertions, 1 skipped) |
+| `php vendor/bin/phpunit --filter CompressOperationTest` | OK (3 tests, 12 assertions) |
+| `php scratchpad/compress-fixture.php` + headless Chrome görsel karşılaştırma | 201315 → 44803 bayt (2 görüntü optimize, biri gri tonlamalı); ortalama piksel farkı 2.01/255, en büyük 67. Geçici dosyalar silindi |

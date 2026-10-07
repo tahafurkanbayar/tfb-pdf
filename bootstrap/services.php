@@ -25,6 +25,7 @@ use App\I18n\LocaleNegotiator;
 use App\I18n\Translator;
 use App\Security\Hmac;
 use App\Security\OwnerContext;
+use App\Pdf\Compression\Compressor;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
 use App\Services\Operations\OperationArchiveService;
@@ -41,6 +42,9 @@ use App\Services\ThumbnailService;
 use App\Services\ToolCatalog;
 use App\Services\Upload\UploadValidator;
 use App\Support\DateFormatter;
+use App\Tools\Capabilities;
+use App\Tools\ProcessRunner;
+use App\Tools\ToolDetector;
 use App\Services\StorageService;
 
 return static function (Container $c, Config $config): void {
@@ -148,7 +152,27 @@ return static function (Container $c, Config $config): void {
 
     // Servisler
     $c->set(AuditService::class, fn (Container $c) => new AuditService($c->get(Database::class)));
-    $c->set(ToolCatalog::class, fn () => new ToolCatalog(['ocr' => false, 'office' => false]));
+    // Opsiyonel sunucu araçları (Ghostscript, LibreOffice, Tesseract) ve yetenekler
+    $c->set(ProcessRunner::class, fn () => new ProcessRunner());
+    $c->set(ToolDetector::class, fn (Container $c) => new ToolDetector(
+        $c->get(ProcessRunner::class),
+        [
+            ToolDetector::GHOSTSCRIPT => (string) $config->get('tools.ghostscript'),
+            ToolDetector::LIBREOFFICE => (string) $config->get('tools.libreoffice'),
+            ToolDetector::TESSERACT => (string) $config->get('tools.tesseract'),
+            ToolDetector::PDFTOPPM => '',
+        ],
+        $storage . '/cache/tools.json',
+        (int) $config->get('tools.detection_cache_ttl', 3600)
+    ));
+    $c->set(Capabilities::class, fn (Container $c) => new Capabilities($c->get(ToolDetector::class)));
+    $c->set(Compressor::class, fn (Container $c) => new Compressor(
+        $c->get(ProcessRunner::class),
+        $c->get(ToolDetector::class)->path(ToolDetector::GHOSTSCRIPT),
+        (int) $config->get('tools.timeout', 120),
+        $c->get(Logger::class)
+    ));
+    $c->set(ToolCatalog::class, fn (Container $c) => new ToolCatalog($c->get(Capabilities::class)->toArray()));
     $c->set(DocumentService::class, fn (Container $c) => new DocumentService(
         $c->get(Database::class),
         $c->get(DocumentRepository::class),
@@ -159,7 +183,7 @@ return static function (Container $c, Config $config): void {
         $c->get(HashService::class),
         $c->get(AuditService::class),
         $c->get(UploadValidator::class),
-        fn (): bool => false,
+        fn (): bool => $c->get(Capabilities::class)->office(),
         (int) $config->get('limits.max_storage_per_owner'),
         (string) $config->get('storage.default_expiry', '7d')
     ));
@@ -182,7 +206,8 @@ return static function (Container $c, Config $config): void {
         $c->get(DocumentService::class),
         $c->get(PdfService::class),
         $c->get(PdfInspector::class),
-        (int) $config->get('limits.max_files_per_operation')
+        (int) $config->get('limits.max_files_per_operation'),
+        $c->get(Compressor::class)
     ));
     $c->set(OperationArchiveService::class, fn (Container $c) => new OperationArchiveService(
         $c->get(OperationRepository::class),

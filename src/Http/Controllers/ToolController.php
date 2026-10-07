@@ -10,6 +10,7 @@ use App\Http\Request;
 use App\Http\Response;
 use App\Services\Operations\PdfToolService;
 use App\Services\ToolCatalog;
+use App\Tools\Capabilities;
 
 final class ToolController extends Controller
 {
@@ -34,6 +35,7 @@ final class ToolController extends Controller
         return $this->view($template, [
             'tool' => $tool,
             'preselected' => $this->preselected($request),
+            'capabilities' => $this->service(Capabilities::class)->toArray(),
         ]);
     }
 

@@ -8,7 +8,9 @@ use App\Core\Database;
 use App\Core\Logger;
 use App\Http\UploadedFile;
 use App\Domain\Document;
+use App\Pdf\Compression\Compressor;
 use App\Pdf\PdfInspector;
+use App\Tools\ProcessRunner;
 use App\Pdf\PdfService;
 use App\Repositories\DocumentRepository;
 use App\Repositories\ExpiryRepository;
@@ -71,7 +73,7 @@ final class Services
             '7d'
         );
 
-        $this->tools = new PdfToolService($this->operations, $this->documents, $this->pdf, $inspector, 20);
+        $this->tools = new PdfToolService($this->operations, $this->documents, $this->pdf, $inspector, 20, new Compressor(new ProcessRunner(), null, 60));
     }
 
     /**

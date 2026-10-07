@@ -17,4 +17,5 @@ return [
     'embedded_objects' => 'Embedded objects (charts, OLE objects, videos) may be converted to static images or omitted.',
     'rasterized_pages' => 'Redacted pages are converted to images: text on these pages can no longer be selected or searched.',
     'ocr_accuracy' => 'OCR results may not be 100% accurate. Compare important information with the original document.',
+    'images_recompressed' => 'Images were saved again at a lower resolution and quality; this may be noticeable when zooming in or printing.',
 ];

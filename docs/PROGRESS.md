@@ -22,7 +22,7 @@ Son güncelleme: 2026-10-07
 | 13 | Split | [x] | PageRangeParser (PHP+JS eşdeğer), each/ranges/extract modları, ZIP indirme (ext-zip varsa), küçük resimden sayfa seçimi |
 | 14 | Reorder | [x] | Sayfa sıralama + kaldırma, değişmeyen sıra = yeni sürüm yok, sürükle-bırak Chrome ile doğrulandı |
 | 15 | Rotate | [x] | Sayfa bazında ve toplu 90° adımlar, /Rotate ile kayıpsız; önceden döndürülmüş kaynakta piksel karşılaştırmasıyla doğrulandı |
-| 16 | Compress | [ ] | |
+| 16 | Compress | [x] | Ghostscript (varsa, -dSAFER) + PHP optimizasyonu (JPEG yeniden örnekleme, Flate); %3'ten az küçülme = yeni sürüm yok; araç tespiti altyapısı |
 | 17 | Watermark | [ ] | |
 | 18 | Redaction | [ ] | |
 | 19 | OCR capability detection | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 16: Compress (Ghostscript varsa, yoksa PHP tabanlı gerçek optimizasyon; küçülmezse yeni sürüm yok).
+Aşama 17: Watermark (metin, konum, döndürme, opaklık, font boyutu; Türkçe karakter).
 
 ## Aşama notları
 
