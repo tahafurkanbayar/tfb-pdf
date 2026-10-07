@@ -15,8 +15,32 @@
 - `tfb_pdf`: uygulama
 - `tfb_pdf_test`: testler (`DB_TEST_DATABASE`). Test altyapısı adı `_test` ile bitmeyen veritabanında çalışmayı reddeder.
 
+## Migration sistemi
+
+- Dosyalar: `database/migrations/NNNN_ad.sql`, ad sırasıyla, yalnızca ileri yönlü. Uygulanmış bir dosya **değiştirilmez**; değişiklik için yeni dosya eklenir.
+- Kurallar: yorumlar `--` ile başlayan satırlar, her ifade satır sonundaki `;` ile biter, yalnızca ASCII (test ile denetlenir).
+- `migrations` tablosu: dosya adı, SHA-256 checksum, batch, zaman. Değiştirilmiş eski dosyalar `status` çıktısında uyarı verir.
+- `GET_LOCK` ile eşzamanlı çalıştırma engellenir.
+- Çalıştırma yolları:
+  - `php bin/migrate.php` / `status` / `schema`
+  - Web kurulum sayfası (`INSTALL_KEY` ile, SSH'siz cPanel) — Aşama 31
+  - phpMyAdmin → Import → `database/schema.sql` (her migration + `migrations` kayıtları; `php bin/migrate.php schema` ile üretilir, testle güncelliği denetlenir)
+
 ## Tablolar
 
-> Aşama 6'da (migration sistemi) doldurulacak.
+| Tablo | Amaç | Önemli noktalar |
+|---|---|---|
+| `settings` | Anahtar/değer | `audit_chain_head` (audit hash zinciri başı) |
+| `documents` | Belge | `public_id` (32 hex, URL'de), `owner_hash` (HMAC), `user_id` (gelecek), `original_name` yalnızca metadata, `source_type`: upload_pdf / upload_office / generated |
+| `operations` | İşlem kaydı | `type`, `status` (processing/completed/failed/no_change), `engine`, `params`/`input_versions`/`result` JSON, `error_code`, süre |
+| `document_versions` | Değiştirilemez sürüm | `version_number` 0 = orijinal; `(document_id, version_number)` ve `storage_path` tekil; `sha256`, `file_size`, `page_count`, `label` |
+| `audit_events` | Append-only olay günlüğü | FK yok (belge silinse de kalır); `prev_hash` + `event_hash` zinciri; IP/UA yalnızca imza olaylarında |
+| `file_expiry` | Saklama süresi | `policy` 1d/7d/30d/never, `expires_at` (never → NULL) |
+| `signature_requests` | İmza talebi | imzalanacak `version_id`, `source_sha256`, `final_version_id`, `final_sha256` |
+| `signature_signers` | İmzacı | `token_hash` (token'ın kendisi saklanmaz), consent/sign/decline zamanları |
+| `signature_fields` | İmza alanı | sayfa + oransal konum (0..1) |
+| `signature_events` | Talebe özel olaylar | son PDF'teki imza sayfası için |
+| `rate_limits` | İstek sınırlama | `bucket` = HMAC(eylem+IP), sabit pencere |
+| `migrations` | Migration takibi | migrator tarafından oluşturulur |
 
-Spec'in istediği minimum tablolar: `documents`, `document_versions`, `operations`, `audit_events`, `file_expiry`, `signature_requests`, `signature_events`, `settings`.
+Silme davranışı: belge silinince sürümler, işlemler, expiry ve imza kayıtları `ON DELETE CASCADE` ile silinir; `audit_events` kalır.

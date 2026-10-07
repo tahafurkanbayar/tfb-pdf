@@ -12,7 +12,7 @@ Son güncelleme: 2026-10-07
 | 3 | Configuration | [x] | Env okuyucu, Config (nokta notasyonu), config/*.php, .env.example, Size |
 | 4 | Localization sistemi | [x] | Translator, LocaleNegotiator, __()/trans_choice(), 8 dil grubu, bin/check-translations.php |
 | 5 | MySQL bağlantısı | [x] | Database (PDO, strict+UTC oturum, transaction), hata kategorileri, entegrasyon testleri |
-| 6 | Migration sistemi | [ ] | |
+| 6 | Migration sistemi | [x] | 8 migration (tüm tablolar), Migrator (checksum, GET_LOCK), bin/migrate.php, schema.sql |
 | 7 | Core PHP architecture | [ ] | |
 | 8 | Storage sistemi | [ ] | |
 | 9 | Upload validation | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 6: Migration sistemi (database/migrations/*.sql, Migrator, bin/migrate.php, schema.sql).
+Aşama 7: Core PHP architecture (Request, Response, Router, Container, Session, CSRF, View, Logger, ErrorHandler, bootstrap).
 
 ## Aşama notları
 

@@ -69,3 +69,16 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit` | OK (39 tests, 110 assertions) — fakat EnvTest'in .env değerlerini sildiği fark edildi |
 | `php vendor/bin/phpunit` (EnvTest düzeltmesi sonrası) | OK (39 tests, 110 assertions) |
 | `php bin/check-translations.php` | OK |
+| `git add -A; git commit; git push` | ecbd0ab — Aşama 5 |
+
+## Aşama 6 — Migration sistemi
+
+| Komut | Sonuç |
+|---|---|
+| bash heredoc ile migration dosyası yazımı | **Başarısız**: bash ayrıştırma hatası (unexpected EOF), hiçbir dosya oluşmadı; dosyalar Write aracıyla yazıldı |
+| `php bin/migrate.php schema` | `database/schema.sql` üretildi |
+| `php vendor/bin/phpunit` | OK (43 tests, 156 assertions) — test DB'de taze migration, idempotency, schema.sql içe aktarımı |
+| `php bin/migrate.php` | `tfb_pdf` üzerinde 0001–0008 uygulandı |
+| `php bin/migrate.php` (tekrar) | "Bekleyen migration yok" |
+| `php bin/migrate.php status` | 8/8 [x] |
+| `php bin/migrate.php bogus` | "Bilinmeyen komut", exit 2 |
