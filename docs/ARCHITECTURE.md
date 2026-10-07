@@ -106,3 +106,11 @@ yetki + girdi doğrulama → rate limit → operation kaydı (processing)
 
 Controller kuralı: `[Sınıf, 'metod']`, imza `metod(Request $request, array $params): Response`.
 Frontend: `public/assets/js/app.js` (ES module: `t()`, `api()`, `toast()`), sayfa verisi `<script type="application/json" id="tfb-config">` ile (inline script yok, CSP `script-src 'self'`).
+
+## Storage (Aşama 8)
+
+- `StorageService`: DB'de yalnızca göreli yol. Kalıplar: `documents/ab/<id>/original.<ext>`, `versions/ab/<id>/v001.pdf`, `previews/ab/<id>/<n>/...`, `signatures/ab/<id>/...`, `temporary/<24hex>/`.
+- `resolve()`: izinli kök dizin listesi + segment regex, `..`/`\`/null byte reddi, `realpath` ile kök içinde kalma kontrolü (symlink kaçışı).
+- `moveIntoPlace()`: hedef varsa reddeder (immutable), `.part-*` geçici adla atomik rename.
+- `FilenameSanitizer`: kullanıcı adı yalnızca metadata/indirme adı; yol bileşenleri, kontrol karakterleri, RTL override, baştaki noktalar temizlenir.
+- `HashService`: akışlı SHA-256 (`hash_file`), `hash_equals` ile doğrulama.

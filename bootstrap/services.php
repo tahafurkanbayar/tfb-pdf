@@ -25,6 +25,8 @@ use App\I18n\LocaleNegotiator;
 use App\I18n\Translator;
 use App\Security\Hmac;
 use App\Security\OwnerContext;
+use App\Services\HashService;
+use App\Services\StorageService;
 
 return static function (Container $c, Config $config): void {
     $storage = $config->get('storage.path');
@@ -111,6 +113,9 @@ return static function (Container $c, Config $config): void {
     });
 
     $c->set(Database::class, fn () => new Database($config->get('database')));
+
+    $c->set(StorageService::class, fn () => new StorageService($storage));
+    $c->set(HashService::class, fn () => new HashService());
 
     $c->set(Router::class, function () use ($c): Router {
         $router = new Router();

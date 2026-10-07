@@ -96,3 +96,13 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit --filter RouterTest` | Hata ayrıntısı incelendi |
 | `php vendor/bin/phpunit` (düzeltmeler sonrası) | OK (84 tests, 251 assertions) |
 | `curl` ile Apache smoke test (13 yol) | `/`→302 `/en/` (Accept-Language en); `/tr/`, `/en/about`, `/tr/privacy` 200; `/tr/yok` 404; `/.env`, `/storage/logs/`, `/src/helpers.php`, `/composer.json`, `/database/schema.sql` 403; `/vendor/autoload.php` 404; CSP, X-Frame-Options, HttpOnly session cookie mevcut |
+| `git add -A; git commit; git push` | 72017e1 — Aşama 7 |
+
+## Aşama 8 — Storage sistemi
+
+| Komut | Sonuç |
+|---|---|
+| `sed` (DIRECTORIES listesine signatures) + `mkdir storage/signatures; touch .gitkeep` | Tamam |
+| `php vendor/bin/phpunit` | **2 failure**: FilenameSanitizer test beklentileri (`.env`→`env`, bozuk UTF-8 baytı atılıyor) — kod davranışı daha güvenli olduğu için beklentiler güncellendi |
+| `sed` + Edit (test beklentisi) + `php vendor/bin/phpunit` | 1 failure kaldı (sed ikinci satırı değiştiremedi), Edit ile düzeltildi |
+| `php vendor/bin/phpunit` | OK (119 tests, 376 assertions) |
