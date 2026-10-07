@@ -15,7 +15,10 @@ use App\Core\Logger;
 use App\Core\Session;
 use App\Core\Url;
 use App\Core\View;
+use App\Http\Middleware\EnsureConfigured;
 use App\Http\Middleware\ForceHttps;
+use App\Http\Middleware\ThrottleRequests;
+use App\Security\RateLimiter;
 use App\Http\Middleware\ResolveLocale;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Request;
@@ -104,6 +107,9 @@ return static function (Container $c, Config $config): void {
     $c->set(View::class, function (Container $c) use ($config): View {
         $view = new View(APP_ROOT . '/resources/views');
         $view->share('url', $c->get(Url::class));
+        // Dil çözümlenmeden oluşan hatalarda da sayfa çizilebilsin (ResolveLocale bunları günceller)
+        $view->share('locale', (string) $config->get('i18n.default'));
+        $view->share('currentPath', '/');
         $view->share('appName', (string) $config->get('app.name'));
         $view->share('locales', $config->get('i18n.locales'));
         $view->share('config', $config);
@@ -270,6 +276,17 @@ return static function (Container $c, Config $config): void {
         (string) $config->get('i18n.cookie')
     ));
     $c->set(VerifyCsrfToken::class, fn (Container $c) => new VerifyCsrfToken($c->get(Csrf::class)));
+    $c->set(EnsureConfigured::class, fn (Container $c) => new EnsureConfigured($config, $c->get(Database::class)));
+    $c->set(RateLimiter::class, fn (Container $c) => new RateLimiter($c->get(Database::class), $c->get(Hmac::class)));
+    $c->set(ThrottleRequests::class, fn (Container $c) => new ThrottleRequests(
+        $c->get(RateLimiter::class),
+        [
+            'upload' => (int) $config->get('limits.rate_uploads_per_hour'),
+            'operation' => (int) $config->get('limits.rate_operations_per_hour'),
+            'signature' => (int) $config->get('limits.rate_signatures_per_hour'),
+        ],
+        $config->get('app.trusted_proxies')
+    ));
 
     $c->set(ExportService::class, fn (Container $c) => new ExportService(
         $c->get(DocumentRepository::class),

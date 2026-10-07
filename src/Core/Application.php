@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\EnsureConfigured;
 use App\Http\Middleware\ForceHttps;
 use App\Http\Middleware\Middleware;
 use App\Http\Middleware\ResolveLocale;
 use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\ThrottleRequests;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Request;
 use App\Http\Response;
@@ -77,7 +79,9 @@ final class Application
         return [
             $this->container->get(ForceHttps::class),
             $this->container->get(ResolveLocale::class),
+            $this->container->get(EnsureConfigured::class),
             $this->container->get(VerifyCsrfToken::class),
+            $this->container->get(ThrottleRequests::class),
         ];
     }
 
@@ -111,7 +115,11 @@ final class Application
             // HTML sayfa ziyaretlerinde owner cookie süresi uzatılır
             $isPage = $request->isMethod('GET') && !$request->isApi()
                 && str_starts_with((string) $response->header('Content-Type'), 'text/html');
-            $this->container->get(OwnerContext::class)->applyTo($response, $isPage);
+            try {
+                $this->container->get(OwnerContext::class)->applyTo($response, $isPage);
+            } catch (\InvalidArgumentException) {
+                // APP_KEY yapılandırılmamış: cookie verilmez (EnsureConfigured zaten 503 döndürür)
+            }
         }
 
         if ($request->isMethod('HEAD')) {

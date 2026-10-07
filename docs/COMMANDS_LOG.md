@@ -323,3 +323,15 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php bin/check-translations.php` | OK (579 anahtar) |
 | `php vendor/bin/phpunit` / `php -d extension=zip vendor/bin/phpunit` | zip yok: 248 tests, 1021 assertions, 3 skipped · zip var: 248 tests, 1052 assertions, 1 skipped |
 | headless Chrome: tools/sign.js, pages/sign.js, pages/document.js import | Sözdizimi hatası yok |
+| `git add -A; git commit; git push` | 2950e4a — Aşama 26 |
+
+## Aşama 27 — Security hardening
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (ThrottleRequests, EnsureConfigured, post_max_size kontrolü bağlama) + `php -l` | Temiz |
+| `php vendor/bin/phpunit --filter SecurityHardeningTest` | 1 error + 1 failure: **gerçek bug** — APP_KEY eksikken middleware kurulumu sırasında Hmac hata fırlatıyordu ve hata sayfası `$locale` olmadan çiziliyordu; XSS testinde `<script>` adı yüklemede zaten temizleniyordu (test güncellendi) |
+| düzeltme (View varsayılanları, finalize'da güvenli cookie, Hmac anahtar doğrulaması ilk kullanıma) + aynı komut | 1 failure (500≠503) → kök neden Hmac kurucusu; doğrulama `hash()`'e taşındı |
+| `php vendor/bin/phpunit --filter SecurityHardeningTest` | OK (5 tests, 31 assertions) |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (253 tests, 1052 assertions, 3 skipped); çeviriler eksiksiz |
+| curl (Apache): 16 yol, başlıklar, CSRF'siz POST, DELETE | .env/.env.example/storage/src/config/database/composer.lock/docs/bin/cron/tests/resources/.git → 403; CSP, X-Frame-Options, nosniff, Referrer/Permissions/COOP başlıkları; CSRF'siz POST 403 (çevrilmiş mesaj) |

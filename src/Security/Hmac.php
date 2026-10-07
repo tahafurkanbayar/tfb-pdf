@@ -13,13 +13,15 @@ final class Hmac
         #[\SensitiveParameter]
         private readonly string $key,
     ) {
-        if (strlen($key) < 32) {
-            throw new \InvalidArgumentException('APP_KEY must be at least 32 characters.');
-        }
     }
 
     public function hash(string $purpose, string $value): string
     {
+        // Doğrulama ilk kullanımda: anahtar eksikse uygulama yine de "yapılandırılmamış" sayfasını gösterebilir
+        if (strlen($this->key) < 32) {
+            throw new \InvalidArgumentException('APP_KEY must be at least 32 characters.');
+        }
+
         return hash_hmac('sha256', $purpose . '|' . $value, $this->key);
     }
 

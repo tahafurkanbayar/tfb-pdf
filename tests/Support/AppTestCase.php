@@ -51,6 +51,8 @@ abstract class AppTestCase extends DatabaseTestCase
             $c = $app->container();
             $c->set(Database::class, fn (): Database => $db);
             $c->set(StorageService::class, fn (): StorageService => new StorageService($root));
+            // Test logları geliştirme storage/logs dizinini kirletmesin
+            $c->set(\App\Core\Logger::class, fn (): \App\Core\Logger => new \App\Core\Logger($root . '/logs', 'debug'));
         }
 
         return $app;

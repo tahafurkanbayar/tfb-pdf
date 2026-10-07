@@ -198,3 +198,20 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - Tümü imzalayınca `OperationService` ile `signature_completed` işlemi: imzalar alanlara basılır + iki dilli sertifika sayfası → yeni sürüm, `final_sha256` talep kaydına.
 - Durumlar: pending / completed / cancelled / declined / expired (temizlik görevi ve erişim anında süre kontrolü). Tüm olaylar `signature_events` ve audit'te (`signature_*`; IP/UA yalnızca imza olaylarında).
 - Nitelikli e-imza / eIDAS / kimlik doğrulama YOK; PDF'e kriptografik imza eklenmez — her ekranda ve sertifikada belirtilir.
+
+## Güvenlik özeti (Aşama 27)
+
+| Konu | Uygulama |
+|---|---|
+| CSRF | Oturum token'ı + Origin kontrolü, tüm durum değiştiren isteklerde (`VerifyCsrfToken`) |
+| SQL injection | Yalnızca PDO prepared statement; dinamik tanımlayıcılar beyaz liste/regex |
+| XSS | Tüm çıktılar `e()`; CSP `script-src 'self'` (inline script yok), JSON veri bloğu `JSON_HEX_*` |
+| Oturum | HttpOnly, SameSite=Lax, Secure (HTTPS), strict mode, kendi kayıt dizini |
+| Upload | Uzantı + imza + MIME + yapı + boyut + sayfa; `is_uploaded_file`; kota |
+| Path traversal | `StorageService::resolve` (izinli kökler, regex, realpath); kullanıcı adı asla yol değil |
+| Hata gösterimi | Kategori mesajı + hata kodu; ayrıntı yalnızca APP_ENV=local + APP_DEBUG=true |
+| Rate limiting | `ThrottleRequests` + `RateLimiter` (DB, HMAC'li anahtar): upload / operation / signature / preview |
+| Kurulum | `EnsureConfigured`: APP_KEY/DB eksikse 503 + açıklama |
+| İndirmeler | `nosniff`, `CSP sandbox`, RFC 6266 dosya adı, owner kontrolü |
+| Harici araçlar | Kabuksuz `proc_open`, `-dSAFER`, zaman aşımı, ayrı profil dizini |
+| Başlıklar | CSP, X-Frame-Options DENY, frame-ancestors none, Referrer-Policy, Permissions-Policy, COOP, HSTS (opsiyonel) |

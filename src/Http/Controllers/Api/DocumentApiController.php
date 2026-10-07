@@ -30,6 +30,12 @@ final class DocumentApiController extends Controller
      */
     public function store(Request $request): Response
     {
+        // post_max_size aşılırsa PHP gövdeyi sessizce boşaltır: anlaşılır mesaj ver
+        $length = (int) ($request->server['CONTENT_LENGTH'] ?? 0);
+        if ($length > \App\Support\Size::fromIni('post_max_size')) {
+            throw new ValidationException('Request exceeds post_max_size', 'upload.server_limit');
+        }
+
         $files = $request->files('file');
         if ($files === []) {
             throw new ValidationException('No file field', 'upload.no_file');

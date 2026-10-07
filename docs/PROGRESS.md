@@ -33,7 +33,7 @@ Son güncelleme: 2026-10-07
 | 24 | Expiration | [x] | CleanupService (süresi dolan belgeler + audit 'expiry', geçici/export/önizleme/oturum, yetim dizinler, rate limit), cron/cleanup.php, fırsatçı temizlik (gerçek isteklerle doğrulandı) |
 | 25 | Export | [x] | Belge ve tüm veriler ZIP: dosyalar, sürümler, metadata, işlem geçmişi, audit (silinmişler dahil), SHA-256 manifest; zip yoksa açık mesaj |
 | 26 | Signature workflow | [x] | Alanlar, imzalayanlar, davet (SMTP opsiyonel), consent kaydı, çizim/yazılı imza, ret/iptal/süre, final PDF + sertifika + SHA-256, audit; nitelikli e-imza değil |
-| 27 | Security hardening | [ ] | |
+| 27 | Security hardening | [x] | Rate limiting (DB, HMAC'li), yapılandırma koruması, post_max_size tespiti, erken hata sayfası düzeltmesi, güvenlik testleri + Apache erişim kontrolleri |
 | 28 | Responsive UI | [ ] | |
 | 29 | Türkçe/İngilizce UI kontrolü | [ ] | |
 | 30 | Tests | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 27: Security hardening (rate limiting, güvenlik başlıkları gözden geçirme, kurulum kontrolü, oturum yenileme).
+Aşama 28: Responsive UI (mobil/tablet gözden geçirme, gerçek tarayıcıda ekran görüntüleri ile kontrol, erişilebilirlik).
 
 ## Aşama notları
 
