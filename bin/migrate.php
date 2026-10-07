@@ -17,6 +17,11 @@ if (PHP_SAPI !== 'cli') {
     exit;
 }
 
+if (PHP_VERSION_ID < 80200) {
+    fwrite(STDERR, 'PHP 8.2+ gerekli / required (bu komut / this command: ' . PHP_VERSION . ")\n");
+    exit(1);
+}
+
 define('APP_ROOT', dirname(__DIR__));
 require APP_ROOT . '/vendor/autoload.php';
 

@@ -75,3 +75,10 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 - Spec §45 uçtan uca akış `Feature\HappyPathTest` ile **süreç içi HTTP** üzerinden test edilir (gerçek PDF, gerçek test veritabanı ve storage; yükle → döndür → sürüm → hash → audit → indir). Tarayıcı otomasyonu (Selenium/Playwright) Node/npm yasağı ve cPanel hedefi nedeniyle test paketinde yok; tarayıcı tarafı Aşama 11, 28 ve 29'da headless Chrome ile elle doğrulandı.
 - `Feature\LocalizationPagesTest`: 25 yol × TR/EN; eksik anahtar (`Translator::missingKeys`), çözülmemiş `grup.anahtar` metni, EN sayfada Türkçe harf, `<html lang>`, menü ve JS'e giden çevirilerin sayfa diliyle aynı olması. Aşama 29'daki elle taramanın kalıcı hali.
 - Zip eklentisine bağlı testler eklenti yoksa atlanır, "zip yokken" davranış testi eklenti varsa atlanır; tam doğrulama için paket iki kez çalıştırılır: `php vendor/bin/phpunit` ve `php -d extension=zip vendor/bin/phpunit`.
+
+## 2026-10-08 — Web kurulum sayfası (Aşama 31)
+- `/install` (dil öneksiz): `INSTALL_KEY` boşsa 404; 16 karakterden kısa anahtar kabul edilmez. Yanlış denemeler IP başına (HMAC'siz SHA-256 özetiyle, düz IP yok) `storage/cache/install-attempts.json`'da sayılır — veritabanı henüz hazır olmayabileceği için DB rate limiter kullanılmaz; 15 dakikada 5 hata → kilit. Oturumda anahtarın özeti tutulur; `.env`'de anahtar değişince oturum düşer.
+- Sayfa yalnızca bilgilendirir ve migration çalıştırır; `.env`'yi **yazmaz** (web sürecinin yapılandırma dosyasını değiştirmesi riskli). `APP_KEY` eksikse rastgele öneri gösterilir, kaydedilmez.
+- Veritabanı hataları kategoriye indirgenir (erişim reddi / veritabanı yok / sunucuya ulaşılamıyor / diğer); ham mesaj yalnızca log'a. Yönetici sayfasında cron komutu için sunucu yolu gösterilir (anahtarla korunan sayfa).
+- `bootstrap/app.php` en başta PHP < 8.2 için iki dilli düz metin mesajı verir (cPanel varsayılan / cron CLI sürümü eski olabilir).
+- `public/` içeriği `public_html`'e kopyalanan yerleşimde `app-root.php` `public/.htaccess` ile doğrudan erişime kapalı.

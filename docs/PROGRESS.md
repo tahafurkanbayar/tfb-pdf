@@ -37,13 +37,13 @@ Son güncelleme: 2026-10-08
 | 28 | Responsive UI | [x] | 320/390/820 px ve masaüstünde 15 sayfa yatay taşmasız; `[hidden]` ile Bootstrap `.d-flex` çakışması, mobil menü kenar boşluğu, yığılan kart boşluğu, etiketsiz imzalayan seçimi düzeltildi; küçük resimler, imzalayan önizlemesi ve temel erişilebilirlik taraması gerçek Chrome'da doğrulandı |
 | 29 | Türkçe/İngilizce UI kontrolü | [x] | 26 sayfa × 2 dilde sunucu ve JS sonrası tarama (sızıntı yok), sayfa başına JS çeviri grubu kapsamı, dil değiştirme (yol + sorgu korunuyor, açık yönlendirme yok), çevrilmiş API hataları; TR ondalık virgül (sunucu + JS aynı), süre metni sunucuda biçimleniyor |
 | 30 | Tests | [x] | §45 eşlemesi: HashService, ExpiryPolicy, sürüm numaralama, PdfService bölme unit testleri; Upload→DB→işlem→sürüm→hash→audit entegrasyon testi; HTTP üzerinden uçtan uca happy path (indirme + audit zinciri); §46 için 25 yol × TR/EN otomatik çeviri taraması; mutasyonla hassasiyet kontrolü; zip eklentisiz 271 test (3 atlandı) ve eklentili 271 test (1 atlandı) geçti |
-| 31 | cPanel deployment | [ ] | |
+| 31 | cPanel deployment | [x] | `/install` web kurulum (INSTALL_KEY, dosya tabanlı deneme kilidi, 22 ortam kontrolü: PHP/eklenti/ini, .env, depolama, DB bağlantı + sürüm, migration, araçlar; tek tuşla migration, cron komutu); eski PHP için anlaşılır mesaj; public_html + app-root.php yerleşimi gerçek Apache'de doğrulandı; 289 test |
 | 32 | README | [ ] | |
 | 33 | Final verification | [ ] | |
 
 ## Sıradaki adım
 
-Aşama 31: cPanel deployment (web kurulum sihirbazı `/install` + INSTALL_KEY, ortam kontrolü, SSH olmadan kurulum adımları).
+Aşama 32: README (spec §47–48 bölümleri: cPanel adımları, MySQL, Composer/vendor yükleme, env değişkenleri, storage, güvenlik, backup, cron, opsiyonel araçlar, dil sistemi, testler, limitations, üçüncü taraf lisanslar).
 
 ## Aşama notları
 

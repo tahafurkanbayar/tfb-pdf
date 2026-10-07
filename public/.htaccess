@@ -9,8 +9,8 @@ DirectoryIndex index.php
     AddType application/wasm .wasm
 </IfModule>
 
-# Gizli dosyalar
-<FilesMatch "^\.">
+# Gizli dosyalar ve uygulama kökünü gösteren app-root.php (public/ içeriği public_html'e kopyalandıysa)
+<FilesMatch "^(\.|app-root\.php$)">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>

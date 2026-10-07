@@ -7,6 +7,18 @@ declare(strict_types=1);
  * HTTP (public/index.php), CLI (bin/*, cron/*) ve testler tarafından kullanılır.
  */
 
+// Bu dosya eski PHP sürümlerinde de ayrıştırılabilir olmalı: cPanel'de varsayılan sürüm (veya cron'daki
+// CLI sürümü) çoğu zaman eskidir; ham "syntax error" yerine yöneticiye ne yapacağı söylenir.
+if (PHP_VERSION_ID < 80200) {
+    if (PHP_SAPI !== 'cli') {
+        http_response_code(503);
+        header('Content-Type: text/plain; charset=utf-8');
+    }
+    echo "tfb-pdf: PHP 8.2 veya üzeri gerekli. cPanel → \"Select PHP Version\" / \"MultiPHP Manager\" ile sürümü değiştirin.\n"
+        . "tfb-pdf: PHP 8.2 or newer is required. Change it in cPanel → \"Select PHP Version\" / \"MultiPHP Manager\".\n";
+    exit(1);
+}
+
 if (!defined('APP_ROOT')) {
     define('APP_ROOT', dirname(__DIR__));
 }

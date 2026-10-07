@@ -49,6 +49,8 @@ use App\Services\MailService;
 use App\Services\SignatureService;
 use App\Repositories\SignatureRepository;
 use App\Services\DocumentService;
+use App\Services\Install\EnvironmentCheck;
+use App\Services\Install\InstallGuard;
 use App\Services\ThumbnailService;
 use App\Services\ToolCatalog;
 use App\Services\Upload\UploadValidator;
@@ -326,8 +328,24 @@ return static function (Container $c, Config $config): void {
         $c->get(SignatureService::class)
     ));
 
+    // Web kurulum sayfası (SSH'siz cPanel): erişim koruması ve ortam kontrolü
+    $c->set(InstallGuard::class, fn () => new InstallGuard(
+        (string) $config->get('app.install_key', ''),
+        $storage . '/cache/install-attempts.json'
+    ));
+    $c->set(EnvironmentCheck::class, fn (Container $c) => new EnvironmentCheck(
+        $config,
+        $c->get(Database::class),
+        $c->get(StorageService::class),
+        $c->get(Capabilities::class),
+        $c->get(Logger::class),
+        APP_ROOT
+    ));
+
     // İstek gönderildikten sonra çalışacak görevler: cron kurulamayan sunucularda fırsatçı temizlik
+    // Kurulum sayfasında atlanır (tablolar henüz oluşturulmamış olabilir)
     $c->set('after_response', fn (Container $c) => (bool) $config->get('storage.opportunistic_cleanup', true) && $c->get(Database::class)->isConfigured()
+        && !str_starts_with($c->get(Request::class)->path, '/install')
         ? [static fn () => $c->get(CleanupService::class)->maybeRunOpportunistic()]
         : []);
 };

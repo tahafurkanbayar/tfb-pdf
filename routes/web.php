@@ -6,6 +6,7 @@ use App\Core\Config;
 use App\Core\Container;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InstallController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\SignController;
 use App\Http\Controllers\ToolController;
@@ -31,4 +32,10 @@ return static function (Router $router, Container $c): void {
 
     $router->get($l . '/documents', [DocumentController::class, 'index']);
     $router->get($l . '/documents/{id:[a-f0-9]{32}}', [DocumentController::class, 'show']);
+
+    // Web kurulum (dil öneksiz; INSTALL_KEY boşsa 404)
+    $router->get('/install', [InstallController::class, 'show']);
+    $router->post('/install/login', [InstallController::class, 'login']);
+    $router->post('/install/migrate', [InstallController::class, 'migrate']);
+    $router->post('/install/logout', [InstallController::class, 'logout']);
 };

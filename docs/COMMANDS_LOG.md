@@ -394,3 +394,22 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php -d extension=zip vendor/bin/phpunit` | OK (271 tests, 22234 assertions, 1 skipped) |
 | `php -d extension=zip vendor/bin/phpunit --display-skipped` | Atlanan: `ExportTest::testUnavailableWithoutZipExtension` (zip yokken davranış testi) — iki çalıştırma birlikte tüm dalları kapsıyor |
 | `php bin/check-translations.php` | OK (578 anahtar) |
+| `git add -A; git commit; git push` | bb0b1d7 — Aşama 30 |
+
+## Aşama 31 — cPanel deployment
+
+| Komut | Sonuç |
+|---|---|
+| mevcut durum incelemesi | `INSTALL_KEY` config'de ve `EnsureConfigured` `/install`'ı muaf tutuyordu, ancak kurulum sayfası yoktu |
+| yeni: `Services/Install/InstallGuard`, `Services/Install/EnvironmentCheck`, `InstallController`, `pages/install.php`, `lang/{tr,en}/install.php`, 4 rota | — |
+| `php -l` (6 dosya) | Sözdizimi hatası yok |
+| `php bin/check-translations.php` | OK (686 anahtar) |
+| curl yerel `/install` akışı (cookie jar; anahtar dosyadan okundu, yazdırılmadı) | Giriş formu; yanlış anahtar → 302 + "Kurulum anahtarı yanlış."; ilk doğru anahtar denemesi curl `@/c/...` yol biçimi nedeniyle okunamadı → `cygpath -m` ile 302; sayfa: `Cache-Control: no-store`, `X-Robots-Tag: noindex, nofollow`, 22 kontrol, "0 hata, 2 uyarı" (zip eklentisi yok, HTTPS yok — yerelde beklenen), 8/8 migration uygulandı |
+| `php vendor/bin/phpunit --filter 'InstallHttpTest\|InstallTest'` | 1 error: testteki `SHOW TABLES LIKE ?` gerçek prepared statement ile çalışmıyor → information_schema sorgusu; OK (18 tests, 110 assertions) |
+| public/ içeriği `htdocs/tfbpub-smoke`'a kopyalandı + `app-root.php` + `SetEnv APP_URL` (public_html senaryosu) | `/` 302 → `/tr/`, sayfalar ve `/install` 200, CSS/JS 200 doğru MIME, API 404 JSON, linkler `/tfbpub-smoke/...`; `.htaccess` 403; `app-root.php` 200 boş gövde → `public/.htaccess`'te reddedildi, tekrar: 403 |
+| curl proje kökü yerleşimi (`/tfb-pdf/.env`, `/storage/logs`, `/src/...`, `/composer.json`, `/app-root.php`) | 403; `/vendor/autoload.php` 404 |
+| test kopyasının silinmesi | Silindi |
+| `php vendor/bin/phpunit` | OK (289 tests, 22310 assertions, 3 skipped — zip) |
+| `php -d extension=zip vendor/bin/phpunit` | OK (289 tests, 22344 assertions, 1 skipped) |
+| headless Chrome ekran görüntüsü (giriş yapılmış sayfanın geçici statik kopyası, 1280 ve 500 px) | Düzgün, taşma yok; geçici dosya ve profil silindi |
+| eski PHP sürüm kontrolü (`bootstrap/app.php`, `bin/migrate.php`) | Yalnızca PHP 8.2.12 ile sözdizimi kontrolü yapıldı; yerelde eski PHP olmadığından < 8.2 mesajı **denenmedi** |
