@@ -19,7 +19,7 @@ Son güncelleme: 2026-10-07
 | 10 | Document management | [x] | Repository katmanı, DocumentService, AuditService (hash zinciri), upload/liste/detay/indirme (Range)/silme/saklama API + sayfalar, dashboard |
 | 11 | PDF preview | [x] | PDF.js 6.4.299 legacy (yerel), tembel küçük resimler + sunucu önbelleği (GD ile yeniden kodlama), sayfa görüntüleyici; headless Chrome ile doğrulandı |
 | 12 | Merge | [x] | OperationService (ortak işlem akışı, girdi hash kontrolü), PdfService, PdfToolService, WarningCollector, araç sayfası iskeleti + birleştirme UI (sürükle-bırak, klavye) |
-| 13 | Split | [ ] | |
+| 13 | Split | [x] | PageRangeParser (PHP+JS eşdeğer), each/ranges/extract modları, ZIP indirme (ext-zip varsa), küçük resimden sayfa seçimi |
 | 14 | Reorder | [ ] | |
 | 15 | Rotate | [ ] | |
 | 16 | Compress | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 13: Split (sayfa aralığı ayrıştırıcı, bölme modları, UI).
+Aşama 14: Reorder (sayfa sıralama + sayfa silme, sürükle-bırak ızgara).
 
 ## Aşama notları
 

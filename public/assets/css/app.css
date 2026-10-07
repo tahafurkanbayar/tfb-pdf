@@ -266,3 +266,20 @@ button.thumb:hover {
     outline: 2px dashed var(--tfb-brand);
     outline-offset: 2px;
 }
+
+.thumb.is-selected {
+    border-color: var(--tfb-brand);
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.thumb.is-selected::after {
+    content: "";
+    position: absolute;
+    top: 0.35rem;
+    left: 0.35rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    background: var(--tfb-brand);
+    box-shadow: 0 0 0 2px #fff;
+}

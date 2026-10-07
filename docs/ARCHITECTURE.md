@@ -139,3 +139,11 @@ OperationApiController (POST /api/operations/{type}, JSON)
 - `WarningCollector`: girdilerdeki form/imza/yer imi/ek dosya/JS/etiket/metadata özelliklerine göre uyarılar (`warnings.*`).
 - Araç sayfaları: `GET /{l}/tools/{tool}` → `resources/views/tools/{tool}.php`; ortak parçalar `partials/tool-header`, `partials/operation-result`; JS `tools/common.js` (`runOperation`, `showResult`), `sortable.js` (pointer tabanlı sürükle-bırak; klavye için taşıma butonları + aria-live duyuruları).
 - İstek kapsamlı servisler: `OwnerContext` her `handle()` çağrısında sıfırlanır.
+
+## Bölme (Aşama 13)
+
+- `PageRangeParser` (PHP) ve `assets/js/page-range.js` aynı kurallar: `1-3, 5, 8-12`, `;`/satır ayırıcı, `8-` = sona kadar; hata anahtarları `split.range_*`. Eşdeğerlik headless Chrome'da 19 girdiyle doğrulandı.
+- Modlar: `each` (sayfa başına sürüm), `ranges` (aralık başına sürüm), `extract` (seçilenler tek sürüm). Sürüm `label` = aralık.
+- Geçersiz aralık işlemden ÖNCE reddedilir: operation kaydı oluşmaz.
+- Çok çıktılı işlemler: `GET /api/operations/{id}/download` → ZIP (ext-zip varsa; yoksa `zip_url` null, dosyalar tek tek indirilir). Geçici ZIP yanıt sonrası silinir; indirme audit'e yazılır.
+- Ortak tek-belge bileşenleri: `partials/source-picker` + `tools/source.js` (`setupSource`, `renderPageGrid`).

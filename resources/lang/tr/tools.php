@@ -29,6 +29,10 @@ return [
         'list_note' => 'Listeden kaldırılan dosyalar belgelerinizde kalmaya devam eder.',
         'empty_list' => 'Henüz dosya eklenmedi.',
         'choose_document' => 'Bir PDF yükleyin veya belgelerinizden birini açıp bu aracı seçin.',
+        'change_file' => 'Dosyayı değiştir',
+        'source_heading' => 'Kaynak PDF',
+        'pages_heading' => 'Sayfalar',
+        'settings_heading' => 'Ayarlar',
     ],
     'merge' => [
         'action' => 'PDF\'leri birleştir',

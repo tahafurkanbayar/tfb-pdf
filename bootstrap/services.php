@@ -27,6 +27,7 @@ use App\Security\Hmac;
 use App\Security\OwnerContext;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
+use App\Services\Operations\OperationArchiveService;
 use App\Services\Operations\OperationService;
 use App\Services\Operations\PdfToolService;
 use App\Services\HashService;
@@ -182,6 +183,13 @@ return static function (Container $c, Config $config): void {
         $c->get(PdfService::class),
         $c->get(PdfInspector::class),
         (int) $config->get('limits.max_files_per_operation')
+    ));
+    $c->set(OperationArchiveService::class, fn (Container $c) => new OperationArchiveService(
+        $c->get(OperationRepository::class),
+        $c->get(DocumentRepository::class),
+        $c->get(VersionRepository::class),
+        $c->get(StorageService::class),
+        $c->get(AuditService::class)
     ));
     $c->set(ThumbnailService::class, fn (Container $c) => new ThumbnailService($c->get(StorageService::class)));
     $c->set(DateFormatter::class, fn () => new DateFormatter((string) $config->get('app.timezone', 'Europe/Istanbul')));

@@ -29,6 +29,10 @@ return [
         'list_note' => 'Files removed from the list remain in your documents.',
         'empty_list' => 'No files added yet.',
         'choose_document' => 'Upload a PDF, or open one of your documents and choose this tool.',
+        'change_file' => 'Change file',
+        'source_heading' => 'Source PDF',
+        'pages_heading' => 'Pages',
+        'settings_heading' => 'Settings',
     ],
     'merge' => [
         'action' => 'Merge PDFs',

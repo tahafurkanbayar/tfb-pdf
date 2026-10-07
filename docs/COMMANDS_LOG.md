@@ -165,3 +165,15 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit` (Session/Csrf da sıfırlanınca) | 5 failure (CLI oturumu bellekte; sıfırlama CSRF'yi bozdu) → yalnızca OwnerContext sıfırlanıyor |
 | `php vendor/bin/phpunit` | OK (165 tests, 582 assertions) |
 | headless Chrome (geçici `__smoke.html`, access.log ile sonuç) | app/upload/sortable/pdf-preview/viewer/common modülleri yüklendi; home.js, document.js ok; merge.js beklenen TypeError (DOM yok), SyntaxError yok |
+| `git add -A; git commit; git push` | dd2cd61 — Aşama 12 |
+
+## Aşama 13 — Split
+
+| Komut | Sonuç |
+|---|---|
+| `sed` (single_page mesajı), `php -r` (controller/presenter/routes/services bağlama) + `php -l` (4 dosya) | Sözdizimi temiz |
+| `sed` (tools.php çeviri ekleme) + `php -l`; `php -r` (sonuç kartına ZIP butonu) | Tamam |
+| `php vendor/bin/phpunit` | OK (189 tests, 626 assertions, 1 skipped: ZIP testi ext-zip olmadan) |
+| `php -d extension=zip vendor/bin/phpunit --filter SplitOperationTest` | OK (4 tests, 27 assertions) — ZIP içeriği doğrulandı |
+| `php bin/check-translations.php` | OK (357 anahtar) |
+| headless Chrome + `range-php.php`: JS ve PHP aralık ayrıştırıcı karşılaştırması (19 girdi) | **Birebir aynı**; source.js modülü hatasız yüklendi |

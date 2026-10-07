@@ -23,6 +23,8 @@ return static function (Router $router, Container $c): void {
     $router->get($doc . '/versions/{number:\d{1,6}}/download', [DocumentApiController::class, 'download']);
 
     $router->post('/api/operations/merge', [OperationApiController::class, 'merge']);
+    $router->post('/api/operations/split', [OperationApiController::class, 'split']);
+    $router->get('/api/operations/{id:[a-f0-9]{32}}/download', [OperationApiController::class, 'download']);
 
     $previews = $doc . '/versions/{number:\d{1,6}}/previews';
     $router->get($previews, [PreviewApiController::class, 'index']);

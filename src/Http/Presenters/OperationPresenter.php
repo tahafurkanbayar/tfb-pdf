@@ -6,6 +6,7 @@ namespace App\Http\Presenters;
 
 use App\Core\Url;
 use App\Domain\DocumentVersion;
+use App\Services\Operations\OperationArchiveService;
 use App\Services\Operations\OperationResult;
 
 final class OperationPresenter
@@ -43,6 +44,9 @@ final class OperationPresenter
                 'sha256' => $v->sha256,
                 'download_url' => $this->url->to('/api/documents/' . $document->publicId . '/versions/' . $v->versionNumber . '/download'),
             ], $result->versions),
+            'zip_url' => count($result->versions) > 1 && OperationArchiveService::available()
+                ? $this->url->to('/api/operations/' . $result->operationId . '/download')
+                : null,
             'warnings' => array_map(static fn (string $key): string => __($key), $result->warnings),
             'meta' => $result->meta,
         ];

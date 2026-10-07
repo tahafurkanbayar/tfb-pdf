@@ -65,6 +65,12 @@ export function showResult(section, result) {
     if (result.outputs.length === 1) {
         download.href = result.outputs[0].download_url;
     }
+    const zip = section.querySelector('[data-result-zip]');
+    zip.hidden = !result.zip_url;
+    if (result.zip_url) {
+        zip.href = result.zip_url;
+    }
+
     const open = section.querySelector('[data-result-document]');
     open.hidden = !result.document;
     if (result.document) {

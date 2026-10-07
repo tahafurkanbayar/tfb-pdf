@@ -13,6 +13,7 @@
         <ul class="list-unstyled mb-3" data-result-outputs></ul>
         <div class="d-flex flex-wrap gap-2 mb-3" data-result-actions>
             <a class="btn btn-primary" data-result-download hidden><?= $view->icon('download') ?> <?= e(__('operations.download_result')) ?></a>
+            <a class="btn btn-primary" data-result-zip hidden><?= $view->icon('file-zip') ?> <?= e(__('split.download_zip')) ?></a>
             <a class="btn btn-outline-secondary" data-result-document hidden><?= $view->icon('box-arrow-up-right') ?> <?= e(__('operations.open_document')) ?></a>
         </div>
         <div class="alert alert-warning small mb-0" data-result-warnings hidden>

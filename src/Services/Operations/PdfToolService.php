@@ -7,6 +7,7 @@ namespace App\Services\Operations;
 use App\Domain\Document;
 use App\Domain\DocumentVersion;
 use App\Exceptions\ValidationException;
+use App\Pdf\PageRangeParser;
 use App\Pdf\PdfInspector;
 use App\Pdf\PdfService;
 use App\Pdf\WarningCollector;
@@ -84,6 +85,59 @@ final class PdfToolService
                 );
             },
             newDocumentName: $firstName . '-merged.pdf'
+        );
+    }
+
+    public const SPLIT_MODES = ['each', 'ranges', 'extract'];
+
+    /**
+     * Bölme (spec §12):
+     *   each    → her sayfa ayrı sürüm
+     *   ranges  → her aralık ayrı sürüm ("1-3", "5", "8-12")
+     *   extract → seçilen sayfalar tek sürümde (yazılan sırayla)
+     * Sürüm etiketi sayfa aralığıdır.
+     */
+    public function split(string $ownerHash, string $documentId, ?int $versionNumber, string $mode, string $ranges = ''): OperationResult
+    {
+        if (!in_array($mode, self::SPLIT_MODES, true)) {
+            throw new ValidationException('Invalid split mode', 'errors.validation');
+        }
+
+        [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+        $total = (int) $version->pageCount;
+
+        // Geçersiz aralıklar işlem başlamadan yakalanır (operation kaydı oluşmaz)
+        $parsed = $mode === 'each'
+            ? array_map(static fn (int $p): array => [$p, $p], range(1, max(1, $total)))
+            : PageRangeParser::parse($ranges, $total);
+
+        if ($mode === 'each' && $total < 2) {
+            throw new ValidationException('Single page document', 'split.single_page');
+        }
+
+        return $this->operations->run(
+            'split',
+            $ownerHash,
+            [[$document, $version]],
+            ['mode' => $mode, 'ranges' => array_map([PageRangeParser::class, 'label'], $parsed)],
+            function (string $tmp, array $paths) use ($mode, $parsed): ProcessResult {
+                $outputs = [];
+                if ($mode === 'extract') {
+                    $pages = array_merge(...array_map([PageRangeParser::class, 'pages'], $parsed));
+                    $file = $tmp . '/extract.pdf';
+                    $this->pdf->extract($paths[0], $file, $pages);
+                    $outputs[] = new OperationOutput($file, count($pages), implode(', ', array_map([PageRangeParser::class, 'label'], $parsed)));
+                } else {
+                    foreach ($parsed as $i => $range) {
+                        $file = $tmp . '/part-' . ($i + 1) . '.pdf';
+                        $pages = PageRangeParser::pages($range);
+                        $this->pdf->extract($paths[0], $file, $pages);
+                        $outputs[] = new OperationOutput($file, count($pages), PageRangeParser::label($range));
+                    }
+                }
+
+                return new ProcessResult($outputs, 'fpdi', ['mode' => $mode, 'files' => count($outputs)], $this->rebuildWarnings($paths));
+            }
         );
     }
 
