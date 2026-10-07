@@ -26,6 +26,9 @@ use App\I18n\Translator;
 use App\Security\Hmac;
 use App\Security\OwnerContext;
 use App\Pdf\PdfInspector;
+use App\Pdf\PdfService;
+use App\Services\Operations\OperationService;
+use App\Services\Operations\PdfToolService;
 use App\Services\HashService;
 use App\Repositories\DocumentRepository;
 use App\Repositories\ExpiryRepository;
@@ -158,6 +161,27 @@ return static function (Container $c, Config $config): void {
         fn (): bool => false,
         (int) $config->get('limits.max_storage_per_owner'),
         (string) $config->get('storage.default_expiry', '7d')
+    ));
+    $c->set(PdfService::class, fn () => new PdfService((int) $config->get('limits.max_pages_per_document')));
+    $c->set(OperationService::class, fn (Container $c) => new OperationService(
+        $c->get(Database::class),
+        $c->get(DocumentRepository::class),
+        $c->get(VersionRepository::class),
+        $c->get(OperationRepository::class),
+        $c->get(ExpiryRepository::class),
+        $c->get(StorageService::class),
+        $c->get(HashService::class),
+        $c->get(AuditService::class),
+        $c->get(DocumentService::class),
+        $c->get(Logger::class),
+        (string) $config->get('storage.default_expiry', '7d')
+    ));
+    $c->set(PdfToolService::class, fn (Container $c) => new PdfToolService(
+        $c->get(OperationService::class),
+        $c->get(DocumentService::class),
+        $c->get(PdfService::class),
+        $c->get(PdfInspector::class),
+        (int) $config->get('limits.max_files_per_operation')
     ));
     $c->set(ThumbnailService::class, fn (Container $c) => new ThumbnailService($c->get(StorageService::class)));
     $c->set(DateFormatter::class, fn () => new DateFormatter((string) $config->get('app.timezone', 'Europe/Istanbul')));

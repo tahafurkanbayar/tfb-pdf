@@ -17,4 +17,22 @@ return [
     ],
     'unavailable_badge' => 'Bu sunucuda kullanılamıyor',
     'requires' => 'Gereken sunucu bileşeni: :tool',
+    'ui' => [
+        'files_heading' => 'Dosyalar',
+        'add_files' => 'Dosya ekle',
+        'remove_file' => ':name dosyasını listeden kaldır',
+        'drag_handle' => 'Sürükleyerek sırasını değiştirin',
+        'moved' => ':name, :position. sıraya taşındı.',
+        'removed' => ':name listeden kaldırıldı.',
+        'upload_failed' => ':name yüklenemedi: :reason',
+        'ready' => 'Hazır',
+        'list_note' => 'Listeden kaldırılan dosyalar belgelerinizde kalmaya devam eder.',
+        'empty_list' => 'Henüz dosya eklenmedi.',
+        'choose_document' => 'Bir PDF yükleyin veya belgelerinizden birini açıp bu aracı seçin.',
+    ],
+    'merge' => [
+        'action' => 'PDF\'leri birleştir',
+        'hint' => 'Dosyaları istediğiniz sıraya getirin. Birleştirilen dosya yeni bir belge olarak kaydedilir.',
+        'need_two' => 'Birleştirmek için en az iki PDF ekleyin.',
+    ],
 ];

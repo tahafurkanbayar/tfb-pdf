@@ -123,3 +123,19 @@ Frontend: `public/assets/js/app.js` (ES module: `t()`, `api()`, `toast()`), sayf
 - API: `POST/GET /api/documents`, `GET/DELETE /api/documents/{id}`, `PUT .../expiry`, `GET .../versions/{n}/download[?inline=1]` (inline: Range, audit yok; normal: attachment + `download` olayı).
 - Sayfalar: `/{l}/documents`, `/{l}/documents/{id}`, dashboard (`/{l}`): yükleme, araçlar, son belgeler/işlemler, depolama, yakında silinecekler.
 - JS: `upload.js` (XHR ilerleme, dropzone), `pages/home.js`, `pages/document.js` (silme modalı + DELETE, saklama süresi PUT).
+
+## PDF işlemleri (Aşama 12)
+
+```text
+OperationApiController (POST /api/operations/{type}, JSON)
+  → PdfToolService        (araç kuralları: girdi doğrulama, sahiplik, limitler)
+  → OperationService::run (ortak akış: operation kaydı → işlemci → SHA-256 → transaction{kilit, sürüm no, taşıma, version, audit})
+  → PdfService            (saf PDF: merge, extract(+rotation); DB/HTTP bilmez)
+```
+
+- Girdi bütünlüğü: işlemden önce her girdi dosyasının SHA-256'sı kayıtla karşılaştırılır; uyuşmazsa işlem durur (`operations.integrity_failed`).
+- `ProcessResult::changed=false` → yeni sürüm oluşturulmaz, durum `no_change` (ör. sıkıştırma küçültemedi).
+- Birleştirme sonucu yeni bir belgedir (`source_type=generated`, sürüm 1'den başlar, orijinal yok); diğer işlemler aynı belgeye yeni sürüm ekler.
+- `WarningCollector`: girdilerdeki form/imza/yer imi/ek dosya/JS/etiket/metadata özelliklerine göre uyarılar (`warnings.*`).
+- Araç sayfaları: `GET /{l}/tools/{tool}` → `resources/views/tools/{tool}.php`; ortak parçalar `partials/tool-header`, `partials/operation-result`; JS `tools/common.js` (`runOperation`, `showResult`), `sortable.js` (pointer tabanlı sürükle-bırak; klavye için taşıma butonları + aria-live duyuruları).
+- İstek kapsamlı servisler: `OwnerContext` her `handle()` çağrısında sıfırlanır.

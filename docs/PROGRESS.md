@@ -18,7 +18,7 @@ Son güncelleme: 2026-10-07
 | 9 | Upload validation | [x] | UploadValidator (PDF + Office), PdfInspector, xref stream / object stream / hybrid parser uzantısı, `App\Pdf\Fpdi` (tFPDF+DejaVu) |
 | 10 | Document management | [x] | Repository katmanı, DocumentService, AuditService (hash zinciri), upload/liste/detay/indirme (Range)/silme/saklama API + sayfalar, dashboard |
 | 11 | PDF preview | [x] | PDF.js 6.4.299 legacy (yerel), tembel küçük resimler + sunucu önbelleği (GD ile yeniden kodlama), sayfa görüntüleyici; headless Chrome ile doğrulandı |
-| 12 | Merge | [ ] | |
+| 12 | Merge | [x] | OperationService (ortak işlem akışı, girdi hash kontrolü), PdfService, PdfToolService, WarningCollector, araç sayfası iskeleti + birleştirme UI (sürükle-bırak, klavye) |
 | 13 | Split | [ ] | |
 | 14 | Reorder | [ ] | |
 | 15 | Rotate | [ ] | |
@@ -43,7 +43,7 @@ Son güncelleme: 2026-10-07
 
 ## Sıradaki adım
 
-Aşama 12: Merge (OperationService + PdfService temeli, birleştirme aracı sayfası).
+Aşama 13: Split (sayfa aralığı ayrıştırıcı, bölme modları, UI).
 
 ## Aşama notları
 

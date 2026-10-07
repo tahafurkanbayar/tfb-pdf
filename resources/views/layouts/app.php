@@ -17,6 +17,7 @@ $jsConfig = [
     'baseUrl' => $url->to('/'),
     'apiUrl' => $url->to('/api'),
     'csrfToken' => $csrfToken(),
+    'icons' => $url->asset('img/icons.svg'),
     // JS'in ihtiyaç duyduğu çeviri grupları; sayfa ek gruplar isteyebilir ($view->section('i18n', 'tools,pdf'))
     'i18n' => array_merge(...array_map(
         static fn (string $group): array => App\I18n\Lang::translator()->group(trim($group)),

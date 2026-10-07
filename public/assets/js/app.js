@@ -16,6 +16,31 @@ export function t(key, replace = {}) {
 }
 
 /**
+ * Çoğul seçimi: "tekil|çoğul" biçimindeki çeviriler için (Türkçede tek biçim).
+ */
+export function tc(key, count, replace = {}) {
+    const text = t(key, { count, ...replace });
+    if (!text.includes('|')) {
+        return text;
+    }
+    const [one, other] = text.split('|');
+    return count === 1 ? one : other;
+}
+
+/**
+ * SVG ikon (sprite). Dekoratiftir, ekran okuyuculardan gizlenir.
+ */
+export function icon(name) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'bi');
+    svg.setAttribute('aria-hidden', 'true');
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', config.icons + '#i-' + name);
+    svg.append(use);
+    return svg;
+}
+
+/**
  * JSON API isteği. CSRF token ve arayüz dili otomatik eklenir.
  * Hata durumunda { ok: false, error: { message, category, recoverable, request_id } } döner,
  * istisna fırlatmaz.

@@ -214,3 +214,55 @@ button.thumb:hover {
         animation: none;
     }
 }
+
+/* Araç sayfaları */
+.tool-icon-lg {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.6rem;
+}
+
+.tool-sidebar {
+    top: 1rem;
+}
+
+.file-thumb {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 0.4rem;
+    background: #fff;
+    overflow: hidden;
+}
+
+.file-thumb img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.file-thumb.is-loading {
+    background: linear-gradient(90deg, #f1f1f3 25%, #fafafa 50%, #f1f1f3 75%);
+    background-size: 200% 100%;
+    animation: thumb-shimmer 1.2s infinite;
+}
+
+.drag-handle {
+    cursor: grab;
+    touch-action: none;
+}
+
+.is-sorting,
+.is-sorting * {
+    cursor: grabbing !important;
+    user-select: none;
+}
+
+.is-dragging {
+    opacity: 0.6;
+    outline: 2px dashed var(--tfb-brand);
+    outline-offset: 2px;
+}

@@ -48,6 +48,17 @@ final class Container
         return $this->instances[$id] = ($this->factories[$id])($this);
     }
 
+    /**
+     * Oluşturulmuş örneği atar; tanım kalır ve bir sonraki get() yeniden oluşturur.
+     * İsteğe bağlı (request-scoped) servisler için.
+     */
+    public function reset(string $id): void
+    {
+        if (isset($this->factories[$id])) {
+            unset($this->instances[$id]);
+        }
+    }
+
     public function has(string $id): bool
     {
         return isset($this->factories[$id]) || array_key_exists($id, $this->instances);

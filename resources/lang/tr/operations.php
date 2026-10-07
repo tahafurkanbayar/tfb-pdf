@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'success' => [
+        'merge' => 'PDF\'ler başarıyla birleştirildi.',
+        'split' => 'PDF başarıyla bölündü.',
+        'reorder' => 'Sayfa düzeni kaydedildi.',
+        'rotate' => 'Sayfalar başarıyla döndürüldü.',
+        'compress' => 'PDF başarıyla sıkıştırıldı.',
+        'watermark' => 'Filigran başarıyla eklendi.',
+        'redact' => 'Seçilen alanlar kalıcı olarak karartıldı.',
+        'ocr' => 'OCR tamamlandı; metin artık aranabilir.',
+        'office_convert' => 'Belge başarıyla PDF\'e dönüştürüldü.',
+    ],
+    'no_change' => [
+        'merge' => 'Değişiklik yapılmadı.',
+        'split' => 'Değişiklik yapılmadı.',
+        'reorder' => 'Sayfa düzeni değişmediği için yeni sürüm oluşturulmadı.',
+        'rotate' => 'Hiçbir sayfa döndürülmediği için yeni sürüm oluşturulmadı.',
+        'compress' => 'Bu dosya daha fazla küçültülemedi. Yeni sürüm oluşturulmadı; dosyanız zaten verimli biçimde sıkıştırılmış olabilir.',
+        'watermark' => 'Değişiklik yapılmadı.',
+        'redact' => 'Karartılacak alan seçilmediği için yeni sürüm oluşturulmadı.',
+        'ocr' => 'Değişiklik yapılmadı.',
+        'office_convert' => 'Değişiklik yapılmadı.',
+    ],
+    'merge_min_files' => 'Birleştirmek için en az iki PDF seçin.',
+    'no_pages' => 'En az bir sayfa seçin.',
+    'page_out_of_range' => ':page. sayfa bulunamadı. Belgede :total sayfa var.',
+    'invalid_rotation' => 'Döndürme açısı 90, 180 veya 270 derece olmalıdır.',
+    'input_not_pdf' => 'Seçilen sürüm bir PDF değil.',
+    'integrity_failed' => 'Kaynak dosya bütünlük kontrolünden geçemedi; işlem güvenlik nedeniyle durduruldu.',
+    'result_title' => 'Sonuç',
+    'download_result' => 'Sonucu indir',
+    'open_document' => 'Belgeyi aç',
+    'start_over' => 'Yeni işlem',
+    'warnings_title' => 'Bilmeniz gerekenler',
+    'created_versions' => 'Oluşturulan sürümler',
+];

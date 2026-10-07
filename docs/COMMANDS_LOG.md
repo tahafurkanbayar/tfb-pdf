@@ -149,3 +149,19 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | curl önizleme API smoke (Apache) | previews 200 (cache_enabled), PUT 201, aralık dışı sayfa 404, GET image/jpeg 200, owner'sız 404, belge sayfası 200, silme 200 |
 | `rmdir` boş shard dizinleri | Silmede boş üst dizin kalıyordu → `deleteDocumentFiles` artık boş üst dizini de kaldırıyor |
 | `php vendor/bin/phpunit` | OK (155 tests, 526 assertions) |
+| `git add -A; git commit; git push` | ca472e6 — Aşama 11 |
+
+## Aşama 12 — Merge
+
+| Komut | Sonuç |
+|---|---|
+| `grep` FPDI AddPage/cleanUp/useTemplate/getTemplateSize | İmzalar doğrulandı (AddPage rotation parametresi var) |
+| `php vendor/bin/phpunit` | **1 failure + 1 warning**: başarısız işlemde FPDI dosya tanıtıcılarını kapatmıyordu (gerçek bug → `finally { cleanUp(true) }`); test yardımcısı kaynak PDF'leri temporary/ içine koyuyordu |
+| `sed` (Services test yardımcısı) + `php vendor/bin/phpunit` | OK (163 tests, 567 assertions) |
+| `php -r` ile tools.php çeviri ekleme + `php -l` | TR dosyasında kesme işareti kaçış hatası (parse error) → Edit ile düzeltildi, lint temiz |
+| `php -r` (tc/icon yardımcıları, merge/common JS düzeltmeleri, layout icons) | Tamam |
+| `php vendor/bin/phpunit` | 2 failure (test: HTML5 `&apos;` çözümleme, taban yol `/tfb-pdf` soyulmuyordu) |
+| düzeltme sonrası `php vendor/bin/phpunit` | 1 failure: **yabancı owner birleştirme 201 döndü** — container `OwnerContext`'i istekler arasında önbelleğe alıyordu (aynı süreçte çoklu istek). Düzeltme: istek kapsamlı servis sıfırlama |
+| `php vendor/bin/phpunit` (Session/Csrf da sıfırlanınca) | 5 failure (CLI oturumu bellekte; sıfırlama CSRF'yi bozdu) → yalnızca OwnerContext sıfırlanıyor |
+| `php vendor/bin/phpunit` | OK (165 tests, 582 assertions) |
+| headless Chrome (geçici `__smoke.html`, access.log ile sonuç) | app/upload/sortable/pdf-preview/viewer/common modülleri yüklendi; home.js, document.js ok; merge.js beklenen TypeError (DOM yok), SyntaxError yok |

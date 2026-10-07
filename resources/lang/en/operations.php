@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'success' => [
+        'merge' => 'PDFs merged successfully.',
+        'split' => 'PDF split successfully.',
+        'reorder' => 'The new page order has been saved.',
+        'rotate' => 'Pages rotated successfully.',
+        'compress' => 'PDF compressed successfully.',
+        'watermark' => 'Watermark added successfully.',
+        'redact' => 'The selected areas have been permanently redacted.',
+        'ocr' => 'OCR completed; the text is now searchable.',
+        'office_convert' => 'The document was converted to PDF successfully.',
+    ],
+    'no_change' => [
+        'merge' => 'No changes were made.',
+        'split' => 'No changes were made.',
+        'reorder' => 'The page order did not change, so no new version was created.',
+        'rotate' => 'No pages were rotated, so no new version was created.',
+        'compress' => 'This file could not be made smaller. No new version was created; your file may already be efficiently compressed.',
+        'watermark' => 'No changes were made.',
+        'redact' => 'No areas were selected, so no new version was created.',
+        'ocr' => 'No changes were made.',
+        'office_convert' => 'No changes were made.',
+    ],
+    'merge_min_files' => 'Select at least two PDFs to merge.',
+    'no_pages' => 'Select at least one page.',
+    'page_out_of_range' => 'Page :page does not exist. The document has :total pages.',
+    'invalid_rotation' => 'The rotation must be 90, 180 or 270 degrees.',
+    'input_not_pdf' => 'The selected version is not a PDF.',
+    'integrity_failed' => 'The source file failed the integrity check; the operation was stopped for safety.',
+    'result_title' => 'Result',
+    'download_result' => 'Download result',
+    'open_document' => 'Open document',
+    'start_over' => 'New operation',
+    'warnings_title' => 'Good to know',
+    'created_versions' => 'Created versions',
+];

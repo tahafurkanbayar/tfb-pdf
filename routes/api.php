@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Container;
 use App\Http\Controllers\Api\DocumentApiController;
+use App\Http\Controllers\Api\OperationApiController;
 use App\Http\Controllers\Api\PreviewApiController;
 use App\Http\Router;
 
@@ -20,6 +21,8 @@ return static function (Router $router, Container $c): void {
     $router->delete($doc, [DocumentApiController::class, 'destroy']);
     $router->put($doc . '/expiry', [DocumentApiController::class, 'expiry']);
     $router->get($doc . '/versions/{number:\d{1,6}}/download', [DocumentApiController::class, 'download']);
+
+    $router->post('/api/operations/merge', [OperationApiController::class, 'merge']);
 
     $previews = $doc . '/versions/{number:\d{1,6}}/previews';
     $router->get($previews, [PreviewApiController::class, 'index']);

@@ -17,6 +17,9 @@ use App\Security\OwnerContext;
 
 final class Application
 {
+    /** İstekten türetilen ve her istekte yeniden oluşturulması gereken servisler */
+    private const REQUEST_SCOPED = [OwnerContext::class];
+
     public function __construct(private readonly Container $container)
     {
     }
@@ -44,6 +47,10 @@ final class Application
     public function handle(Request $request): Response
     {
         $this->container->instance(Request::class, $request);
+        // İstekten türetilen kimlik bir sonraki isteğe taşınmasın (aynı süreçte birden çok istek: testler, ileride worker)
+        foreach (self::REQUEST_SCOPED as $id) {
+            $this->container->reset($id);
+        }
 
         try {
             $this->container->get(Session::class)->start();

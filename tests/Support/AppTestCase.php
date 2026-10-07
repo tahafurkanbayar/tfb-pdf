@@ -75,9 +75,13 @@ abstract class AppTestCase extends DatabaseTestCase
         $query = [];
         parse_str((string) parse_url($path, PHP_URL_QUERY), $query);
 
+        $app ??= $this->createApp();
+        // Gerçek sunucudaki gibi taban yol (/tfb-pdf) soyulur; uygulamanın ürettiği URL'ler doğrudan kullanılabilir
+        $basePath = $app->container()->get(\App\Core\Url::class)->basePath();
+
         $request = new Request(
             $method,
-            Request::extractPath($path, ''),
+            Request::extractPath($path, $basePath),
             $query,
             $post,
             $files,
@@ -87,7 +91,7 @@ abstract class AppTestCase extends DatabaseTestCase
             $body,
         );
 
-        return ($app ?? $this->createApp())->handle($request);
+        return $app->handle($request);
     }
 
     /**
