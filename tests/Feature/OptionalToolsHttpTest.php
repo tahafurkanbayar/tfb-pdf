@@ -54,6 +54,11 @@ final class OptionalToolsHttpTest extends AppTestCase
         $home = $this->request('GET', '/tr');
         self::assertSame(200, $home->status());
         self::assertStringContainsString('<span class="badge text-bg-light border mt-2">Bu sunucuda kullanılamıyor</span>', $home->content());
+        $office = $this->request('GET', '/tr/tools/office');
+        self::assertMatchesRegularExpression($alert, $office->content());
+        self::assertStringContainsString('LibreOffice', $office->content());
+        self::assertStringNotContainsString('data-dropzone', $office->content(), 'Araç yokken yükleme alanı gösterilmez');
+
         // Diğer araçlar çalışmaya devam eder
         self::assertSame(200, $this->request('GET', '/tr/tools/merge')->status());
         self::assertDoesNotMatchRegularExpression($alert, $this->request('GET', '/tr/tools/split')->content());
@@ -75,5 +80,23 @@ final class OptionalToolsHttpTest extends AppTestCase
         $data = json_decode($response->content(), true);
         self::assertSame('tool_unavailable', $data['error']['category']);
         self::assertSame('Bu özellik mevcut hosting ortamında kullanılamıyor.', $data['error']['message']);
+    }
+
+    public function testOfficeUploadIsRefusedWith503(): void
+    {
+        $app = $this->createApp();
+        $token = $app->container()->get(Csrf::class)->token();
+        $docx = $this->storageRoot() . '/temporary/a.docx';
+        file_put_contents($docx, \Tests\Support\TinyZip::build(['[Content_Types].xml' => '<Types/>', 'word/document.xml' => '<x/>']));
+
+        $response = $this->request('POST', '/api/documents', [
+            'Accept' => 'application/json',
+            'X-CSRF-Token' => $token,
+            'X-Locale' => 'en',
+        ], app: $app, post: ['office' => '1'], files: ['file' => [\App\Http\UploadedFile::fromPath($docx, 'a.docx')]]);
+
+        self::assertSame(503, $response->status());
+        self::assertSame('This feature is not available in the current hosting environment.', json_decode($response->content(), true)['error']['message']);
+        self::assertSame(0, (int) self::db()->scalar('SELECT COUNT(*) FROM documents'));
     }
 }

@@ -28,6 +28,7 @@ use App\Security\OwnerContext;
 use App\Pdf\Compression\Compressor;
 use App\Pdf\PdfInspector;
 use App\Pdf\Ocr\OcrEngine;
+use App\Pdf\Office\OfficeConverter;
 use App\Pdf\PdfService;
 use App\Pdf\Redaction\Redactor;
 use App\Services\Operations\OperationArchiveService;
@@ -211,7 +212,13 @@ return static function (Container $c, Config $config): void {
         (int) $config->get('limits.max_files_per_operation'),
         $c->get(Compressor::class),
         $c->get(Redactor::class),
-        $c->get(OcrEngine::class)
+        $c->get(OcrEngine::class),
+        $c->get(OfficeConverter::class)
+    ));
+    $c->set(OfficeConverter::class, fn (Container $c) => new OfficeConverter(
+        $c->get(ProcessRunner::class),
+        $c->get(ToolDetector::class)->path(ToolDetector::LIBREOFFICE),
+        (int) $config->get('tools.timeout', 120)
     ));
     $c->set(OcrEngine::class, fn (Container $c) => new OcrEngine(
         $c->get(ProcessRunner::class),

@@ -10,6 +10,7 @@ use App\Http\UploadedFile;
 use App\Exceptions\ValidationException;
 use App\Pdf\Compression\Compressor;
 use App\Pdf\Ocr\OcrEngine;
+use App\Pdf\Office\OfficeConverter;
 use App\Pdf\PageRangeParser;
 use App\Pdf\Redaction\RedactionBoxes;
 use App\Pdf\Redaction\Redactor;
@@ -35,6 +36,7 @@ final class PdfToolService
         private readonly ?Compressor $compressor = null,
         private readonly ?Redactor $redactor = null,
         private readonly ?OcrEngine $ocr = null,
+        private readonly ?OfficeConverter $office = null,
     ) {
     }
 
@@ -349,6 +351,41 @@ final class PdfToolService
                     'tesseract',
                     $info,
                     array_values(array_unique(['warnings.ocr_accuracy', 'warnings.rasterized_pages', ...$this->rebuildWarnings($paths)]))
+                );
+            }
+        );
+    }
+
+    /**
+     * Office belgesini (orijinal, sürüm 0) PDF'e dönüştürür; sonuç aynı belgenin yeni sürümüdür.
+     */
+    public function officeConvert(string $ownerHash, string $documentId): OperationResult
+    {
+        if ($this->office === null || !$this->office->available()) {
+            throw new \App\Exceptions\ToolUnavailableException('LibreOffice unavailable', 'errors.tool_unavailable');
+        }
+
+        $document = $this->documents->get($documentId, $ownerHash);
+        $original = $this->documents->version($document, 0);
+        $extension = \App\Support\FilenameSanitizer::extension($original->filename);
+        if ($original->isPdf() || !in_array($extension, \App\Services\Upload\UploadValidator::OFFICE_EXTENSIONS, true)) {
+            throw new ValidationException('Not an Office document', 'office.not_office');
+        }
+
+        return $this->operations->run(
+            'office_convert',
+            $ownerHash,
+            [[$document, $original]],
+            ['format' => $extension],
+            function (string $tmp, array $paths) use ($extension): ProcessResult {
+                $file = $tmp . '/converted.pdf';
+                $pages = $this->office->convert($paths[0], $extension, $file, $tmp);
+
+                return new ProcessResult(
+                    [new OperationOutput($file, $pages)],
+                    'libreoffice',
+                    ['pages' => $pages, 'format' => $extension],
+                    ['warnings.font_substitution', 'warnings.layout_changes', 'warnings.office_forms', 'warnings.embedded_objects', 'warnings.office_signatures']
                 );
             }
         );

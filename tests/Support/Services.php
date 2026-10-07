@@ -11,6 +11,7 @@ use App\Domain\Document;
 use App\Pdf\Compression\Compressor;
 use App\Pdf\PdfInspector;
 use App\Tools\ProcessRunner;
+use App\Pdf\Office\OfficeConverter;
 use App\Pdf\PdfService;
 use App\Pdf\Redaction\Redactor;
 use App\Repositories\DocumentRepository;
@@ -37,7 +38,10 @@ final class Services
     public readonly PdfToolService $tools;
     public readonly PdfService $pdf;
 
-    public function __construct(public readonly Database $db, public readonly string $root, int $quota = 0)
+    /**
+     * @param ProcessRunner|null $officeRunner Verilirse LibreOffice "var" sayılır ve bu çalıştırıcı kullanılır (sahte araç)
+     */
+    public function __construct(public readonly Database $db, public readonly string $root, int $quota = 0, ?ProcessRunner $officeRunner = null)
     {
         $this->storage = new StorageService($root);
         $this->storage->ensureDirectories();
@@ -55,7 +59,7 @@ final class Services
             new HashService(),
             $this->audit,
             new UploadValidator($inspector, 50_000_000, 500),
-            fn (): bool => false,
+            fn (): bool => $officeRunner !== null,
             $quota,
             '7d'
         );
@@ -74,7 +78,7 @@ final class Services
             '7d'
         );
 
-        $this->tools = new PdfToolService($this->operations, $this->documents, $this->pdf, $inspector, 20, new Compressor(new ProcessRunner(), null, 60), new Redactor(new ProcessRunner(), null, 60));
+        $this->tools = new PdfToolService($this->operations, $this->documents, $this->pdf, $inspector, 20, new Compressor(new ProcessRunner(), null, 60), new Redactor(new ProcessRunner(), null, 60), null, $officeRunner === null ? null : new OfficeConverter($officeRunner, '/usr/bin/soffice', 60));
     }
 
     /**

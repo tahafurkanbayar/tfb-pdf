@@ -245,3 +245,13 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | aynı komut | OK (6 tests, 29 assertions) |
 | `php -r` (bootstrap + Capabilities + ToolDetector, gerçek tespit) | ghostscript/office/ocr/zip: yok; gd ve proc_open: var; tespit 0.03 sn, `storage/cache/tools.json` yazıldı |
 | `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK; çeviriler eksiksiz |
+| `git add -A; git commit; git push` | adc2a20 — Aşama 19 |
+
+## Aşama 20 — Office conversion capability detection
+
+| Komut | Sonuç |
+|---|---|
+| `php -r` (OfficeConverter bağlama, uyarı metni) + `php -l` (6 dosya) | Temiz; TR metninde `\x27` kalmıştı → Edit ile düzeltildi |
+| `php -r` (test servis grafiğine sahte LibreOffice) + `php -l` | Temiz |
+| `php vendor/bin/phpunit --filter OfficeConvertOperationTest` | OK (5 tests, 21 assertions) |
+| `php vendor/bin/phpunit` + `php bin/check-translations.php` | OK (226 tests, 815 assertions, 1 skipped — ext-zip); çeviriler eksiksiz |

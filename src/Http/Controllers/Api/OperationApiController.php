@@ -139,6 +139,11 @@ final class OperationApiController extends Controller
         ));
     }
 
+    public function officeConvert(Request $request): Response
+    {
+        return $this->respond($this->tools()->officeConvert($this->requireOwner(), (string) $request->input('document', '')));
+    }
+
     /**
      * GET /api/operations/{id}/download — işlemin tüm çıktıları tek ZIP.
      */

@@ -30,6 +30,7 @@ return static function (Router $router, Container $c): void {
     $router->post('/api/operations/watermark', [OperationApiController::class, 'watermark']);
     $router->post('/api/operations/redact', [OperationApiController::class, 'redact']);
     $router->post('/api/operations/ocr', [OperationApiController::class, 'ocr']);
+    $router->post('/api/operations/office', [OperationApiController::class, 'officeConvert']);
     $router->get('/api/operations/{id:[a-f0-9]{32}}/download', [OperationApiController::class, 'download']);
 
     $previews = $doc . '/versions/{number:\d{1,6}}/previews';

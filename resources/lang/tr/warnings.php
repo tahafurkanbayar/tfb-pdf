@@ -18,4 +18,5 @@ return [
     'rasterized_pages' => 'Karartılan sayfalar görüntüye dönüştürülür: bu sayfalardaki metin artık seçilemez ve aranamaz.',
     'ocr_accuracy' => 'OCR sonucu %100 doğru olmayabilir. Önemli bilgileri özgün belgeyle karşılaştırın.',
     'images_recompressed' => 'Görüntüler daha düşük çözünürlük ve kaliteyle yeniden kaydedildi; yakınlaştırıldığında veya basıldığında fark edilebilir.',
+    'office_signatures' => 'Office belgesindeki dijital imzalar PDF\'e aktarılmaz; dönüştürülen dosyada imza bulunmaz.',
 ];

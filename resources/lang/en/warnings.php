@@ -18,4 +18,5 @@ return [
     'rasterized_pages' => 'Redacted pages are converted to images: text on these pages can no longer be selected or searched.',
     'ocr_accuracy' => 'OCR results may not be 100% accurate. Compare important information with the original document.',
     'images_recompressed' => 'Images were saved again at a lower resolution and quality; this may be noticeable when zooming in or printing.',
+    'office_signatures' => 'Digital signatures in the Office document are not carried over; the converted file contains no signature.',
 ];
