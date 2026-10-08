@@ -82,3 +82,7 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 - Veritabanı hataları kategoriye indirgenir (erişim reddi / veritabanı yok / sunucuya ulaşılamıyor / diğer); ham mesaj yalnızca log'a. Yönetici sayfasında cron komutu için sunucu yolu gösterilir (anahtarla korunan sayfa).
 - `bootstrap/app.php` en başta PHP < 8.2 için iki dilli düz metin mesajı verir (cPanel varsayılan / cron CLI sürümü eski olabilir).
 - `public/` içeriği `public_html`'e kopyalanan yerleşimde `app-root.php` `public/.htaccess` ile doğrudan erişime kapalı.
+
+## 2026-10-08 — İstek başı PHP uyarıları (Aşama 33)
+- PHP, `post_max_size` aşımı gibi uyarıları betik başlamadan basar; sunucuda `display_errors=On` ise bu HTML JSON yanıtını bozar ve teknik metin gösterir. Uygulamanın `ini_set('display_errors', '0')` çağrısı bunu engelleyemez.
+- Çözüm sunucu düzeyinde, iki SAPI için: `public/.htaccess` içinde `<IfModule mod_php.c> php_flag display_errors Off </IfModule>` (koşulsuz `php_flag` PHP-FPM/CGI'de 500 hatası verir) ve `public/.user.ini` (`display_errors = Off`, PHP-FPM/CGI/LiteSpeed). İkisi de nokta ile başladığı için web erişimine kapalıdır.

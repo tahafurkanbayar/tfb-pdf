@@ -117,7 +117,7 @@ XAMPP (Windows) veya benzeri bir Apache + PHP + MariaDB ortamı yeterlidir.
 ```bash
 git clone https://github.com/tahafurkanbayar/tfb-pdf.git
 cd tfb-pdf
-php composer.phar install          # veya: composer install
+composer install                   # Composer kurulu değilse: php composer.phar install (bkz. Composer)
 cp .env.example .env               # değerleri doldurun; yerelde APP_ENV=local
 php bin/migrate.php                # tabloları oluşturur
 php bin/migrate.php status         # durum
@@ -147,7 +147,7 @@ Bu adımlar **SSH erişimi olmayan** bir kullanıcı için yazılmıştır. Men�
 4. **Veritabanı kullanıcısı oluşturun.** Aynı sayfada "Add New User" ile güçlü parolalı bir kullanıcı oluşturun, ardından "Add User To Database" ile kullanıcıyı veritabanına ekleyip **ALL PRIVILEGES** verin.
 5. **Dosyaları yükleyin.** Yerel bilgisayarınızda `composer install --no-dev` çalıştırın (bkz. [Composer](#composer)), proje klasörünü (vendor/ dahil) ZIP'leyin; "File Manager" ile yükleyip "Extract" ile açın. İki yerleşimden birini seçin:
    - **Önerilen — document root `public/`:** Projeyi ana dizininize (ör. `/home/kullanici/tfb-pdf`) çıkarın. Alt alan adı veya ek alan adı oluştururken ("Domains") document root olarak `/home/kullanici/tfb-pdf/public` yazın. Böylece `storage/`, `.env`, `src/` web'den hiç erişilemez.
-   - **Ana alan adı (`public_html`) değiştirilemiyorsa:** Projeyi `/home/kullanici/tfb-pdf` dizinine çıkarın, yalnızca `public/` dizininin **içeriğini** (gizli `.htaccess` dahil) `public_html/` içine kopyalayın ve `public_html/app-root.php` dosyasını oluşturun:
+   - **Ana alan adı (`public_html`) değiştirilemiyorsa:** Projeyi `/home/kullanici/tfb-pdf` dizinine çıkarın, yalnızca `public/` dizininin **içeriğini** (gizli `.htaccess` ve `.user.ini` dosyaları dahil) `public_html/` içine kopyalayın ve `public_html/app-root.php` dosyasını oluşturun:
      ```php
      <?php return '/home/kullanici/tfb-pdf';
      ```
@@ -189,15 +189,15 @@ Bu adımlar **SSH erişimi olmayan** bir kullanıcı için yazılmıştır. Men�
 
 ## Composer
 
-Bağımlılıklar `composer.json` / `composer.lock` ile sabitlenmiştir. Depoda bir `composer.phar` bulunur; sistemde Composer kurulu olmasa da kullanılabilir.
+Bağımlılıklar `composer.json` / `composer.lock` ile sabitlenmiştir. Bilgisayarınızda Composer kurulu değilse [getcomposer.org/download](https://getcomposer.org/download/) adresinden tek dosyalık `composer.phar` indirip proje köküne koyabilir ve aşağıdaki komutları `php composer.phar ...` biçiminde çalıştırabilirsiniz (`composer.phar` depoya dahil değildir, `.gitignore`'dadır).
 
 | Ortam | Komut |
 |---|---|
-| Geliştirme | `php composer.phar install` |
-| Canlıya yüklemek için (yerelde) | `php composer.phar install --no-dev --optimize-autoloader` |
+| Geliştirme | `composer install` |
+| Canlıya yüklemek için (yerelde) | `composer install --no-dev --optimize-autoloader` |
 | Sunucuda (SSH + Composer varsa) | `composer install --no-dev --optimize-autoloader` |
 
-**Hostingde Composer yoksa:** bağımlılıkları yerel bilgisayarınızda `--no-dev` ile kurun, oluşan `vendor/` dizinini projeyle birlikte yükleyin. `vendor/` eksikse uygulama ham hata yerine "vendor/ missing" mesajı verir. Yüklemeden sonra geliştirme makinenizde tekrar `php composer.phar install` çalıştırarak PHPUnit gibi geliştirme bağımlılıklarını geri getirebilirsiniz.
+**Hostingde Composer yoksa:** bağımlılıkları yerel bilgisayarınızda `--no-dev` ile kurun, oluşan `vendor/` dizinini projeyle birlikte yükleyin. `vendor/` eksikse uygulama ham hata yerine "vendor/ missing" mesajı verir. Yüklemeden sonra geliştirme makinenizde tekrar `composer install` çalıştırarak PHPUnit gibi geliştirme bağımlılıklarını geri getirebilirsiniz.
 
 Platform PHP sürümü `composer.json` içinde `8.2.12` olarak sabitlenmiştir; böylece bağımlılıklar PHP 8.2 ile uyumlu sürümlerde kalır.
 
@@ -272,7 +272,7 @@ storage/
 - **Dosya güvenliği:** PDF içerik doğrulaması (imza, yapı, şifreleme kontrolü), uzantı/MIME tutarlılığı, güvenli ve normalize dosya adları, makro içeren Office paketlerinin reddi.
 - **Erişim:** Belgeler owner çerezine (HMAC'li) bağlıdır; başka tarayıcıdan erişim 404 döner. İmza bağlantıları tahmin edilemez token'lardır.
 - **Rate limiting:** IP başına saatlik yükleme, işlem ve imza sınırları (veritabanında, IP düz metin saklanmadan).
-- **Hata yönetimi:** Kullanıcıya teknik ayrıntı (SQL, stack trace, dosya yolu, kimlik bilgisi) gösterilmez; ayrıntılar `storage/logs/` altına, hassas veriler maskelenerek yazılır. Hatalar istek kimliği ile ilişkilendirilir.
+- **Hata yönetimi:** Kullanıcıya teknik ayrıntı (SQL, stack trace, dosya yolu, kimlik bilgisi) gösterilmez; ayrıntılar `storage/logs/` altına, hassas veriler maskelenerek yazılır. Hatalar istek kimliği ile ilişkilendirilir. PHP'nin uygulama başlamadan bastığı uyarılar (ör. `post_max_size` aşımı) için `display_errors` hem `public/.htaccess` (mod_php) hem `public/.user.ini` (PHP-FPM/CGI/LiteSpeed) ile kapatılır.
 - **Harici araçlar:** Kabuk kullanılmadan, argüman dizisiyle, zaman aşımıyla ve Ghostscript'te `-dSAFER` ile çalıştırılır.
 - **`.htaccess`:** `.env`, `.git`, `composer.*`, `*.sql`, `*.log`, `*.md` vb. dosyalar ile `storage/`, `src/`, `config/` dizinleri reddedilir; dizin listeleme kapalıdır. HTTPS yönlendirmesi için hazır (yorum satırında) kurallar vardır.
 - **Kurulum sayfası:** Yalnızca `INSTALL_KEY` doluyken açıktır; yanlış denemeler kilitlenir. Kurulumdan sonra anahtarı boşaltın.
@@ -385,6 +385,7 @@ Ayrıntılı ve güncel liste: [docs/LIMITATIONS.md](docs/LIMITATIONS.md). Özet
 - Ghostscript, LibreOffice, Tesseract ve SMTP gönderimi geliştirme ortamında **gerçek araçlarla test edilmedi** (sahte çalıştırıcılarla test edildi); Office dönüşümü ve OCR yalnızca bu araçlar sunucuda varsa çalışır.
 - Toplu ZIP indirme ve dışa aktarma PHP `zip` eklentisi gerektirir.
 - Kurulum sayfasındaki "PHP 8.2'den eski" mesajı geliştirme ortamında eski bir PHP sürümüyle denenmedi.
+- `public/.user.ini` (display_errors) yalnızca PHP-FPM/CGI sunucularda etkilidir; geliştirme ortamı mod_php olduğundan bu dosyanın etkisi denenmedi (mod_php karşılığı `.htaccess` kuralı denendi).
 
 ## Üçüncü Taraf Lisansları
 

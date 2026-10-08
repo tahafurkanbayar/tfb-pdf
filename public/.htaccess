@@ -3,6 +3,14 @@
 Options -Indexes -MultiViews
 DirectoryIndex index.php
 
+# PHP hatalarının yanıta yazılmasını kapatır. Uygulama bunu çalışırken de yapar, ancak PHP'nin
+# istek başındaki uyarıları (ör. post_max_size aşımı) uygulama başlamadan basılır ve JSON
+# yanıtını bozar. Yalnızca mod_php'de geçerlidir (PHP-FPM/CGI'de php_flag 500 hatası verir;
+# orada aynı ayarı public/.user.ini yapar). Sunucuda log_errors açıksa uyarılar sunucu log'una yazılır.
+<IfModule mod_php.c>
+    php_flag display_errors Off
+</IfModule>
+
 # PDF.js ES module dosyaları için doğru MIME tipi (bazı sunucularda tanımlı değil)
 <IfModule mod_mime.c>
     AddType application/javascript .js .mjs

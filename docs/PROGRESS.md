@@ -39,11 +39,11 @@ Son güncelleme: 2026-10-08
 | 30 | Tests | [x] | §45 eşlemesi: HashService, ExpiryPolicy, sürüm numaralama, PdfService bölme unit testleri; Upload→DB→işlem→sürüm→hash→audit entegrasyon testi; HTTP üzerinden uçtan uca happy path (indirme + audit zinciri); §46 için 25 yol × TR/EN otomatik çeviri taraması; mutasyonla hassasiyet kontrolü; zip eklentisiz 271 test (3 atlandı) ve eklentili 271 test (1 atlandı) geçti |
 | 31 | cPanel deployment | [x] | `/install` web kurulum (INSTALL_KEY, dosya tabanlı deneme kilidi, 22 ortam kontrolü: PHP/eklenti/ini, .env, depolama, DB bağlantı + sürüm, migration, araçlar; tek tuşla migration, cron komutu); eski PHP için anlaşılır mesaj; public_html + app-root.php yerleşimi gerçek Apache'de doğrulandı; 289 test |
 | 32 | README | [x] | Spec §47 bölümlerinin tamamı + üçüncü taraf lisansları; SSH'siz 12 adımlı cPanel kurulumu (3 yerleşim), cPanel ve manuel backup, cron, tüm env değişkenleri (eksik 2 değişken .env.example'a eklendi); schema.sql içe aktarımı gerçek veritabanında doğrulandı; ARCHITECTURE dizin ağacı güncellendi |
-| 33 | Final verification | [ ] | |
+| 33 | Final verification | [x] | PHP 8.3.35 (resmi paket, SHA-256 doğrulandı) ile 278 dosya lint + 289 test; Apache'ye karşı §55 HTTP doğrulaması 30/30 (ilk turda bulunan istek başı PHP uyarısı .htaccess + .user.ini ile düzeltildi); production hata yönetimi gerçek DB hatasıyla; README'de composer.phar hatası düzeltildi; son rapor: docs/FINAL_REPORT.md |
 
 ## Sıradaki adım
 
-Aşama 33: Final verification (spec §54 kontrol listesi, §55 doğrulama — mümkünse PHP 8.3 ile, §56 son rapor: yalnızca gerçekten çalıştırılan komutlar).
+Tüm aşamalar tamamlandı. Son rapor: [FINAL_REPORT.md](FINAL_REPORT.md). Kalan sınırlamalar: [LIMITATIONS.md](LIMITATIONS.md).
 
 ## Aşama notları
 

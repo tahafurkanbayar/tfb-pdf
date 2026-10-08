@@ -428,3 +428,30 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit --testsuite Unit` + `grep` (unit testlerde DB kullanımı) | OK (193 tests, 573 assertions); unit testler gerçek veritabanı kullanmıyor |
 | `docs/ARCHITECTURE.md` | "planlanan" dizin ağacı ve var olmayan `bin/check-env.php` gerçek yapıya göre düzeltildi |
 | `gh api /markdown ...` | İlk deneme: Git Bash yolu dönüştürdü ("invalid API endpoint"); `gh api markdown` ile render edildi ancak API başlık kimliği üretmediği için içindekiler bağlantıları bu yolla doğrulanamadı |
+| `git add -A; git commit; git push` | 144fb7b — Aşama 32 |
+| `curl -sL https://github.com/tahafurkanbayar/tfb-pdf` + başlık kimliği karşılaştırması (push sonrası) | 24 başlık kimliği; README içindekiler 20/20 bağlantı eşleşiyor ("İ" içeren `pdf-i̇şleme`, `türkçe--i̇ngilizce-dil-sistemi` dahil) |
+
+## Aşama 33 — Final verification (spec §54–56)
+
+| Komut | Sonuç |
+|---|---|
+| `which -a php`, `ls "C:/Program Files"` | Makinede yalnızca XAMPP PHP 8.2.12 (ZTS, x64) |
+| `curl https://windows.php.net/downloads/releases/sha256sum.txt` | İlk deneme boş (302 yönlendirmesi izlenmedi); `-L` ile: `php-8.3.35-nts-Win32-vs16-x64.zip` ve SHA-256 değeri |
+| `curl -L` PHP 8.3.35 zip → scratchpad, `sha256sum`, `unzip` | Özet php.net listesiyle birebir aynı (`25a8e2ac…fe45`); sisteme kurulmadı, PATH değişmedi |
+| PHP 8.3: `php -n -d extension=… -l` (git'teki 278 PHP dosyası) | 0 sözdizimi hatası |
+| PHP 8.3: `php composer.phar check-platform-reqs --no-dev` | Tümü success (php 8.3.35, ext-*) |
+| PHP 8.3: `vendor/bin/phpunit --display-skipped --display-deprecations` (`-n`, php.ini yok) | 1 error: `CompressOperationTest` 3,4 MB yükleme `File too large` — php.ini olmadan `upload_max_filesize` varsayılanı 2M (uygulama ini sınırını doğru uyguluyor; PHP 8.3 sorunu değil) |
+| PHP 8.3: aynı + `-d upload_max_filesize=40M -d post_max_size=40M` (XAMPP ile aynı) | OK (289 tests, 22344 assertions, 1 skipped); deprecation yok |
+| PHP 8.3: aynı, zip eklentisi olmadan | OK (289 tests, 22310 assertions, 3 skipped) |
+| `php scratchpad/final-verify.php` (Apache'ye karşı HTTP: TR/EN arayüz, dil değiştirme, gerçek PDF yükleme, birleştirme, bölme, döndürme, yeni sürüm, orijinal değişmedi (HTTP + disk), SHA-256 (yükleme, indirme, sunucu doğrulaması), audit + zincir, indirme, hatalı/kesik PDF, 26 MB ve 42 MB yükleme, storage/.env/.git/config/src erişimi, başka tarayıcı, CSRF (token yok/yanlış/yabancı Origin), silme + audit, süre dolumu + `cron/cleanup.php`, araçlar yokken OCR 503 / PHP sıkıştırma) | **29/30**: post_max_size aşan 42 MB yüklemede yanıt 422 ve doğru mesaj, ancak gövdenin başında PHP'nin istek başı uyarısı (`<b>Warning</b>: POST Content-Length … exceeds the limit`) — XAMPP `display_errors=On`; uygulamanın `ini_set` ile kapatması bu uyarıdan sonra çalışıyor |
+| düzeltme: `public/.htaccess` `<IfModule mod_php.c> php_flag display_errors Off`, `public/.user.ini` (`display_errors = Off`, PHP-FPM/CGI) | curl tekrar: temiz JSON, 422 "The file exceeds the upload size allowed by the server."; `/.user.ini` 403, `/tr` ve CSS 200 |
+| `php scratchpad/final-verify.php` (tekrar) | **30/30** |
+| production hata yönetimi: `public/` kopyası + `SetEnv APP_ENV=production APP_DEBUG=true DB_PASSWORD=<yanlış>` | İlk deneme 200 döndü: owner çerezi olmayan ana sayfa ve `/api/documents` veritabanına sorgu atmıyor (geçici `envdump.php` ile SetEnv ve yapılandırmanın uygulamaya ulaştığı, bağlantının `DatabaseException` verdiği doğrulandı; `mysql -pyanlış` → 1045). Owner çereziyle `/tr/documents`: HTTP 500, "Bir sorun oluştu / Veriler kaydedilirken bir sorun oluştu… Hata kodu: e4a8848b14d5"; API 500 JSON `category: database`; SQLSTATE, kullanıcı, parola, yol, 1045 sayfada yok; log'da aynı istek kimliğiyle ayrıntı var, parola yok. Kopya ve `envdump.php` silindi |
+| `php composer.phar validate` / `install` / `check-platform-reqs --no-dev` / `audit` | valid / değişiklik yok / success / "No security vulnerability advisories found." |
+| `php bin/migrate.php status` + `php bin/migrate.php` | 8/8 uygulanmış; "Bekleyen migration yok" |
+| `php bin/check-translations.php` | OK (686 anahtar) |
+| `php bin/verify-audit.php` | OK: 42 kayıt, zincir sağlam |
+| `.gitignore` + `git check-ignore` + `git ls-files` + `git log --all -- .env` + `git grep <APP_KEY> $(git rev-list --all)` | `.env`, `vendor/`, storage içerikleri, log'lar, `composer.phar`, `.phpunit.cache` izlenmiyor; geçmişte `.env` ve APP_KEY yok |
+| README kontrolü (göreli bağlantılar, `composer.phar` ifadeleri) | Bağlantılar mevcut; **hata**: README "depoda composer.phar bulunur" diyordu ama dosya `.gitignore`'da → getcomposer.org yönlendirmesiyle düzeltildi; `.user.ini` kopyalama ve güvenlik notları eklendi |
+| `php vendor/bin/phpunit` / `php -d extension=zip vendor/bin/phpunit` (PHP 8.2.12) | OK (289 tests, 22310 assertions, 3 skipped) / OK (289 tests, 22344 assertions, 1 skipped) |
+| `--testsuite Unit / Integration / Feature` (zip ile) | 193 tests, 573 assertions / 63 tests, 462 assertions, 1 skipped / 33 tests, 21309 assertions |

@@ -27,3 +27,5 @@
 - İmza akışı basit elektronik imzadır: imzalayanın kimliği doğrulanmaz (bağlantıya sahip olan imzalayabilir), PDF'e kriptografik dijital imza (PAdES) eklenmez. Nitelikli elektronik imza / eIDAS bilinçli olarak yoktur.
 - E-posta gönderimi SMTP yapılandırmasına bağlıdır; geliştirme ortamında SMTP olmadığından gerçek gönderim test edilmedi (devre dışı yolu test edildi).
 - İmzalayan sayfasında önizleme en fazla ilk 30 sayfayı gösterir.
+- PHP'nin istek başı uyarılarını (ör. post_max_size aşımı) yanıttan uzak tutan `public/.user.ini` yalnızca PHP-FPM/CGI/LiteSpeed sunucularda okunur; geliştirme ortamı mod_php (XAMPP) olduğundan etkisi denenmedi. mod_php için `public/.htaccess` içindeki `<IfModule mod_php.c>` kuralı gerçek Apache'de doğrulandı.
+- Kurulumdaki "PHP 8.2 veya üzeri gerekli" mesajı (bootstrap/app.php, bin/migrate.php) eski bir PHP sürümüyle denenmedi; PHP 8.2.12 ve 8.3.35 ile çalışma doğrulandı.
