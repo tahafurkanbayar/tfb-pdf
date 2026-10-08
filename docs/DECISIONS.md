@@ -104,3 +104,9 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 - Boş durumlar (ikon + başlık + kısa yönlendirme) her liste kartında gösterilir; Belgelerim boşsa yükleme bağlantısı verilir.
 - Yapışkan navbar bağlantı hedeflerini örtmesin diye `html { scroll-padding-top: 5.5rem; }`.
 - Ana sayfa yükleme alanı seçilen dosyaları ad, boyut ve dosya başına ilerleme çubuğuyla listeler (`renderFileChips`); diğer araç sayfaları mevcut durum alanını kullanmaya devam eder.
+
+## 2026-10-08 — Sürümleme ve yayın paketi (v1.0.0)
+- Semantic Versioning; ilk kararlı sürüm 1.0.0. Sürümün tek kaynağı `config/app.php` `version` (footer); etiket `vX.Y.Z`. Değişiklikler `CHANGELOG.md` (Keep a Changelog, Türkçe başlıklar).
+- `.env` anahtarı kaldırma/yeniden adlandırma, minimum PHP/MySQL yükseltmesi veya elle müdahale gerektiren güncelleme MAJOR sayılır; yeni migration tek başına MINOR'dur (`/install` ile çalıştırılır).
+- Release'e `vendor/` dahil hazır ZIP eklenir: hedef kitle SSH/Composer olmayan cPanel kullanıcıları. Paket `bin/build-release.php` ile etiketlenmiş commit'ten (`git archive`) üretilir, `composer install --no-dev` uygulanır; testler ve geliştirme notları (CLAUDE.md, PROMPT, COMMANDS_LOG, PROGRESS) hariç. ZIP PharData ile yazılır (zip eklentisi gerektirmez); yanında SHA-256 dosyası.
+- GitHub'ın otomatik kaynak arşivleri tam kalsın diye `.gitattributes export-ignore` kullanılmadı; hariç tutma betikte.

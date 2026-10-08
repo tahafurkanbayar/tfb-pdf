@@ -35,6 +35,7 @@ Lisans: [MIT](LICENSE) · İlerleme ve karar kayıtları: [docs/](docs/)
 - [Opsiyonel Server Tools](#opsiyonel-server-tools)
 - [Türkçe / İngilizce Dil Sistemi](#türkçe--i̇ngilizce-dil-sistemi)
 - [Testler](#testler)
+- [Sürümler](#sürümler)
 - [Limitations](#limitations)
 - [Üçüncü Taraf Lisansları](#üçüncü-taraf-lisansları)
 
@@ -109,7 +110,7 @@ Kullanılmayanlar (bilinçli): Laravel/Symfony vb. framework, Node.js/npm, Pytho
 
 Kısa özet (ayrıntılar aşağıdaki bölümlerde):
 
-1. Dosyaları sunucuya yükleyin (`vendor/` dizini dahil — bkz. [Composer](#composer)).
+1. [Releases](https://github.com/tahafurkanbayar/tfb-pdf/releases) sayfasından son sürümün `tfb-pdf-X.Y.Z.zip` paketini indirip sunucuya yükleyin (`vendor/` dahildir, Composer gerekmez). Kaynaktan kuruyorsanız bkz. [Composer](#composer).
 2. Bir MySQL/MariaDB veritabanı ve kullanıcısı oluşturun.
 3. `.env.example` dosyasını `.env` adıyla kopyalayıp doldurun (`APP_KEY`, `APP_URL`, `DB_*`, `INSTALL_KEY`).
 4. `storage/` dizininin yazılabilir olduğundan emin olun.
@@ -152,7 +153,7 @@ Bu adımlar **SSH erişimi olmayan** bir kullanıcı için yazılmıştır. Men�
 2. **PHP sürümünü seçin.** "Select PHP Version" (CloudLinux) veya "MultiPHP Manager" ile alan adınız için PHP 8.3 (en az 8.2) seçin. "Extensions" sekmesinde `pdo_mysql`, `mbstring`, `fileinfo`, `gd`, `zip` eklentilerinin işaretli olduğundan emin olun. Aynı ekranda veya "MultiPHP INI Editor"de `upload_max_filesize` ve `post_max_size` değerlerini (ör. `32M`) ayarlayabilirsiniz.
 3. **MySQL veritabanı oluşturun.** "MySQL Databases" → "Create New Database" (ör. `tfbpdf`). cPanel adı kullanıcı adınızla öneklenir: `kullanici_tfbpdf`.
 4. **Veritabanı kullanıcısı oluşturun.** Aynı sayfada "Add New User" ile güçlü parolalı bir kullanıcı oluşturun, ardından "Add User To Database" ile kullanıcıyı veritabanına ekleyip **ALL PRIVILEGES** verin.
-5. **Dosyaları yükleyin.** Yerel bilgisayarınızda `composer install --no-dev` çalıştırın (bkz. [Composer](#composer)), proje klasörünü (vendor/ dahil) ZIP'leyin; "File Manager" ile yükleyip "Extract" ile açın. İki yerleşimden birini seçin:
+5. **Dosyaları yükleyin.** [Releases](https://github.com/tahafurkanbayar/tfb-pdf/releases) sayfasından son sürümün `tfb-pdf-X.Y.Z.zip` paketini indirin (`vendor/` dahil, Composer gerekmez; isteğe bağlı olarak `.sha256` dosyasıyla doğrulayın). "File Manager" ile yükleyip "Extract" ile açın; paket `tfb-pdf-X.Y.Z/` klasörüne açılır, bu klasörü istediğiniz adla (ör. `tfb-pdf`) yeniden adlandırın. Kaynaktan kuruyorsanız yerelde `composer install --no-dev` çalıştırıp proje klasörünü (vendor/ dahil) ZIP'leyin (bkz. [Composer](#composer)). İki yerleşimden birini seçin:
    - **Önerilen — document root `public/`:** Projeyi ana dizininize (ör. `/home/kullanici/tfb-pdf`) çıkarın. Alt alan adı veya ek alan adı oluştururken ("Domains") document root olarak `/home/kullanici/tfb-pdf/public` yazın. Böylece `storage/`, `.env`, `src/` web'den hiç erişilemez.
    - **Ana alan adı (`public_html`) değiştirilemiyorsa:** Projeyi `/home/kullanici/tfb-pdf` dizinine çıkarın, yalnızca `public/` dizininin **içeriğini** (gizli `.htaccess` ve `.user.ini` dosyaları dahil) `public_html/` içine kopyalayın ve `public_html/app-root.php` dosyasını oluşturun:
      ```php
@@ -180,7 +181,7 @@ Bu adımlar **SSH erişimi olmayan** bir kullanıcı için yazılmıştır. Men�
     - "SSL/TLS Status" → AutoSSL ile sertifika kurulduktan sonra `FORCE_HTTPS=true` (isteğe bağlı olarak `HSTS_ENABLED=true`) yapın,
     - `APP_ENV=production` ve `APP_DEBUG=false` olduğundan emin olun.
 
-**Güncelleme:** Yeni sürümün dosyalarını (`vendor/` dahil) yükleyin, `.env` ve `storage/` dizinine dokunmayın; ardından `/install` sayfasından (geçici olarak `INSTALL_KEY` vererek) bekleyen migration'ları çalıştırın. Öncesinde [yedek](#backup) alın.
+**Güncelleme:** Değişiklikleri [CHANGELOG.md](CHANGELOG.md) dosyasında inceleyin. Yeni sürüm paketini (`vendor/` dahil) mevcut dosyaların üzerine yükleyin, `.env` ve `storage/` dizinine dokunmayın; ardından `/install` sayfasından (geçici olarak `INSTALL_KEY` vererek) bekleyen migration'ları çalıştırın. Öncesinde [yedek](#backup) alın.
 
 ## MySQL Kurulumu
 
@@ -377,6 +378,12 @@ php bin/check-translations.php
 - **Feature (uçtan uca, HTTP):** gerçek PDF ile yükle → işle → sürüm → hash → audit → indir; tüm sayfaların iki dilde eksiksiz çizilmesi; güvenlik (CSRF, yetki, rate limit); kurulum sayfası.
 - Son çalıştırma sonuçları ve kullanılan komutlar: [docs/COMMANDS_LOG.md](docs/COMMANDS_LOG.md).
 - Tarayıcı otomasyonu (Selenium/Playwright) Node/npm gerektirmemek için test paketinde yoktur; tarayıcı tarafı headless Chrome ile elle doğrulanmıştır.
+
+## Sürümler
+
+- Sürüm numaraları [Semantic Versioning](https://semver.org/lang/tr/) kurallarına uyar (`MAJOR.MINOR.PATCH`); kurulu sürüm sayfa altbilgisinde görünür.
+- Değişiklikler: [CHANGELOG.md](CHANGELOG.md). İndirilebilir paketler: [Releases](https://github.com/tahafurkanbayar/tfb-pdf/releases).
+- Yayın paketi `php bin/build-release.php` ile üretilir; yayın adımları: [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Limitations
 

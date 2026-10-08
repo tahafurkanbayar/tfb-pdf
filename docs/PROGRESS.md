@@ -43,10 +43,11 @@ Son güncelleme: 2026-10-08
 | 34 | Tasarım sistemi ve koyu tema | [x] | app.css bölümlere ayrıldı (tokens/base/components/pages/dark), tüm renkler CSS değişkeni; Bootstrap 5.3 data-bs-theme ile Açık/Koyu/Sistem, flaşsız yerel theme-init.js (CSP), localStorage; Inter (yerel, OFL); AA kontrast (#E5484D vurgu, #C9373C buton/bağlantı); araç kartları renkli, devre dışı rozet + tooltip; 16 sayfa kopyasında kontrast ve taşma ölçüldü |
 | 35 | Logo ve marka | [x] | Geometrik monogramlı belge işareti ve kelime işareti (logo-mark / logo-full / logo-full-inverse SVG), favicon SVG + 32 px PNG, apple-touch 180, manifest 192/512 (maskable), og:image 1200×630 ve og/twitter etiketleri; navbar'da satır içi logo (mobilde yalnızca işaret) |
 | 36 | Sayfa tasarımları | [x] | Hero (güven rozeti, gradient/ızgara zemin), büyük yükleme alanı + dosya önizleme ve dosya başına ilerleme, dashboard kartları (son belgeler, depolama çubuğu, yakında silinecekler, son işlemler) ve boş durumlar, yapışkan/bulanık navbar, footer (logo, bağlantılar, sürüm); 48 sayfa kopyasında AA kontrast, 360/768/1280 px taşma yok, koyu temada gerçek PDF.js küçük resimleri doğrulandı |
+| 37 | Sürüm 1.0.0 | [x] | SemVer + CHANGELOG, docs/RELEASING.md, bin/build-release.php (vendor/ dahil yayın paketi + SHA-256), v1.0.0 etiketi ve GitHub release |
 
 ## Sıradaki adım
 
-Tasarım işi (Aşama 34–36) tamamlandı. Planlanan aşama kalmadı; yeni istekler yeni aşama olarak eklenir.
+v1.0.0 yayınlandı. Bundan sonra geliştirme sürüm mantığıyla: değişiklikler CHANGELOG `[Yayınlanmadı]` altına, yayın adımları docs/RELEASING.md.
 
 ## Aşama notları
 

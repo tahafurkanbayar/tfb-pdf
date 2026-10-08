@@ -25,3 +25,7 @@ Bu dosya her oturumda otomatik okunur. Kısa tutulmalıdır; ayrıntılar `docs/
 - Aşama bitince `docs/PROGRESS.md` güncellenir; önemli kararlar `docs/DECISIONS.md`'ye.
 - Composer: proje kökündeki `composer.phar` ile → `C:\xampp\php\php.exe composer.phar ...`
 - Testler: `C:\xampp\php\php.exe vendor/bin/phpunit`
+
+## Sürümleme (v1.0.0 sonrası)
+- SemVer. Her değişiklik `CHANGELOG.md` → `## [Yayınlanmadı]` altına eklenir.
+- Sürümün tek kaynağı `config/app.php` → `version`. Yayın adımları: `docs/RELEASING.md` (etiket `vX.Y.Z`, `php bin/build-release.php`, `gh release create`).
