@@ -14,7 +14,7 @@
     </ol>
 </nav>
 <header class="d-flex gap-3 align-items-center mb-4">
-    <span class="tool-icon tool-icon-lg" aria-hidden="true"><?= $view->icon($tool['icon']) ?></span>
+    <span class="tool-icon tool-icon-lg tool-icon-<?= e($tool['slug']) ?>" aria-hidden="true"><?= $view->icon($tool['icon']) ?></span>
     <div>
         <h1 class="h3 mb-1"><?= e(__('pdf.' . $tool['slug'])) ?></h1>
         <p class="text-body-secondary mb-0"><?= e(__('tools.descriptions.' . $tool['slug'])) ?></p>

@@ -99,6 +99,40 @@ export function toast(message, type = 'info') {
     new window.bootstrap.Toast(element, { delay: 6000 }).show();
 }
 
+// Tema seçici (Açık / Koyu / Sistem). Tercihi theme-init.js saklar ve uygular; burada yalnızca
+// seçim, erişilebilir ad ve aria-pressed güncellenir.
+function syncThemeSwitcher() {
+    const preference = window.tfbTheme?.get() ?? 'auto';
+    const toggle = document.querySelector('[data-theme-toggle]');
+    toggle?.setAttribute('aria-label', t('theme.switch') + ' — ' + t('theme.current', { theme: t('theme.' + preference) }));
+    document.querySelectorAll('[data-theme-value]').forEach((item) => {
+        item.setAttribute('aria-pressed', String(item.dataset.themeValue === preference));
+    });
+}
+
+document.addEventListener('click', (event) => {
+    const item = event.target.closest('[data-theme-value]');
+    if (!item || !window.tfbTheme) {
+        return;
+    }
+    window.tfbTheme.set(item.dataset.themeValue);
+    syncThemeSwitcher();
+});
+syncThemeSwitcher();
+
+// Yapışkan üst menü: sayfa kaydırılınca bulanık yarı saydam zemin
+const header = document.querySelector('.site-header');
+if (header) {
+    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+}
+
+// Bootstrap tooltip'leri (ör. "bu sunucuda kullanılamıyor" araç kartları)
+if (window.bootstrap?.Tooltip) {
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((element) => new window.bootstrap.Tooltip(element));
+}
+
 // data-copy="metin" özniteliğine sahip butonlar panoya kopyalar
 document.addEventListener('click', async (event) => {
     const button = event.target.closest('[data-copy]');

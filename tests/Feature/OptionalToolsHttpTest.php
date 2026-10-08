@@ -53,7 +53,12 @@ final class OptionalToolsHttpTest extends AppTestCase
 
         $home = $this->request('GET', '/tr');
         self::assertSame(200, $home->status());
-        self::assertStringContainsString('<span class="badge text-bg-light border mt-2">Bu sunucuda kullanılamıyor</span>', $home->content());
+        // Ana sayfada araç kartı soluk, "Devre dışı" rozetli; gereken bileşen tooltip'te ve ekran okuyucu metninde
+        self::assertMatchesRegularExpression('#class="tool-card card h-100 text-decoration-none tool-card-disabled"\s*href="[^"]*/tr/tools/ocr"\s*data-bs-toggle="tooltip"#', $home->content());
+        self::assertStringContainsString('data-bs-title="Bu sunucuda kullanılamıyor. Gereken: Tesseract OCR"', $home->content());
+        self::assertStringContainsString('<span class="visually-hidden" data-tool-requirement>Bu sunucuda kullanılamıyor. Gereken: LibreOffice</span>', $home->content());
+        self::assertStringContainsString('<span class="badge badge-soft">Devre dışı</span>', $home->content());
+        self::assertDoesNotMatchRegularExpression('#tool-card-disabled"\s*href="[^"]*/tr/tools/merge"#', $home->content());
         $office = $this->request('GET', '/tr/tools/office');
         self::assertMatchesRegularExpression($alert, $office->content());
         self::assertStringContainsString('LibreOffice', $office->content());

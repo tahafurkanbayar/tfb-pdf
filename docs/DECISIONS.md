@@ -86,3 +86,10 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 ## 2026-10-08 — İstek başı PHP uyarıları (Aşama 33)
 - PHP, `post_max_size` aşımı gibi uyarıları betik başlamadan basar; sunucuda `display_errors=On` ise bu HTML JSON yanıtını bozar ve teknik metin gösterir. Uygulamanın `ini_set('display_errors', '0')` çağrısı bunu engelleyemez.
 - Çözüm sunucu düzeyinde, iki SAPI için: `public/.htaccess` içinde `<IfModule mod_php.c> php_flag display_errors Off </IfModule>` (koşulsuz `php_flag` PHP-FPM/CGI'de 500 hatası verir) ve `public/.user.ini` (`display_errors = Off`, PHP-FPM/CGI/LiteSpeed). İkisi de nokta ile başladığı için web erişimine kapalıdır.
+
+## 2026-10-08 — Tasarım sistemi ve koyu tema (Aşama 34)
+- Tema: Bootstrap 5.3 `data-bs-theme` (`<html>`). Tercih `localStorage["tfb-theme"]` = `light | dark | auto` (erişilemezse `auto`); `auto` `prefers-color-scheme`'i izler. Flaşı önleyen kod istenen inline script yerine `<head>`'de CSS'ten önce **engelleyici yerel dosya** (`assets/js/theme-init.js`): CSP `script-src 'self'` gevşetilmez. Tema seçicideki ikon/onay işareti `<html data-theme-preference>` ile CSS'te seçilir.
+- Bootstrap değişkenleri `:root,[data-bs-theme=light]` ve `[data-bs-theme=dark]` altında ayrı ayrı tanımlanır (yalnızca `:root`'ta tanımlamak koyu temayı ezerdi). `--bs-body-bg` yüzey (kart/form/tablo/menü/modal) rengidir; sayfa zemini body'de `--tfb-bg`.
+- Renk: vurgu `#E5484D` (ikon, gradient, logo); beyaz metinle 3.9:1 olduğu için dolu buton ve bağlantılarda `#C9373C` (5.1:1) / bağlantı `#B02F34`; koyu temada bağlantı `#FF8A8E`. Tehlike/başarı renkleri de token'a bağlandı (Bootstrap varsayılan outline-danger 4.2:1 idi).
+- PDF sayfaları (küçük resim, görüntüleyici, karartma, imza alanı) iki temada da kâğıt beyazı kalır; imza alanının beyaz kalması çizilen siyah mürekkebin PDF'e aynen aktarılması içindir.
+- Font: Inter değişken (yalnızca latin + latin-ext, Türkçe karakterler dahil, ~133 KB), yerel; `@fontsource-variable/inter` 5.3.0 npm arşivinden integrity doğrulanarak alındı.

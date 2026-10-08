@@ -40,10 +40,13 @@ Son güncelleme: 2026-10-08
 | 31 | cPanel deployment | [x] | `/install` web kurulum (INSTALL_KEY, dosya tabanlı deneme kilidi, 22 ortam kontrolü: PHP/eklenti/ini, .env, depolama, DB bağlantı + sürüm, migration, araçlar; tek tuşla migration, cron komutu); eski PHP için anlaşılır mesaj; public_html + app-root.php yerleşimi gerçek Apache'de doğrulandı; 289 test |
 | 32 | README | [x] | Spec §47 bölümlerinin tamamı + üçüncü taraf lisansları; SSH'siz 12 adımlı cPanel kurulumu (3 yerleşim), cPanel ve manuel backup, cron, tüm env değişkenleri (eksik 2 değişken .env.example'a eklendi); schema.sql içe aktarımı gerçek veritabanında doğrulandı; ARCHITECTURE dizin ağacı güncellendi |
 | 33 | Final verification | [x] | PHP 8.3.35 (resmi paket, SHA-256 doğrulandı) ile 278 dosya lint + 289 test; Apache'ye karşı §55 HTTP doğrulaması 30/30 (ilk turda bulunan istek başı PHP uyarısı .htaccess + .user.ini ile düzeltildi); production hata yönetimi gerçek DB hatasıyla; README'de composer.phar hatası düzeltildi; son rapor: docs/FINAL_REPORT.md |
+| 34 | Tasarım sistemi ve koyu tema | [x] | app.css bölümlere ayrıldı (tokens/base/components/pages/dark), tüm renkler CSS değişkeni; Bootstrap 5.3 data-bs-theme ile Açık/Koyu/Sistem, flaşsız yerel theme-init.js (CSP), localStorage; Inter (yerel, OFL); AA kontrast (#E5484D vurgu, #C9373C buton/bağlantı); araç kartları renkli, devre dışı rozet + tooltip; 16 sayfa kopyasında kontrast ve taşma ölçüldü |
+| 35 | Logo ve marka | [ ] | |
+| 36 | Sayfa tasarımları | [ ] | |
 
 ## Sıradaki adım
 
-Tüm aşamalar tamamlandı. Son rapor: [FINAL_REPORT.md](FINAL_REPORT.md). Kalan sınırlamalar: [LIMITATIONS.md](LIMITATIONS.md).
+Aşama 35: Logo ve marka (logo-full / logo-mark SVG, favicon, apple-touch-icon, manifest ikonları, og:image, navbar logosu).
 
 ## Aşama notları
 

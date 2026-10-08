@@ -52,7 +52,7 @@ function createItem(name) {
 
     const grip = iconButton('grip-vertical', t('tools.ui.drag_handle'), 'btn btn-sm btn-link text-body-secondary drag-handle');
     const pos = document.createElement('span');
-    pos.className = 'badge text-bg-light border';
+    pos.className = 'badge badge-soft';
     pos.dataset.position = '';
 
     const thumb = document.createElement('span');

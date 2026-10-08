@@ -132,7 +132,7 @@ $maxSize = $view->shared('maxUploadSize');
                                             · <a href="<?= e($url->page('/documents/' . $op['document_public_id'])) ?>"><?= e((string) $op['original_name']) ?></a>
                                         <?php endif; ?>
                                     </span>
-                                    <span class="badge <?= $op['status'] === 'failed' ? 'text-bg-danger' : 'text-bg-light border' ?>"><?= e(__('audit.status.' . $op['status'])) ?></span>
+                                    <span class="badge <?= $op['status'] === 'failed' ? 'text-bg-danger' : 'badge-soft' ?>"><?= e(__('audit.status.' . $op['status'])) ?></span>
                                 </li>
                             <?php endforeach; ?>
                         </ul>

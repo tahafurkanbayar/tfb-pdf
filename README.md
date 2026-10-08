@@ -78,7 +78,7 @@ Uygulama hesap sistemi içermez: belgeler tarayıcıya verilen güvenli bir kiml
 - **Backend:** PHP 8.2+ (hedef 8.3+), framework yok — katmanlı, nesne yönelimli PHP (Controller → Service → Repository → PDO)
 - **Veritabanı:** MySQL 8.0+ veya MariaDB 10.4+ (PDO, prepared statements, `utf8mb4_unicode_ci`)
 - **PDF:** [FPDI](https://github.com/Setasign/FPDI) + [tFPDF](http://fpdf.org/en/script/script92.php) (Unicode/DejaVu), kendi PDF ayrıştırıcısı (xref stream, object stream)
-- **Frontend:** Bootstrap 5, vanilla JavaScript (ES modules), [PDF.js](https://mozilla.github.io/pdf.js/) — hepsi yerel kopya, CDN yok, build adımı yok
+- **Frontend:** Bootstrap 5.3 (açık/koyu/sistem teması), vanilla JavaScript (ES modules), [PDF.js](https://mozilla.github.io/pdf.js/), Inter fontu — hepsi yerel kopya, CDN yok, build adımı yok
 - **E-posta (opsiyonel):** PHPMailer (SMTP)
 - **Test:** PHPUnit 11
 
@@ -398,6 +398,7 @@ Ayrıntılı ve güncel liste: [docs/LIMITATIONS.md](docs/LIMITATIONS.md). Özet
 | [Bootstrap Icons](https://icons.getbootstrap.com/) (seçilmiş ikonlar) | — | MIT | `public/assets/img/icons.LICENSE.txt` |
 | [PDF.js](https://github.com/mozilla/pdf.js) (pdfjs-dist, legacy build) | 6.4.299 | Apache-2.0 | `public/assets/vendor/pdfjs/LICENSE` |
 | PDF.js ile gelen cmaps, standart fontlar (Foxit, Liberation), ICC profilleri, WASM çözücüler (OpenJPEG, JBIG2/PDFium, qcms) | — | Her biri kendi lisans dosyasıyla (BSD, CC0, Liberation Font lisansı vb.) | `public/assets/vendor/pdfjs/**/LICENSE*` |
+| [Inter](https://rsms.me/inter/) (@fontsource-variable/inter, latin + latin-ext, değişken ağırlık) | 5.3.0 | OFL-1.1 | `public/assets/fonts/inter/OFL.txt` |
 | [DejaVu fontları](https://dejavu-fonts.github.io/) | — | Bitstream Vera / Arev lisansı (serbest) | `resources/fonts/unifont/DejaVu_LICENSE.txt` |
 | PHPUnit (yalnızca geliştirme) | 11.5 | BSD-3-Clause | `vendor/` (`--no-dev` ile yüklenmez) |
 

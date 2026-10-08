@@ -15,6 +15,8 @@ DirectoryIndex index.php
 <IfModule mod_mime.c>
     AddType application/javascript .js .mjs
     AddType application/wasm .wasm
+    AddType font/woff2 .woff2
+    AddType application/manifest+json .webmanifest
 </IfModule>
 
 # Gizli dosyalar ve uygulama kökünü gösteren app-root.php (public/ içeriği public_html'e kopyalandıysa)

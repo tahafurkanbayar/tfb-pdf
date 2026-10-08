@@ -17,6 +17,13 @@ return [
     ],
     'unavailable_badge' => 'Bu sunucuda kullanılamıyor',
     'requires' => 'Gereken sunucu bileşeni: :tool',
+    'disabled_badge' => 'Devre dışı',
+    'disabled_tooltip' => 'Bu sunucuda kullanılamıyor. Gereken: :tool',
+    'requirements' => [
+        'ocr' => 'Tesseract OCR',
+        'office' => 'LibreOffice',
+    ],
+    'open' => 'Aracı aç',
     'ui' => [
         'files_heading' => 'Dosyalar',
         'add_files' => 'Dosya ekle',

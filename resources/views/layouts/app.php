@@ -21,15 +21,21 @@ $jsConfig = [
     // JS'in ihtiyaç duyduğu çeviri grupları; sayfa ek gruplar isteyebilir ($view->section('i18n', 'tools,pdf'))
     'i18n' => array_merge(...array_map(
         static fn (string $group): array => App\I18n\Lang::translator()->group(trim($group)),
-        array_filter(['js', 'states', 'errors', 'upload', ...explode(',', $view->yield('i18n'))])
+        array_filter(['js', 'states', 'errors', 'upload', 'theme', ...explode(',', $view->yield('i18n'))])
     )),
 ];
+$themes = ['light' => 'sun', 'dark' => 'moon-stars', 'auto' => 'circle-half'];
 ?>
 <!doctype html>
 <html lang="<?= e($locale) ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php /* Tema ilk çizimden önce uygulanır (beyaz flaş olmaz); CSP nedeniyle inline değil, engelleyici yerel dosya */ ?>
+    <script src="<?= e($url->asset('js/theme-init.js')) ?>"></script>
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0e1014" media="(prefers-color-scheme: dark)">
     <title><?= e($pageTitle) ?></title>
     <meta name="description" content="<?= e($view->yield('description', __('common.app_tagline'))) ?>">
     <meta name="robots" content="<?= e($view->yield('robots', 'index, follow')) ?>">
@@ -61,22 +67,43 @@ $jsConfig = [
                     <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/documents')) ?>"><?= e(__('nav.documents')) ?></a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/about')) ?>"><?= e(__('nav.about')) ?></a></li>
                 </ul>
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" aria-label="<?= e(__('language.switch')) ?>">
-                        <?= $view->icon('translate') ?>
-                        <span><?= e($locales[$locale]) ?></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <?php foreach ($locales as $code => $label): ?>
-                            <li>
-                                <a class="dropdown-item<?= $code === $locale ? ' active' : '' ?>" lang="<?= e($code) ?>"
-                                   hreflang="<?= e($code) ?>"
-                                   <?= $code === $locale ? 'aria-current="true"' : '' ?>
-                                   href="<?= e($url->to('/language/' . $code, ['return' => $currentPath])) ?>"><?= e($label) ?></a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
+                <div class="navbar-actions d-flex align-items-center gap-2 pb-2 pb-lg-0">
+                    <div class="dropdown">
+                        <button class="btn btn-ghost btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false" aria-label="<?= e(__('language.switch')) ?>">
+                            <?= $view->icon('translate') ?>
+                            <span><?= e($locales[$locale]) ?></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <?php foreach ($locales as $code => $label): ?>
+                                <li>
+                                    <a class="dropdown-item<?= $code === $locale ? ' active' : '' ?>" lang="<?= e($code) ?>"
+                                       hreflang="<?= e($code) ?>"
+                                       <?= $code === $locale ? 'aria-current="true"' : '' ?>
+                                       href="<?= e($url->to('/language/' . $code, ['return' => $currentPath])) ?>"><?= e($label) ?><?= $view->icon('check2', 'dropdown-check') ?></a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="dropdown" data-theme-switcher>
+                        <button class="btn btn-ghost btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false" data-theme-toggle
+                                aria-label="<?= e(__('theme.switch')) ?>" title="<?= e(__('theme.label')) ?>">
+                            <?php foreach ($themes as $value => $themeIcon): ?>
+                                <?= $view->icon($themeIcon, 'theme-icon theme-icon-' . $value) ?>
+                            <?php endforeach; ?>
+                            <span class="d-lg-none"><?= e(__('theme.label')) ?></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <?php foreach ($themes as $value => $themeIcon): ?>
+                                <li>
+                                    <button type="button" class="dropdown-item" data-theme-value="<?= e($value) ?>" aria-pressed="false">
+                                        <?= $view->icon($themeIcon) ?><span><?= e(__('theme.' . $value)) ?></span><?= $view->icon('check2', 'dropdown-check') ?>
+                                    </button>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -17,6 +17,13 @@ return [
     ],
     'unavailable_badge' => 'Not available on this server',
     'requires' => 'Required server component: :tool',
+    'disabled_badge' => 'Disabled',
+    'disabled_tooltip' => 'Not available on this server. Requires: :tool',
+    'requirements' => [
+        'ocr' => 'Tesseract OCR',
+        'office' => 'LibreOffice',
+    ],
+    'open' => 'Open tool',
     'ui' => [
         'files_heading' => 'Files',
         'add_files' => 'Add files',

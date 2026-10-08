@@ -456,3 +456,18 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php vendor/bin/phpunit` / `php -d extension=zip vendor/bin/phpunit` (PHP 8.2.12) | OK (289 tests, 22310 assertions, 3 skipped) / OK (289 tests, 22344 assertions, 1 skipped) |
 | `--testsuite Unit / Integration / Feature` (zip ile) | 193 tests, 573 assertions / 63 tests, 462 assertions, 1 skipped / 33 tests, 21309 assertions |
 | `git add -A; git commit; git push` | 5e9fad4 — Aşama 33 |
+
+## Aşama 34 — Tasarım sistemi ve koyu tema
+
+| Komut | Sonuç |
+|---|---|
+| önyüz incelemesi (`app.css`, layout, partials, `app.js`, `upload.js`, sayfa şablonları, dil dosyaları, `Url::asset`) | Yükleme ilerlemesi (XHR) zaten var; navbar `navbar-expand-lg` (≥992 px açık); `app.css` `:root`'ta `--bs-body-bg` eziyordu (koyu temayı bozardı) |
+| `curl registry.npmjs.org/@fontsource-variable/inter/latest` + tarball + `openssl dgst -sha512` + `tar -xzf` | 5.3.0, OFL-1.1, integrity eşleşti; latin + latin-ext değişken woff2 ve lisans `public/assets/fonts/inter/` |
+| sprite'a ikon ekleme (yerel Bootstrap Icons 1.13.1 paketi) | 8 ikon eklendi (sun, moon-stars, circle-half, github, inbox, server, check2, cloud-check), toplam 48 |
+| `php bin/check-translations.php` (theme grubu, tools.disabled_* / requirements) | OK |
+| `php vendor/bin/phpunit --testsuite Feature` | 1 failure: `OptionalToolsHttpTest` eski rozet HTML'ini birebir arıyordu → kart yeniden tasarlandı (soluk, "Devre dışı" rozeti, gereken bileşen tooltip + ekran okuyucu metni), test yeni davranışa göre güncellendi; OK (33 tests) |
+| curl font/js MIME | `font/woff2`, `application/javascript` |
+| geçici anlık kopya düzeneği (`snap.php`, `contrast.js`; oturum + örnek belge + döndürme) — ilk çalıştırma | Git Bash yol dönüşümü `/tr` argümanlarını bozdu → `MSYS_NO_PATHCONV=1` |
+| headless Chrome `--dump-dom` kontrast + taşma taraması (8 sayfa × açık/koyu = 16) | 16/16 Inter yüklendi, taşma yok; 1 sorun iki temada: "Belgeyi sil" `btn-outline-danger` 4.2:1 → danger/success token'a bağlandı |
+| headless Chrome ekran görüntüsü (ana sayfa açık/koyu, 1280 px) | İkisi de okunaklı; örnek belge adındaki "Ö" kaybı Git Bash curl `-F filename` kaynaklı (uygulama değil) |
+| `php vendor/bin/phpunit` | OK (289 tests, 23770 assertions, 3 skipped — zip) |

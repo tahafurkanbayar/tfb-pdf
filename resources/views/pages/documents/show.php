@@ -227,7 +227,7 @@ $pdfVersions = array_values(array_filter($versions, static fn (App\Domain\Docume
                                 <li class="d-flex justify-content-between gap-2 py-1 border-bottom">
                                     <span><?= e(__('audit.events.' . $op['type'])) ?></span>
                                     <span class="text-nowrap">
-                                        <span class="badge <?= $op['status'] === 'failed' ? 'text-bg-danger' : 'text-bg-light border' ?>"><?= e(__('audit.status.' . $op['status'])) ?></span>
+                                        <span class="badge <?= $op['status'] === 'failed' ? 'text-bg-danger' : 'badge-soft' ?>"><?= e(__('audit.status.' . $op['status'])) ?></span>
                                         <time class="text-body-secondary ms-1" datetime="<?= e(App\Support\DateFormatter::iso($op['started_at'])) ?>"><?= e($dates->format($op['started_at'], $locale)) ?></time>
                                     </span>
                                 </li>
@@ -256,7 +256,7 @@ $pdfVersions = array_values(array_filter($versions, static fn (App\Domain\Docume
                                 <li class="d-flex flex-wrap gap-2 align-items-center py-1">
                                     <span class="fw-semibold"><?= e($signer['name']) ?></span>
                                     <?php if ($signer['email'] !== null): ?><span class="text-body-secondary"><?= e($signer['email']) ?></span><?php endif; ?>
-                                    <span class="badge text-bg-light border"><?= e(__('signature.signer_status.' . $signer['status'])) ?></span>
+                                    <span class="badge badge-soft"><?= e(__('signature.signer_status.' . $signer['status'])) ?></span>
                                     <?php if ($sr['status'] === 'pending' && in_array($signer['status'], ['pending', 'viewed'], true)): ?>
                                         <button type="button" class="btn btn-link btn-sm p-0" data-new-link="<?= (int) $signer['id'] ?>"><?= e(__('signature.new_link')) ?></button>
                                     <?php endif; ?>
