@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'og_image_alt' => ':app logosu ve “Kendi sunucunuzda çalışan PDF araçları” yazısı',
     'app_tagline' => 'PDF dosyalarınızı kendi sunucunuzda birleştirin, bölün, düzenleyin.',
     'save' => 'Kaydet',
     'cancel' => 'İptal',

@@ -471,3 +471,16 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | headless Chrome `--dump-dom` kontrast + taşma taraması (8 sayfa × açık/koyu = 16) | 16/16 Inter yüklendi, taşma yok; 1 sorun iki temada: "Belgeyi sil" `btn-outline-danger` 4.2:1 → danger/success token'a bağlandı |
 | headless Chrome ekran görüntüsü (ana sayfa açık/koyu, 1280 px) | İkisi de okunaklı; örnek belge adındaki "Ö" kaybı Git Bash curl `-F filename` kaynaklı (uygulama değil) |
 | `php vendor/bin/phpunit` | OK (289 tests, 23770 assertions, 3 skipped — zip) |
+| `git add -A; git commit; git push` | cf26804 — Aşama 34 |
+
+## Aşama 35 — Logo ve marka
+
+| Komut | Sonuç |
+|---|---|
+| `logo-mark.svg`, `logo-full.svg`, `icon-maskable.svg` (elle, geometrik stroke harfler; font bağımlılığı yok) + geçici önizleme sayfası, headless Chrome ekran görüntüsü (16/24/32/64/256 px, açık/koyu zemin) | İşaret 16 px'te okunuyor. **Sorun:** `logo-full.svg` içindeki `prefers-color-scheme` medya sorgusu `<img>` içinde işletim sistemi tercihine uyuyor (makine Windows koyu mod) → açık sayfada açık renk "TFB" kayboldu. Çözüm: dosyalar sabit varyant (`logo-full.svg` açık zemin, `logo-full-inverse.svg` koyu zemin); uygulama içinde satır içi SVG + CSS değişkenleri (`partials/logo.php`) |
+| headless Chrome 512×512 (`icon-maskable.svg`) ve 1200×630 (og sayfası) ekran görüntüsü | İkon doğru; og ilk çizimde başlık siyah (app.css başlık rengi) ve Inter yüklenmemişti → og sayfası app.css'siz, kendi `@font-face` ile yeniden çizildi, doğru |
+| PHP GD `imagecopyresampled` | `icon-512.png`, `icon-192.png`, `apple-touch-icon.png` (180), `favicon-32.png`, `og-image.png` (1200×630) |
+| curl `/site.webmanifest`, `/en` head | 200 `application/manifest+json`; favicon, apple-touch, manifest, og:* (mutlak og:image), twitter:card çıktısı doğru |
+| `php bin/check-translations.php` (`common.og_image_alt`) | OK |
+| headless Chrome navbar (1280 ve 390 px, açık/koyu, iframe) | Masaüstünde işaret + kelime işareti, mobilde yalnızca işaret; iki temada okunaklı |
+| `php vendor/bin/phpunit` | OK (289 tests, 3 skipped — zip) |

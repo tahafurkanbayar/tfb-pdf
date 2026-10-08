@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'og_image_alt' => ':app logo with the text “PDF tools on your own server”',
     'app_tagline' => 'Merge, split and edit your PDF files on your own server.',
     'save' => 'Save',
     'cancel' => 'Cancel',

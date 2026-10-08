@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/assets/img/brand/logo-full-inverse.svg">
+    <img src="public/assets/img/brand/logo-full.svg" alt="TFB PDF" width="280">
+  </picture>
+</p>
+
 # tfb-pdf
 
 Standart cPanel shared hosting üzerinde çalışabilen, açık kaynaklı, Türkçe/İngilizce PDF yönetim ve düzenleme platformu.

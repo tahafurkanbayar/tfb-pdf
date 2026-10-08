@@ -93,3 +93,8 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 - Renk: vurgu `#E5484D` (ikon, gradient, logo); beyaz metinle 3.9:1 olduğu için dolu buton ve bağlantılarda `#C9373C` (5.1:1) / bağlantı `#B02F34`; koyu temada bağlantı `#FF8A8E`. Tehlike/başarı renkleri de token'a bağlandı (Bootstrap varsayılan outline-danger 4.2:1 idi).
 - PDF sayfaları (küçük resim, görüntüleyici, karartma, imza alanı) iki temada da kâğıt beyazı kalır; imza alanının beyaz kalması çizilen siyah mürekkebin PDF'e aynen aktarılması içindir.
 - Font: Inter değişken (yalnızca latin + latin-ext, Türkçe karakterler dahil, ~133 KB), yerel; `@fontsource-variable/inter` 5.3.0 npm arşivinden integrity doğrulanarak alındı.
+
+## 2026-10-08 — Logo ve marka varlıkları (Aşama 35)
+- Logo: köşesi kıvrık belge + "TFB" monogramı; harfler font yerine geometrik stroke path'lerle (32'lik ızgara, 16 px'te 1 px çizgi) çizilir, kelime işareti ("TFB" metin rengi, "PDF" mercan) aynı harf sistemiyle.
+- `<img>` içindeki SVG sayfanın temasını değil işletim sistemi tercihini izlediği için dosya halleri sabit varyanttır: `logo-full.svg` (açık zemin), `logo-full-inverse.svg` (koyu zemin), `logo-mark.svg` (temadan bağımsız). Uygulama içinde logo satır içi SVG'dir (`partials/logo.php`) ve renkleri CSS değişkenlerinden alır.
+- PNG'ler (apple-touch 180, manifest 192/512, favicon 32, og:image 1200×630) SVG/HTML kaynaklarından headless Chrome + GD ile üretildi; üretim için Node/ImageMagick gerekmez. Manifest `site.webmanifest` adındadır (kök .htaccess `.json` dosyalarını reddeder).

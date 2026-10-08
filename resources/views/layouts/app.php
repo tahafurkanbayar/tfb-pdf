@@ -43,6 +43,20 @@ $themes = ['light' => 'sun', 'dark' => 'moon-stars', 'auto' => 'circle-half'];
         <link rel="alternate" hreflang="<?= e($code) ?>" href="<?= e($url->to(App\Core\Url::swapLocale($currentPath, $code, array_keys($locales)))) ?>">
     <?php endforeach; ?>
     <link rel="icon" href="<?= e($url->asset('img/favicon.svg')) ?>" type="image/svg+xml">
+    <link rel="icon" href="<?= e($url->asset('img/brand/favicon-32.png')) ?>" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="<?= e($url->asset('img/brand/apple-touch-icon.png')) ?>">
+    <link rel="manifest" href="<?= e($url->to('/site.webmanifest')) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="<?= e($appName) ?>">
+    <meta property="og:title" content="<?= e($pageTitle) ?>">
+    <meta property="og:description" content="<?= e($view->yield('description', __('common.app_tagline'))) ?>">
+    <meta property="og:url" content="<?= e($url->absolute(explode('?', $currentPath, 2)[0])) ?>">
+    <meta property="og:image" content="<?= e($url->absolute('/assets/img/brand/og-image.png')) ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="<?= e(__('common.og_image_alt', ['app' => $appName])) ?>">
+    <meta property="og:locale" content="<?= $locale === 'tr' ? 'tr_TR' : 'en_US' ?>">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="stylesheet" href="<?= e($url->asset('vendor/bootstrap/bootstrap.min.css')) ?>">
     <link rel="stylesheet" href="<?= e($url->asset('css/app.css')) ?>">
     <script type="application/json" id="tfb-config"><?= json_encode($jsConfig, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?></script>
@@ -53,9 +67,9 @@ $themes = ['light' => 'sun', 'dark' => 'moon-stars', 'auto' => 'circle-half'];
 <header class="site-header border-bottom bg-body">
     <nav class="navbar navbar-expand-lg" aria-label="<?= e(__('nav.main')) ?>">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="<?= e($url->page('/')) ?>">
-                <span class="brand-mark" aria-hidden="true"><?= $view->icon('file-earmark-pdf') ?></span>
-                <span><?= e($appName) ?></span>
+            <a class="navbar-brand brand" href="<?= e($url->page('/')) ?>">
+                <?= $view->partial('partials/logo') ?>
+                <span class="visually-hidden"><?= e($appName) ?></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
                     aria-controls="main-nav" aria-expanded="false" aria-label="<?= e(__('nav.toggle_menu')) ?>">

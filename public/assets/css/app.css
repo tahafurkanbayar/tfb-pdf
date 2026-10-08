@@ -404,18 +404,6 @@ html:not([data-theme-preference]) .theme-icon-auto {
 .logo-word .logo-ink { stroke: currentColor; }
 .logo-word .logo-accent { stroke: var(--tfb-accent); }
 
-/* Eski küçük marka kutusu (geri uyumluluk) */
-.brand-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.55rem;
-    background: var(--tfb-accent);
-    color: #fff;
-}
-
 /* --- Butonlar --- */
 .btn {
     --bs-btn-font-weight: 600;

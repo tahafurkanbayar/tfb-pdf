@@ -41,12 +41,12 @@ Son güncelleme: 2026-10-08
 | 32 | README | [x] | Spec §47 bölümlerinin tamamı + üçüncü taraf lisansları; SSH'siz 12 adımlı cPanel kurulumu (3 yerleşim), cPanel ve manuel backup, cron, tüm env değişkenleri (eksik 2 değişken .env.example'a eklendi); schema.sql içe aktarımı gerçek veritabanında doğrulandı; ARCHITECTURE dizin ağacı güncellendi |
 | 33 | Final verification | [x] | PHP 8.3.35 (resmi paket, SHA-256 doğrulandı) ile 278 dosya lint + 289 test; Apache'ye karşı §55 HTTP doğrulaması 30/30 (ilk turda bulunan istek başı PHP uyarısı .htaccess + .user.ini ile düzeltildi); production hata yönetimi gerçek DB hatasıyla; README'de composer.phar hatası düzeltildi; son rapor: docs/FINAL_REPORT.md |
 | 34 | Tasarım sistemi ve koyu tema | [x] | app.css bölümlere ayrıldı (tokens/base/components/pages/dark), tüm renkler CSS değişkeni; Bootstrap 5.3 data-bs-theme ile Açık/Koyu/Sistem, flaşsız yerel theme-init.js (CSP), localStorage; Inter (yerel, OFL); AA kontrast (#E5484D vurgu, #C9373C buton/bağlantı); araç kartları renkli, devre dışı rozet + tooltip; 16 sayfa kopyasında kontrast ve taşma ölçüldü |
-| 35 | Logo ve marka | [ ] | |
+| 35 | Logo ve marka | [x] | Geometrik monogramlı belge işareti ve kelime işareti (logo-mark / logo-full / logo-full-inverse SVG), favicon SVG + 32 px PNG, apple-touch 180, manifest 192/512 (maskable), og:image 1200×630 ve og/twitter etiketleri; navbar'da satır içi logo (mobilde yalnızca işaret) |
 | 36 | Sayfa tasarımları | [ ] | |
 
 ## Sıradaki adım
 
-Aşama 35: Logo ve marka (logo-full / logo-mark SVG, favicon, apple-touch-icon, manifest ikonları, og:image, navbar logosu).
+Aşama 36: Sayfa tasarımları (navbar, hero, yükleme alanı, dashboard kartları, footer, tüm sayfalarda tutarlılık; 360/768/1280 px ve kontrast doğrulaması).
 
 ## Aşama notları
 
