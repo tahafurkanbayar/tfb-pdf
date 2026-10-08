@@ -501,3 +501,4 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | iki adım: popup çizip localStorage'a yazar, ardından koyu tema düzeni bunları gösterir | OK: 4 sayfa gerçek PDF.js ile çizildi; sayfalar iki temada kâğıt beyazı, "Kaldırılacak" rozeti, sayfa numaraları, döndürme düğmeleri, karartma alanı ve imza alanı okunaklı |
 | geçici `public/__snap` silindi | `Test-Path` → False |
 | `php vendor/bin/phpunit` | OK (289 tests, 24733 assertions, 3 skipped — zip) |
+| `git add -A; git commit; git push` | 3164db7 — Aşama 36 |
