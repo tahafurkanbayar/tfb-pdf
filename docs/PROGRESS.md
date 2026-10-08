@@ -42,11 +42,11 @@ Son güncelleme: 2026-10-08
 | 33 | Final verification | [x] | PHP 8.3.35 (resmi paket, SHA-256 doğrulandı) ile 278 dosya lint + 289 test; Apache'ye karşı §55 HTTP doğrulaması 30/30 (ilk turda bulunan istek başı PHP uyarısı .htaccess + .user.ini ile düzeltildi); production hata yönetimi gerçek DB hatasıyla; README'de composer.phar hatası düzeltildi; son rapor: docs/FINAL_REPORT.md |
 | 34 | Tasarım sistemi ve koyu tema | [x] | app.css bölümlere ayrıldı (tokens/base/components/pages/dark), tüm renkler CSS değişkeni; Bootstrap 5.3 data-bs-theme ile Açık/Koyu/Sistem, flaşsız yerel theme-init.js (CSP), localStorage; Inter (yerel, OFL); AA kontrast (#E5484D vurgu, #C9373C buton/bağlantı); araç kartları renkli, devre dışı rozet + tooltip; 16 sayfa kopyasında kontrast ve taşma ölçüldü |
 | 35 | Logo ve marka | [x] | Geometrik monogramlı belge işareti ve kelime işareti (logo-mark / logo-full / logo-full-inverse SVG), favicon SVG + 32 px PNG, apple-touch 180, manifest 192/512 (maskable), og:image 1200×630 ve og/twitter etiketleri; navbar'da satır içi logo (mobilde yalnızca işaret) |
-| 36 | Sayfa tasarımları | [ ] | |
+| 36 | Sayfa tasarımları | [x] | Hero (güven rozeti, gradient/ızgara zemin), büyük yükleme alanı + dosya önizleme ve dosya başına ilerleme, dashboard kartları (son belgeler, depolama çubuğu, yakında silinecekler, son işlemler) ve boş durumlar, yapışkan/bulanık navbar, footer (logo, bağlantılar, sürüm); 48 sayfa kopyasında AA kontrast, 360/768/1280 px taşma yok, koyu temada gerçek PDF.js küçük resimleri doğrulandı |
 
 ## Sıradaki adım
 
-Aşama 36: Sayfa tasarımları (navbar, hero, yükleme alanı, dashboard kartları, footer, tüm sayfalarda tutarlılık; 360/768/1280 px ve kontrast doğrulaması).
+Tasarım işi (Aşama 34–36) tamamlandı. Planlanan aşama kalmadı; yeni istekler yeni aşama olarak eklenir.
 
 ## Aşama notları
 

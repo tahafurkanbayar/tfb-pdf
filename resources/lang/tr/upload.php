@@ -23,4 +23,5 @@ return [
     'partial' => 'Dosya yüklemesi yarıda kesildi. Lütfen tekrar deneyin.',
     'quota_exceeded' => 'Depolama alanınız doldu. Yeni dosya yüklemek için eski belgelerinizi silin.',
     'server_limit' => 'Dosya, sunucunun izin verdiği yükleme boyutunu aşıyor.',
+    'selected_files' => 'Seçilen dosyalar',
 ];

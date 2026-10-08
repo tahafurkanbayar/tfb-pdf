@@ -1,5 +1,53 @@
 // Dosya yükleme: sürükle-bırak alanı ve ilerleme göstergeli XHR (fetch yükleme ilerlemesi vermez).
-import { config, t } from './app.js';
+import { config, icon, t } from './app.js';
+
+export function formatSize(bytes) {
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let size = bytes;
+    let i = 0;
+    while (size >= 1024 && i < units.length - 1) {
+        size /= 1024;
+        i++;
+    }
+    // Sunucudaki Size::format ile aynı: tek ondalık, binlik ayırıcı yok, ondalık ayırıcı sayfa dilinden (TR "13,5 KB")
+    const number = i === 0
+        ? String(size)
+        : new Intl.NumberFormat(config.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1, useGrouping: false }).format(size);
+    return number + ' ' + units[i];
+}
+
+/**
+ * Seçilen dosyaların önizleme listesi ([data-dropzone-files]): ikon, ad, boyut ve her dosya için ilerleme çubuğu.
+ * @returns {Array<{ item: HTMLElement, progress: HTMLProgressElement }>}
+ */
+export function renderFileChips(container, files) {
+    container.replaceChildren();
+    container.hidden = files.length === 0;
+    return [...files].map((file) => {
+        const item = document.createElement('li');
+        item.className = 'file-chip';
+        const iconBox = document.createElement('span');
+        iconBox.className = 'file-chip-icon';
+        iconBox.append(icon('file-earmark-pdf'));
+        const info = document.createElement('div');
+        info.className = 'min-w-0 flex-grow-1 d-flex flex-column gap-1';
+        const name = document.createElement('span');
+        name.className = 'file-chip-name';
+        name.textContent = file.name;
+        const size = document.createElement('span');
+        size.className = 'small text-body-secondary';
+        size.textContent = formatSize(file.size);
+        const progress = document.createElement('progress');
+        progress.className = 'upload-progress w-100';
+        progress.max = 100;
+        progress.value = 0;
+        progress.setAttribute('aria-label', t('upload.uploading_named', { name: file.name }));
+        info.append(name, size, progress);
+        item.append(iconBox, info);
+        container.append(item);
+        return { item, progress };
+    });
+}
 
 /**
  * Tek dosyayı /api/documents'a yükler.

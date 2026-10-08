@@ -484,3 +484,20 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php bin/check-translations.php` (`common.og_image_alt`) | OK |
 | headless Chrome navbar (1280 ve 390 px, açık/koyu, iframe) | Masaüstünde işaret + kelime işareti, mobilde yalnızca işaret; iki temada okunaklı |
 | `php vendor/bin/phpunit` | OK (289 tests, 3 skipped — zip) |
+| `git add -A; git commit; git push` | 5cfba26 — Aşama 35 |
+
+## Aşama 36 — Sayfa tasarımları
+
+| Komut | Sonuç |
+|---|---|
+| sayfa şablonları yeniden düzenlendi (hero + güven rozeti, büyük yükleme alanı + dosya önizleme listesi, dashboard kartları + boş durumlar, footer, Belgelerim/Hakkında/Gizlilik) | `formatSize` `upload.js`'e taşındı (`tools/common.js` yeniden dışa aktarır), `renderFileChips` eklendi |
+| `php bin/check-translations.php` (footer grubu, home/dashboard/upload yeni anahtarlar) | OK |
+| headless Chrome `--dump-dom` kontrast taraması (22 sayfa × açık/koyu + boş durumlar = 48 kopya) | 1878 metin öğesinde AA sorunu yok |
+| taşma ölçümü (iframe 360/768/1280) — ilk tur | Ölçüm düzeneği hatası: flex sarmalayıcı iframe'leri daraltıyordu → `flex:none` + wrap; yeniden ölçüm: 138 ölçüm, taşma yok |
+| headless Chrome ekran görüntüsü (ana sayfa açık 1280, koyu boş durum 360/768) | Tek sütun 360, iki sütun 768; okunaklı |
+| gerçek sayfa JS'i ile etkileşim testi (tema seçici, sürükleme sınıfı, dosya önizleme, tooltip, kaydırma) — sanal zamanda | Tema light/dark/auto uygulanıp saklandı, aria-pressed ve etiket doğru; theme-init.js CSS'ten önce; sürükleme scale 1.015; "Örnek Belge.pdf" önizlemesi; 2 tooltip. Kaydırma/animasyon sanal zamanda ilerlemedi → geçişler kapatılarak ve gerçek zamanlı ekran görüntüsüyle doğrulandı (`.is-scrolled` 12 px blur) |
+| koyu temada gerçek PDF.js küçük resimleri — ana pencere | Headless ana pencerede PDF.js worker başlamıyor (Aşama 28'deki kısıt) |
+| popup içinde çizim (`--disable-popup-blocking`) | Popup açık kalınca Chrome takıldı → test profiline ait süreçler kapatıldı |
+| iki adım: popup çizip localStorage'a yazar, ardından koyu tema düzeni bunları gösterir | OK: 4 sayfa gerçek PDF.js ile çizildi; sayfalar iki temada kâğıt beyazı, "Kaldırılacak" rozeti, sayfa numaraları, döndürme düğmeleri, karartma alanı ve imza alanı okunaklı |
+| geçici `public/__snap` silindi | `Test-Path` → False |
+| `php vendor/bin/phpunit` | OK (289 tests, 24733 assertions, 3 skipped — zip) |

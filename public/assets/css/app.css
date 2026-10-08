@@ -131,6 +131,11 @@
    2. BASE
    ========================================================================== */
 
+/* Yapışkan üst menü çapa ile atlanan başlıkları örtmesin (#tools vb.) */
+html {
+    scroll-padding-top: 5.5rem;
+}
+
 body {
     background-color: var(--tfb-bg);
     font-feature-settings: "cv11", "ss01";
@@ -1228,6 +1233,12 @@ button.thumb:hover {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 1rem;
+}
+
+/* Yükleniyor / hata mesajı ızgaranın tek hücresine sıkışmasın */
+.page-sort-grid > p,
+.thumb-grid > p {
+    grid-column: 1 / -1;
 }
 
 .page-card {

@@ -6,8 +6,8 @@
 $view->extend('layouts/app');
 $view->section('title', __('about.title'));
 ?>
-<div class="container py-5 page-narrow">
-    <h1 class="h2 mb-4"><?= e(__('about.title')) ?></h1>
+<div class="container pb-5 page-narrow prose">
+    <h1 class="page-header h2 mb-0"><?= e(__('about.title')) ?></h1>
     <p><?= e(__('about.intro', ['app' => $appName])) ?></p>
 
     <div class="alert alert-warning d-flex gap-3 my-4" role="note">

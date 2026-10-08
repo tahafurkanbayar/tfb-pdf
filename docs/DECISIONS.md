@@ -98,3 +98,9 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 - Logo: köşesi kıvrık belge + "TFB" monogramı; harfler font yerine geometrik stroke path'lerle (32'lik ızgara, 16 px'te 1 px çizgi) çizilir, kelime işareti ("TFB" metin rengi, "PDF" mercan) aynı harf sistemiyle.
 - `<img>` içindeki SVG sayfanın temasını değil işletim sistemi tercihini izlediği için dosya halleri sabit varyanttır: `logo-full.svg` (açık zemin), `logo-full-inverse.svg` (koyu zemin), `logo-mark.svg` (temadan bağımsız). Uygulama içinde logo satır içi SVG'dir (`partials/logo.php`) ve renkleri CSS değişkenlerinden alır.
 - PNG'ler (apple-touch 180, manifest 192/512, favicon 32, og:image 1200×630) SVG/HTML kaynaklarından headless Chrome + GD ile üretildi; üretim için Node/ImageMagick gerekmez. Manifest `site.webmanifest` adındadır (kök .htaccess `.json` dosyalarını reddeder).
+
+## 2026-10-08 — Sayfa tasarımları (Aşama 36)
+- Footer'daki sürüm ve GitHub bağlantısı `config/app.php` içindeki `version` ve `repository` değerlerinden gelir (tek kaynak; .env'e taşınmadı çünkü kuruluma özgü değil).
+- Boş durumlar (ikon + başlık + kısa yönlendirme) her liste kartında gösterilir; Belgelerim boşsa yükleme bağlantısı verilir.
+- Yapışkan navbar bağlantı hedeflerini örtmesin diye `html { scroll-padding-top: 5.5rem; }`.
+- Ana sayfa yükleme alanı seçilen dosyaları ad, boyut ve dosya başına ilerleme çubuğuyla listeler (`renderFileChips`); diğer araç sayfaları mevcut durum alanını kullanmaya devam eder.

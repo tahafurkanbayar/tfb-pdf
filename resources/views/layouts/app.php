@@ -9,6 +9,7 @@
  * @var string $appName
  * @var string $currentPath
  * @var Closure(): string $csrfToken
+ * @var App\Core\Config $config
  */
 $title = $view->yield('title');
 $pageTitle = $title === '' ? $appName : $title . ' · ' . $appName;
@@ -25,6 +26,9 @@ $jsConfig = [
     )),
 ];
 $themes = ['light' => 'sun', 'dark' => 'moon-stars', 'auto' => 'circle-half'];
+// Etkin menü bölümü: /tr/tools/... → tools, /tr/documents... → documents, /tr/about → about
+$section = explode('/', trim(explode('?', $currentPath, 2)[0], '/'))[1] ?? '';
+$navCurrent = static fn (string $name): string => $section === $name ? ' aria-current="page"' : '';
 ?>
 <!doctype html>
 <html lang="<?= e($locale) ?>">
@@ -64,7 +68,7 @@ $themes = ['light' => 'sun', 'dark' => 'moon-stars', 'auto' => 'circle-half'];
 <body class="d-flex flex-column min-vh-100">
 <a class="visually-hidden-focusable skip-link" href="#main"><?= e(__('common.skip_to_content')) ?></a>
 
-<header class="site-header border-bottom bg-body">
+<header class="site-header">
     <nav class="navbar navbar-expand-lg" aria-label="<?= e(__('nav.main')) ?>">
         <div class="container">
             <a class="navbar-brand brand" href="<?= e($url->page('/')) ?>">
@@ -77,9 +81,9 @@ $themes = ['light' => 'sun', 'dark' => 'moon-stars', 'auto' => 'circle-half'];
             </button>
             <div class="collapse navbar-collapse" id="main-nav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/')) ?>#tools"><?= e(__('nav.tools')) ?></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/documents')) ?>"><?= e(__('nav.documents')) ?></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= e($url->page('/about')) ?>"><?= e(__('nav.about')) ?></a></li>
+                    <li class="nav-item"><a class="nav-link"<?= $navCurrent('tools') ?> href="<?= e($url->page('/')) ?>#tools"><?= e(__('nav.tools')) ?></a></li>
+                    <li class="nav-item"><a class="nav-link"<?= $navCurrent('documents') ?> href="<?= e($url->page('/documents')) ?>"><?= e(__('nav.documents')) ?></a></li>
+                    <li class="nav-item"><a class="nav-link"<?= $navCurrent('about') ?> href="<?= e($url->page('/about')) ?>"><?= e(__('nav.about')) ?></a></li>
                 </ul>
                 <div class="navbar-actions d-flex align-items-center gap-2 pb-2 pb-lg-0">
                     <div class="dropdown">
@@ -128,13 +132,39 @@ $themes = ['light' => 'sun', 'dark' => 'moon-stars', 'auto' => 'circle-half'];
     <?= $view->yield('content') ?>
 </main>
 
-<footer class="site-footer border-top mt-5 py-4 bg-body-tertiary">
-    <div class="container small text-body-secondary">
-        <p class="mb-2 d-flex gap-2"><?= $view->icon('shield-check', 'flex-shrink-0 mt-1') ?><span><?= e(__('notices.privacy')) ?> <?= e(__('notices.no_tracking')) ?></span></p>
-        <p class="mb-0">
-            <a href="<?= e($url->page('/about')) ?>"><?= e(__('notices.disclaimer_title')) ?></a>
-            · <a href="<?= e($url->page('/privacy')) ?>"><?= e(__('nav.privacy')) ?></a>
-        </p>
+<footer class="site-footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <a class="brand mb-3" href="<?= e($url->page('/')) ?>">
+                    <?= $view->partial('partials/logo') ?>
+                    <span class="visually-hidden"><?= e($appName) ?></span>
+                </a>
+                <p class="mb-3"><?= e(__('common.app_tagline')) ?></p>
+                <p class="small d-flex gap-2 mb-0"><?= $view->icon('shield-check', 'flex-shrink-0 mt-1') ?><span><?= e(__('notices.privacy')) ?> <?= e(__('notices.no_tracking')) ?></span></p>
+            </div>
+            <nav class="col-6 col-lg-3 offset-lg-1" aria-labelledby="footer-product">
+                <h2 class="footer-heading" id="footer-product"><?= e(__('footer.product')) ?></h2>
+                <ul class="footer-links">
+                    <li><a href="<?= e($url->page('/')) ?>#tools"><?= e(__('nav.tools')) ?></a></li>
+                    <li><a href="<?= e($url->page('/documents')) ?>"><?= e(__('nav.documents')) ?></a></li>
+                    <li><a href="<?= e($url->page('/about')) ?>"><?= e(__('nav.about')) ?></a></li>
+                    <li><a href="<?= e($url->page('/privacy')) ?>"><?= e(__('nav.privacy')) ?></a></li>
+                </ul>
+            </nav>
+            <nav class="col-6 col-lg-3" aria-labelledby="footer-project">
+                <h2 class="footer-heading" id="footer-project"><?= e(__('footer.project')) ?></h2>
+                <ul class="footer-links">
+                    <li><a href="<?= e((string) $config->get('app.repository')) ?>" rel="noopener"><?= $view->icon('github') ?> <?= e(__('footer.source')) ?></a></li>
+                    <li><a href="<?= e($url->page('/about')) ?>"><?= e(__('notices.disclaimer_title')) ?></a></li>
+                    <li><span><?= e(__('footer.license')) ?></span></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="footer-bottom d-flex flex-wrap justify-content-between gap-2">
+            <span>© <?= e(gmdate('Y')) ?> <?= e($appName) ?> · <?= e(__('footer.open_source')) ?></span>
+            <span><?= e(__('footer.version', ['version' => (string) $config->get('app.version')])) ?></span>
+        </div>
     </div>
 </footer>
 

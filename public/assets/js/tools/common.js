@@ -1,21 +1,9 @@
 // Araç sayfaları için ortak yardımcılar: işlem çalıştırma, durum ve sonuç gösterimi.
-import { api, config, t, tc } from '../app.js';
-import { renderStatus } from '../upload.js';
+import { api, t, tc } from '../app.js';
+import { formatSize, renderStatus } from '../upload.js';
 
-export function formatSize(bytes) {
-    const units = ['B', 'KB', 'MB', 'GB'];
-    let size = bytes;
-    let i = 0;
-    while (size >= 1024 && i < units.length - 1) {
-        size /= 1024;
-        i++;
-    }
-    // Sunucudaki Size::format ile aynı: tek ondalık, binlik ayırıcı yok, ondalık ayırıcı sayfa dilinden (TR "13,5 KB")
-    const number = i === 0
-        ? String(size)
-        : new Intl.NumberFormat(config.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1, useGrouping: false }).format(size);
-    return number + ' ' + units[i];
-}
+// formatSize upload.js'e taşındı (yükleme alanı önizlemesi de kullanır); araç modülleri için buradan da dışa aktarılır
+export { formatSize };
 
 /**
  * /api/operations/{type} çağrısı: buton kilitlenir, "PDF işleniyor..." durumu gösterilir,

@@ -12,4 +12,8 @@ return [
     'expiring_none' => 'Önümüzdeki 48 saatte silinecek belge yok.',
     'no_documents' => 'Henüz belge yok.',
     'no_operations' => 'Henüz işlem yapılmadı.',
+    'no_documents_hint' => 'Yukarıdan bir PDF yükleyerek başlayın.',
+    'no_operations_hint' => 'Bir araç kullandığınızda işlemler burada listelenir.',
+    'expiring_hint' => 'Saklama süresini belge sayfasından değiştirebilirsiniz.',
+    'storage_percent' => '%:percent dolu',
 ];

@@ -19,7 +19,7 @@
             <a class="tool-card card h-100 text-decoration-none<?= $tool['available'] ? '' : ' tool-card-disabled' ?>"
                href="<?= e($url->page('/tools/' . $tool['slug'])) ?>"
                <?php if ($disabledHint !== null): ?>data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?= e($disabledHint) ?>"<?php endif; ?>>
-                <div class="card-body d-flex flex-column gap-3 p-4">
+                <div class="card-body d-flex flex-column gap-3 p-3 p-md-4">
                     <div class="d-flex align-items-start justify-content-between gap-2">
                         <span class="tool-icon tool-icon-<?= e($tool['slug']) ?>" aria-hidden="true"><?= $view->icon($tool['icon']) ?></span>
                         <?php if ($tool['available']): ?>

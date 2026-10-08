@@ -11,9 +11,9 @@ $view->extend('layouts/app');
 $view->section('title', __('documents.title'));
 $view->section('robots', 'noindex');
 ?>
-<div class="container py-4">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
-        <h1 class="h3 mb-0"><?= e(__('documents.title')) ?></h1>
+<div class="container pb-4">
+    <div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <h1 class="h2 mb-0"><?= e(__('documents.title')) ?></h1>
         <div class="d-flex flex-wrap gap-2">
             <?php if ($documents !== [] && App\Services\ExportService::available()): ?>
                 <a class="btn btn-outline-secondary" href="<?= e($url->to('/api/export')) ?>" title="<?= e(__('export.help')) ?>"><?= $view->icon('file-zip') ?> <?= e(__('export.all')) ?></a>
@@ -23,10 +23,15 @@ $view->section('robots', 'noindex');
     </div>
 
     <?php if ($documents === []): ?>
-        <div class="empty-state card text-center p-5">
-            <div class="empty-state-icon mb-3" aria-hidden="true"><?= $view->icon('files') ?></div>
-            <p class="fw-semibold mb-1"><?= e(__('documents.empty')) ?></p>
-            <p class="text-body-secondary mb-0"><?= e(__('documents.empty_hint')) ?></p>
+        <div class="card">
+            <div class="card-body">
+                <div class="empty-state py-5">
+                    <span class="empty-state-icon" aria-hidden="true"><?= $view->icon('inbox') ?></span>
+                    <p class="empty-state-title"><?= e(__('documents.empty')) ?></p>
+                    <p class="empty-state-text mb-3"><?= e(__('documents.empty_hint')) ?></p>
+                    <a class="btn btn-primary" href="<?= e($url->page('/')) ?>"><?= $view->icon('cloud-arrow-up') ?> <?= e(__('documents.upload_new')) ?></a>
+                </div>
+            </div>
         </div>
     <?php else: ?>
         <div class="card">

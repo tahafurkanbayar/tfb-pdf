@@ -12,4 +12,8 @@ return [
     'expiring_none' => 'No documents will be deleted in the next 48 hours.',
     'no_documents' => 'No documents yet.',
     'no_operations' => 'No operations yet.',
+    'no_documents_hint' => 'Upload a PDF above to get started.',
+    'no_operations_hint' => 'Operations appear here when you use a tool.',
+    'expiring_hint' => 'You can change the retention period on the document page.',
+    'storage_percent' => ':percent% used',
 ];

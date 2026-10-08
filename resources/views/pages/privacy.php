@@ -5,8 +5,8 @@
 $view->extend('layouts/app');
 $view->section('title', __('privacy.title'));
 ?>
-<div class="container py-5 page-narrow">
-    <h1 class="h2 mb-4"><?= e(__('privacy.title')) ?></h1>
+<div class="container pb-5 page-narrow prose">
+    <h1 class="page-header h2 mb-0"><?= e(__('privacy.title')) ?></h1>
 
     <h2 class="h5"><?= e(__('privacy.storage_title')) ?></h2>
     <p><?= e(__('notices.privacy')) ?></p>

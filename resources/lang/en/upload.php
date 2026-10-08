@@ -23,4 +23,5 @@ return [
     'partial' => 'The upload was interrupted. Please try again.',
     'quota_exceeded' => 'Your storage is full. Delete older documents to upload new files.',
     'server_limit' => 'The file exceeds the upload size allowed by the server.',
+    'selected_files' => 'Selected files',
 ];

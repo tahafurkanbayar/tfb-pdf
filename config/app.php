@@ -6,6 +6,10 @@ use App\Core\Env;
 
 return [
     'name' => Env::string('APP_NAME', 'TFB PDF'),
+    // Uygulama sürümü (footer'da gösterilir). Yayınlanan her sürümde güncellenir.
+    'version' => '1.0.0',
+    // Kaynak kodu adresi (footer'daki GitHub bağlantısı)
+    'repository' => 'https://github.com/tahafurkanbayar/tfb-pdf',
     // production | local | testing
     'env' => Env::string('APP_ENV', 'production'),
     // Yalnızca yerel geliştirmede true olmalı. Production'da teknik hata ayrıntıları asla gösterilmez.
