@@ -455,3 +455,4 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | README kontrolü (göreli bağlantılar, `composer.phar` ifadeleri) | Bağlantılar mevcut; **hata**: README "depoda composer.phar bulunur" diyordu ama dosya `.gitignore`'da → getcomposer.org yönlendirmesiyle düzeltildi; `.user.ini` kopyalama ve güvenlik notları eklendi |
 | `php vendor/bin/phpunit` / `php -d extension=zip vendor/bin/phpunit` (PHP 8.2.12) | OK (289 tests, 22310 assertions, 3 skipped) / OK (289 tests, 22344 assertions, 1 skipped) |
 | `--testsuite Unit / Integration / Feature` (zip ile) | 193 tests, 573 assertions / 63 tests, 462 assertions, 1 skipped / 33 tests, 21309 assertions |
+| `git add -A; git commit; git push` | 5e9fad4 — Aşama 33 |
