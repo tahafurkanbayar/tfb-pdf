@@ -62,9 +62,21 @@ function removeTree(string $path): void
         RecursiveIteratorIterator::CHILD_FIRST
     );
     foreach ($items as $item) {
-        $item->isDir() && !$item->isLink() ? rmdir($item->getPathname()) : unlink($item->getPathname());
+        $item->isDir() && !$item->isLink() ? removeDir($item->getPathname()) : unlink($item->getPathname());
     }
-    rmdir($path);
+    removeDir($path);
+}
+
+/** Windows'ta silinen dosyalar (virüs tarayıcı / indeksleyici açık tutarken) kısa süre dizinde kalabilir: birkaç kez dene */
+function removeDir(string $path): void
+{
+    for ($attempt = 0; $attempt < 20; $attempt++) {
+        if (@rmdir($path) || !is_dir($path)) {
+            return;
+        }
+        usleep(100_000);
+    }
+    fail('Dizin silinemedi: ' . $path);
 }
 
 $config = require APP_ROOT . '/config/app.php';
