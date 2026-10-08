@@ -502,3 +502,20 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | geçici `public/__snap` silindi | `Test-Path` → False |
 | `php vendor/bin/phpunit` | OK (289 tests, 24733 assertions, 3 skipped — zip) |
 | `git add -A; git commit; git push` | 3164db7 — Aşama 36 |
+
+## Sürüm 1.0.0 — Sürümleme ve GitHub release
+
+| Komut | Sonuç |
+|---|---|
+| `gh auth status`, `git tag`, `gh release list` | Oturum açık; etiket ve release yoktu |
+| `php -r extension_loaded(...)` | zip yok, phar var → paket ZIP'i PharData ile yazılır |
+| CHANGELOG.md, docs/RELEASING.md, bin/build-release.php, README (Kurulum / cPanel / Güncelleme / Sürümler), CLAUDE.md sürümleme kuralları | — |
+| `php -l bin/build-release.php` | Sözdizimi hatası yok |
+| `git commit; git tag -a v1.0.0` (yerel) | 38252ff |
+| `php bin/build-release.php` — ilk çalıştırma | Paket üretildi (702 dosya, 17.9 MB) ama `tests/` silinirken Windows "Directory not empty" uyarıları (silinen dosyalar kısa süre kilitli kalıyor); ZIP içinde test dosyası olmadığı doğrulandı → dizin silmeye yeniden deneme eklendi |
+| `git commit; git tag -f -a v1.0.0` (henüz push edilmemişti) | 032f74b |
+| `php bin/build-release.php` | OK: `build/tfb-pdf-1.0.0.zip` (702 dosya, 17.9 MB), uyarı yok, SHA-256 e0bb551d…dc9e |
+| paket açıldı (PharData), yapı kontrolü, `sha256sum -c` | Kök `tfb-pdf-1.0.0/`; tests, phpunit, CLAUDE.md, PROMPT/COMMANDS_LOG/PROGRESS yok; `vendor/` (fpdi, tfpdf, phpmailer), `.htaccess`, `.user.ini`, `.env.example`, `storage/*/.gitkeep` var; SHA-256 OK |
+| paketten `php -S` (yerel .env kopyasıyla) + curl | `/tr`, `/en`, `/tr/about`, `/tr/tools/merge` 200, footer'da 1.0.0, 28 araç kartı öğesi; router'sız sunucuda CSS/JS/logo/font/manifest 200; sunucu log'unda hata yok. Test sunucuları durduruldu, `.env` kopyalı test klasörü silindi |
+| `git push origin main v1.0.0` | OK |
+| `gh release create v1.0.0 build/tfb-pdf-1.0.0.zip build/tfb-pdf-1.0.0.zip.sha256 --title "TFB PDF 1.0.0" --latest` | https://github.com/tahafurkanbayar/tfb-pdf/releases/tag/v1.0.0 — 2 dosya (18 777 167 B zip, sha256), taslak değil |
