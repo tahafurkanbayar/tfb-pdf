@@ -58,5 +58,11 @@ Her aşama tamamlandığında buraya kısa bir not eklenir: ne yapıldı, nasıl
 - [x] cPanel için isteğe bağlı Evren `/v1/ocr` bağlantısı: cURL/GD, PDF.js görüntüleri, gönderim onayı, orijinal görünümü koruyan yeni aranabilir sürüm, TR/EN mesajları.
 - [x] Hesap sahibinin açık onayıyla v1 koşulları kabul edildi (HTTP 200); yapay görselde canlı OCR doğrulandı (HTTP 200, `text`, 22 karakter, test işareti bulundu). Anahtar yalnızca Git dışında `.env` içinde.
 - [x] 202 birim testi / 605 assertion, 2 OCR HTTP testi / 20 assertion, 728 TR/EN anahtar ve değişen 20 PHP dosyası lint kontrolü geçti.
-- [!] Veritabanı bu oturumda bağlantı reddettiği için DB gerektiren tam entegrasyon/tarayıcı akışı tekrar doğrulanamadı.
+- [x] Yayın hazırlığında veritabanı erişimi sağlandı; tam test paketi yeniden çalıştırıldı. Test ortamında canlı Evren yapılandırması kapatılarak opsiyonel araç testleri dış hesaptan bağımsız hale getirildi.
 - [ ] Office düzenini/verilerini koruyan uzak dönüşüm hizmeti: Evren'de dönüşüm API doğrulanmadı, LibreOffice bağımlılığı devam ediyor.
+## 2026-10-12 — Sürüm 1.1.0
+
+- [x] Evren OCR yeni özellik olduğu için SemVer MINOR: uygulama sürümü 1.1.0, CHANGELOG sürüm bölümü ve karşılaştırma bağlantıları güncellendi.
+- [x] GitHub yenilik notları: OCR akışı, gizlilik/onay, cPanel ayarları, yaklaşık metin konumu ve Office bağımlılığı açıklandı.
+- [x] Kullanıcı GitHub push ve sürüm güncellemesini açıkça yetkilendirdi; hedef depo `tahafurkanbayar/tfb-pdf`, public, varsayılan dal `main` olarak doğrulandı.
+- [x] Tam doğrulama: 300 test (zip kapalı/açık ayrı çalıştırmalarla tüm yollar), çeviriler ve sürüm sözdizimi temiz.

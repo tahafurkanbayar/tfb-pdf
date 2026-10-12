@@ -538,3 +538,16 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | PowerShell dosya düzenlemeleri | Kod biçimi, örnek yapılandırma ve EVREN/LIMITATIONS/PROGRESS/DECISIONS/CHANGELOG/README belgeleri güncellendi; anahtar yalnızca `.env` içinde |
 | git add + git commit | Evren OCR değişiklikleri yerel commit olarak kaydedildi; anahtar dahil değil |
 | git push origin main | Otomatik onay incelemesi reddetti: depo güvenilirliği/gizlilik durumu ve kullanıcının dış gönderim yetkisi doğrulanmadı. Push yapılmadı; kullanıcı onayı gerekiyor |
+
+## 2026-10-12 — 1.1.0 yayın hazırlığı
+
+| Komut / kontrol | Gerçek sonuç |
+|---|---|
+| Kullanıcının push ve sürüm güncellemesi talebi; `gh repo view`, `gh release list` | Dış gönderim açıkça yetkilendirildi; public `tahafurkanbayar/tfb-pdf`, `main`, son sürüm v1.0.0 doğrulandı |
+| İlk tam `php vendor/bin/phpunit` | DB erişimi çalıştı; 300 test, 2 hata, 3 atlandı. Hatalar yerel `.env` ile canlı Evren'in testte etkinleşmesinden kaynaklandı |
+| `phpunit.xml.dist` test ortamında EVREN_OCR_ENABLED=false | Canlı hesaptan bağımsız test ortamı; Evren testleri kendi sahte istemcisini kullanır |
+| `config/app.php`, CHANGELOG ve build/release-notes-1.1.0.md | 1.1.0 sürümü ve yenilik/kurulum/sınır notları hazırlandı |
+| `php bin/check-translations.php`, `php -l config/app.php`, `git diff --check` | 728 TR/EN anahtar; sözdizimi ve boşluk kontrolleri temiz |
+| Tam test tekrar çalıştırması | OK: 300 test, 24879 assertion, 3 zip testi atlandı; zip eklentisiyle ayrıca çalıştırılıyor |
+| `php -d extension=zip vendor/bin/phpunit` | OK: 300 test, 24913 assertion, 1 atlandı (zip yok davranışı önceki çalıştırmada geçti); ZIP akışları dahil bütün testler iki çalıştırmada kapsandı |
+| `git ls-remote --tags origin v1.1.0` | Uzak depoda v1.1.0 etiketi yok |

@@ -25,5 +25,7 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing" force="true"/>
+        <!-- Tests use an injected Evren client; never the developer's live OCR configuration. -->
+        <env name="EVREN_OCR_ENABLED" value="false" force="true"/>
     </php>
 </phpunit>

@@ -5,9 +5,14 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr-TR/1.1.0/) esaslıdır, 
 
 ## [Yayınlanmadı]
 
+## [1.1.0] - 2026-10-12
+
 ### Eklendi
 - Evren'in adanmış `/v1/ocr` ucuna opsiyonel bağlantı: PDF.js sayfa görüntüleri, sunucuda cURL ile çağrı, orijinal görünümü koruyan aranabilir PDF sürümü, kullanıcı gönderim onayı ve TR/EN hata mesajları.
 - `bin/check-evren.php`: gerçek belge kullanmadan bağlantı/yanıt alanı kontrolü ve kullanım koşullarını okuma; koşul kabulü yalnızca açık yönetici eylemiyle.
+
+### Düzeltildi
+- Test ortamı canlı Evren yapılandırmasından ayrıldı; yerel API ayarları opsiyonel araç testlerini etkilemez.
 
 ### Sınırlamalar
 - Evren OCR yapay görselle canlı doğrulandı (HTTP 200, `text` alanı). Metin koordinatları yaklaşık olduğundan seçim/arama vurguları özgün sözcüklerle birebir örtüşmeyebilir; varsayılan sınır 5 sayfadır.
@@ -32,5 +37,6 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr-TR/1.1.0/) esaslıdır, 
 - **Marka:** logo (işaret + kelime işareti), favicon, apple-touch ve manifest ikonları, paylaşım görseli (og:image).
 - **Güvenlik:** CSRF, sıkı CSP (`script-src 'self'`), güvenli çerezler, kullanıcıya teknik hata ayrıntısı gösterilmez, depolama web erişimine kapalı.
 
-[Yayınlanmadı]: https://github.com/tahafurkanbayar/tfb-pdf/compare/v1.0.0...HEAD
+[Yayınlanmadı]: https://github.com/tahafurkanbayar/tfb-pdf/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/tahafurkanbayar/tfb-pdf/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/tahafurkanbayar/tfb-pdf/releases/tag/v1.0.0
