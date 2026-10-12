@@ -550,4 +550,9 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | `php bin/check-translations.php`, `php -l config/app.php`, `git diff --check` | 728 TR/EN anahtar; sözdizimi ve boşluk kontrolleri temiz |
 | Tam test tekrar çalıştırması | OK: 300 test, 24879 assertion, 3 zip testi atlandı; zip eklentisiyle ayrıca çalıştırılıyor |
 | `php -d extension=zip vendor/bin/phpunit` | OK: 300 test, 24913 assertion, 1 atlandı (zip yok davranışı önceki çalıştırmada geçti); ZIP akışları dahil bütün testler iki çalıştırmada kapsandı |
-| `git ls-remote --tags origin v1.1.0` | Uzak depoda v1.1.0 etiketi yok |
+| `git ls-remote --tags origin v1.1.0` | Uzak depoda v1.1.0 etiketi yok || `git commit`, `git tag -a v1.1.0` | aa3980b: 1.1.0 sürüm commiti ve etiketi |
+| İlk `php bin/build-release.php` | Composer kurulumunda zip/unzip eksikliği nedeniyle başarısız |
+| Geçici `build/release-php.ini` ile PHPRC üzerinden zip etkinleştirme + `php bin/build-release.php` | Sistem php.ini değiştirilmedi; 709 dosya, 17.9 MB ZIP üretildi; SHA-256 f91112e4a9065c2e9514108f6c3fd248593400eb28e0369a14cf20de79dc27fc |
+| `php build/verify-release.php` | Paket sürümü, zorunlu OCR/vendor dosyaları ve SHA-256 doğru; `.env`, test dosyaları ve API anahtarı bulunmadı |
+| `git push origin main v1.1.0` | main ve yeni v1.1.0 etiketi GitHub'a gönderildi || `gh release create v1.1.0 ... --notes-file ... --latest` | https://github.com/tahafurkanbayar/tfb-pdf/releases/tag/v1.1.0 yayımlandı |
+| `gh release view`, `gh release list` | Latest; taslak/ön sürüm değil; ZIP (18 816 028 byte) ve SHA-256 (84 byte) uploaded |

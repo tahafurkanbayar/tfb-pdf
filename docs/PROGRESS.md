@@ -66,3 +66,5 @@ Her aşama tamamlandığında buraya kısa bir not eklenir: ne yapıldı, nasıl
 - [x] GitHub yenilik notları: OCR akışı, gizlilik/onay, cPanel ayarları, yaklaşık metin konumu ve Office bağımlılığı açıklandı.
 - [x] Kullanıcı GitHub push ve sürüm güncellemesini açıkça yetkilendirdi; hedef depo `tahafurkanbayar/tfb-pdf`, public, varsayılan dal `main` olarak doğrulandı.
 - [x] Tam doğrulama: 300 test (zip kapalı/açık ayrı çalıştırmalarla tüm yollar), çeviriler ve sürüm sözdizimi temiz.
+
+- [x] main ve v1.1.0 GitHub'a gönderildi; 709 dosyalı hazır ZIP ve SHA-256 doğrulandı; [TFB PDF 1.1.0](https://github.com/tahafurkanbayar/tfb-pdf/releases/tag/v1.1.0) Latest olarak yayımlandı.
