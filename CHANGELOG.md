@@ -5,6 +5,14 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr-TR/1.1.0/) esaslıdır, 
 
 ## [Yayınlanmadı]
 
+### Eklendi
+- Evren'in adanmış `/v1/ocr` ucuna opsiyonel bağlantı: PDF.js sayfa görüntüleri, sunucuda cURL ile çağrı, orijinal görünümü koruyan aranabilir PDF sürümü, kullanıcı gönderim onayı ve TR/EN hata mesajları.
+- `bin/check-evren.php`: gerçek belge kullanmadan bağlantı/yanıt alanı kontrolü ve kullanım koşullarını okuma; koşul kabulü yalnızca açık yönetici eylemiyle.
+
+### Sınırlamalar
+- Evren OCR yapay görselle canlı doğrulandı (HTTP 200, `text` alanı). Metin koordinatları yaklaşık olduğundan seçim/arama vurguları özgün sözcüklerle birebir örtüşmeyebilir; varsayılan sınır 5 sayfadır.
+- Evren üzerinden Office→PDF dönüşümü doğrulanmadı; özgün düzenin korunması talebi nedeniyle AI ile içerik yeniden oluşturma eklenmedi.
+
 ## [1.0.0] - 2026-10-08
 
 İlk kararlı sürüm.

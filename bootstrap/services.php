@@ -181,7 +181,23 @@ return static function (Container $c, Config $config): void {
         $storage . '/cache/tools.json',
         (int) $config->get('tools.detection_cache_ttl', 3600)
     ));
-    $c->set(Capabilities::class, fn (Container $c) => new Capabilities($c->get(ToolDetector::class)));
+    $c->set(\App\Services\Evren\EvrenHttpClient::class, fn () => new \App\Services\Evren\EvrenHttpClient());
+    $c->set(\App\Services\Evren\EvrenOcrClient::class, fn (Container $c) => new \App\Services\Evren\EvrenOcrClient(
+        $c->get(\App\Services\Evren\EvrenHttpClient::class),
+        (bool) $config->get('evren.enabled', false),
+        (string) $config->get('evren.api_key', ''),
+        (string) $config->get('evren.model', 'dots-ocr'),
+        (string) $config->get('evren.text_path', ''),
+        (int) $config->get('evren.timeout', 60)
+    ));
+    $c->set(\App\Pdf\Ocr\EvrenOcrEngine::class, fn (Container $c) => new \App\Pdf\Ocr\EvrenOcrEngine(
+        $c->get(\App\Services\Evren\EvrenOcrClient::class),
+        new \App\Pdf\Ocr\SearchablePdfBuilder(),
+        (int) $config->get('evren.max_pages', 5)
+    ));
+    $c->set(Capabilities::class, fn (Container $c) => new Capabilities(
+        $c->get(ToolDetector::class), $c->get(\App\Pdf\Ocr\EvrenOcrEngine::class)->available()
+    ));
     $c->set(Compressor::class, fn (Container $c) => new Compressor(
         $c->get(ProcessRunner::class),
         $c->get(ToolDetector::class)->path(ToolDetector::GHOSTSCRIPT),
@@ -226,7 +242,8 @@ return static function (Container $c, Config $config): void {
         $c->get(Compressor::class),
         $c->get(Redactor::class),
         $c->get(OcrEngine::class),
-        $c->get(OfficeConverter::class)
+        $c->get(OfficeConverter::class),
+        $c->get(\App\Pdf\Ocr\EvrenOcrEngine::class)
     ));
     $c->set(OfficeConverter::class, fn (Container $c) => new OfficeConverter(
         $c->get(ProcessRunner::class),

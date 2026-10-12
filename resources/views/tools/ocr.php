@@ -14,7 +14,11 @@ if ($tool['available']) {
     $view->section('scripts', '<script type="module" src="' . e($url->asset('js/tools/ocr.js')) . '"></script>');
 }
 ?>
-<div class="container py-4 tool-page" data-tool="ocr">
+<div class="container py-4 tool-page" data-tool="ocr"
+     data-evren="<?= ($capabilities['evren_ocr'] ?? false) ? '1' : '0' ?>"
+     data-max-pages="<?= (int) $evrenMaxPages ?>"
+     data-post-limit="<?= (int) $ocrPostLimit ?>"
+     data-image-limit="<?= (int) $ocrImageLimit ?>">
     <?= $view->partial('partials/tool-header', ['tool' => $tool]) ?>
 
     <p><?= e(__('ocr.intro')) ?></p>
@@ -43,6 +47,15 @@ if ($tool['available']) {
                             <?= $view->icon('exclamation-triangle', 'flex-shrink-0 mt-1') ?><span><?= e(__('ocr.accuracy')) ?></span>
                         </div>
                         <p class="small text-body-secondary"><?= e(__('ocr.slow_note')) ?></p>
+                        <?php if ($capabilities['evren_ocr'] ?? false): ?>
+                            <p class="small"><?= e(__('ocr.evren_notice')) ?></p>
+                            <p class="small text-body-secondary"><?= e(__('ocr.approximate_selection')) ?></p>
+                            <p class="small"><?= e(__('ocr.too_many_pages', ['max' => $evrenMaxPages])) ?></p>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="evren-consent" data-evren-consent>
+                                <label class="form-check-label small" for="evren-consent"><?= e(__('ocr.evren_consent')) ?></label>
+                            </div>
+                        <?php endif; ?>
                         <button type="button" class="btn btn-primary btn-lg w-100" data-run disabled>
                             <?= $view->icon('fonts') ?> <?= e(__('ocr.action')) ?>
                         </button>

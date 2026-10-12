@@ -37,6 +37,7 @@ final class PdfToolService
         private readonly ?Redactor $redactor = null,
         private readonly ?OcrEngine $ocr = null,
         private readonly ?OfficeConverter $office = null,
+        private readonly ?\App\Pdf\Ocr\EvrenOcrEngine $evrenOcr = null,
     ) {
     }
 
@@ -326,8 +327,29 @@ final class PdfToolService
     /**
      * OCR: taranmış PDF'i aranabilir hale getirir. Araçlar yoksa ToolUnavailableException (503).
      */
-    public function ocr(string $ownerHash, string $documentId, ?int $versionNumber): OperationResult
+    public function ocr(string $ownerHash, string $documentId, ?int $versionNumber, array $images = [], bool $evrenConsent = false): OperationResult
     {
+        if ($this->evrenOcr !== null && $this->evrenOcr->available()) {
+            if (!$evrenConsent) {
+                throw new ValidationException('Evren transfer consent required', 'ocr.evren_consent_required');
+            }
+            [$document, $version] = $this->resolveInput($ownerHash, $documentId, $versionNumber);
+            if ((int) $version->pageCount > $this->evrenOcr->maxPages) {
+                throw new ValidationException('Too many Evren OCR pages', 'ocr.too_many_pages', ['max' => $this->evrenOcr->maxPages]);
+            }
+            return $this->operations->run(
+                'ocr', $ownerHash, [[$document, $version]],
+                ['pages' => $version->pageCount, 'provider' => 'evren', 'transfer_consent' => true],
+                function (string $tmp, array $paths) use ($images): ProcessResult {
+                    $file = $tmp . '/ocr.pdf';
+                    $info = $this->evrenOcr->run($paths[0], $file, $images, $tmp);
+                    return new ProcessResult(
+                        [new OperationOutput($file, $info['pages'])], 'evren', $info,
+                        array_values(array_unique(['warnings.ocr_accuracy', 'ocr.approximate_selection', ...$this->rebuildWarnings($paths)]))
+                    );
+                }
+            );
+        }
         if ($this->ocr === null || !$this->ocr->available()) {
             throw new \App\Exceptions\ToolUnavailableException('OCR unavailable', 'errors.tool_unavailable');
         }

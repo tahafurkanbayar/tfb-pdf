@@ -2,7 +2,7 @@
 
 Durum işaretleri: `[x]` tamamlandı · `[~]` devam ediyor · `[ ]` bekliyor · `[!]` sorunlu / kısmi
 
-Son güncelleme: 2026-10-08
+Son güncelleme: 2026-10-12
 
 | # | Aşama | Durum | Not |
 |---|---|---|---|
@@ -52,3 +52,11 @@ v1.0.0 yayınlandı. Bundan sonra geliştirme sürüm mantığıyla: değişikli
 ## Aşama notları
 
 Her aşama tamamlandığında buraya kısa bir not eklenir: ne yapıldı, nasıl doğrulandı, commit.
+
+## 2026-10-12 — Evren OCR
+
+- [x] cPanel için isteğe bağlı Evren `/v1/ocr` bağlantısı: cURL/GD, PDF.js görüntüleri, gönderim onayı, orijinal görünümü koruyan yeni aranabilir sürüm, TR/EN mesajları.
+- [x] Hesap sahibinin açık onayıyla v1 koşulları kabul edildi (HTTP 200); yapay görselde canlı OCR doğrulandı (HTTP 200, `text`, 22 karakter, test işareti bulundu). Anahtar yalnızca Git dışında `.env` içinde.
+- [x] 202 birim testi / 605 assertion, 2 OCR HTTP testi / 20 assertion, 728 TR/EN anahtar ve değişen 20 PHP dosyası lint kontrolü geçti.
+- [!] Veritabanı bu oturumda bağlantı reddettiği için DB gerektiren tam entegrasyon/tarayıcı akışı tekrar doğrulanamadı.
+- [ ] Office düzenini/verilerini koruyan uzak dönüşüm hizmeti: Evren'de dönüşüm API doğrulanmadı, LibreOffice bağımlılığı devam ediyor.

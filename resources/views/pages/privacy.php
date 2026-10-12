@@ -11,6 +11,9 @@ $view->section('title', __('privacy.title'));
     <h2 class="h5"><?= e(__('privacy.storage_title')) ?></h2>
     <p><?= e(__('notices.privacy')) ?></p>
 
+    <h2 class="h5 mt-4"><?= e(__('privacy.evren_title')) ?></h2>
+    <p><?= e(__('privacy.evren_text')) ?></p>
+
     <h2 class="h5 mt-4"><?= e(__('privacy.retention_title')) ?></h2>
     <p><?= e(__('privacy.retention_text')) ?></p>
     <p class="text-body-secondary"><?= e(__('notices.cookie')) ?></p>

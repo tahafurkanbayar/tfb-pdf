@@ -519,3 +519,22 @@ Geliştirme sırasında gerçekten çalıştırılan komutlar ve gerçek sonuçl
 | paketten `php -S` (yerel .env kopyasıyla) + curl | `/tr`, `/en`, `/tr/about`, `/tr/tools/merge` 200, footer'da 1.0.0, 28 araç kartı öğesi; router'sız sunucuda CSS/JS/logo/font/manifest 200; sunucu log'unda hata yok. Test sunucuları durduruldu, `.env` kopyalı test klasörü silindi |
 | `git push origin main v1.0.0` | OK |
 | `gh release create v1.0.0 build/tfb-pdf-1.0.0.zip build/tfb-pdf-1.0.0.zip.sha256 --title "TFB PDF 1.0.0" --latest` | https://github.com/tahafurkanbayar/tfb-pdf/releases/tag/v1.0.0 — 2 dosya (18 777 167 B zip, sha256), taslak değil |
+
+## 2026-10-12 — Evren OCR entegrasyonu
+
+| Komut / kontrol | Gerçek sonuç |
+|---|---|
+| Repo/doküman/kod incelemesi (`rg`, `Get-Content`, `git status/diff`); resmi Evren LLM sayfası ve kullanıcı `/v1/ocr` örneği | OCR adanmış uç; Office dönüşümü doğrulanmadı |
+| İlk `php bin/check-evren.php` bağlantıları | Sandbox ağ erişimi başarısız; izinli ağ çağrısı HTTP 403 `terms_not_accepted`; anahtar/log içeriği yazdırılmadı |
+| `php bin/check-evren.php --terms` | HTTP 200; v1 metni okundu, build altında yerel kopya gösterildi |
+| `php bin/check-evren.php --accept-terms-v1` (hesap sahibinin açık onayından sonra) | HTTP 200 |
+| `php bin/check-evren.php` (kabul sonrası) | HTTP 200; TEXT_PATH=text, 22 karakter, test_marker=yes; yalnızca yapay görsel |
+| `.env` metin alanını `text` ayarlama; `git check-ignore .env` | Etkin; `.env` Git dışında |
+| `php vendor/bin/phpunit --testsuite Unit` | OK: 202 test, 605 assertion |
+| `php vendor/bin/phpunit tests/Feature/EvrenOcrHttpTest.php` | OK: 2 test, 20 assertion; TR/EN ekranı, gönderim onayı, Office bağımlılığı |
+| DB gerektiren Feature/Integration denemesi | MySQL bağlantısı reddedildi; tam entegrasyon doğrulanamadı (teardown hataları da oluştu) |
+| `php bin/check-translations.php` | OK: TR/EN 728 anahtar |
+| Değişen/yeni 20 PHP dosyasına `php -l`; `git diff --check` | Sözdizimi hatası ve diff boşluk hatası yok |
+| PowerShell dosya düzenlemeleri | Kod biçimi, örnek yapılandırma ve EVREN/LIMITATIONS/PROGRESS/DECISIONS/CHANGELOG/README belgeleri güncellendi; anahtar yalnızca `.env` içinde |
+| git add + git commit | Evren OCR değişiklikleri yerel commit olarak kaydedildi; anahtar dahil değil |
+| git push origin main | Otomatik onay incelemesi reddetti: depo güvenilirliği/gizlilik durumu ve kullanıcının dış gönderim yetkisi doğrulanmadı. Push yapılmadı; kullanıcı onayı gerekiyor |

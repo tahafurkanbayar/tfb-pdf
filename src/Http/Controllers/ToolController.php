@@ -36,6 +36,12 @@ final class ToolController extends Controller
             'tool' => $tool,
             'preselected' => $this->preselected($request),
             'capabilities' => $this->service(Capabilities::class)->toArray(),
+            'evrenMaxPages' => min(
+                $this->service(\App\Pdf\Ocr\EvrenOcrEngine::class)->maxPages,
+                max(1, (int) ini_get('max_file_uploads'))
+            ),
+            'ocrPostLimit' => \App\Support\Size::fromIni('post_max_size'),
+            'ocrImageLimit' => min(8 * 1024 * 1024, \App\Support\Size::fromIni('upload_max_filesize')),
         ]);
     }
 

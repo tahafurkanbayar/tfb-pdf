@@ -9,7 +9,7 @@ namespace App\Tools;
  */
 class Capabilities
 {
-    public function __construct(private readonly ToolDetector $detector)
+    public function __construct(private readonly ToolDetector $detector, private readonly bool $evrenOcr = false)
     {
     }
 
@@ -27,8 +27,8 @@ class Capabilities
     /** OCR: Tesseract + sayfaları görüntüye çevirecek bir araç (Ghostscript veya pdftoppm) */
     public function ocr(): bool
     {
-        return $this->detector->has(ToolDetector::TESSERACT)
-            && ($this->ghostscript() || $this->detector->has(ToolDetector::PDFTOPPM));
+        return $this->evrenOcr || ($this->detector->has(ToolDetector::TESSERACT)
+            && ($this->ghostscript() || $this->detector->has(ToolDetector::PDFTOPPM)));
     }
 
     public function zip(): bool
@@ -50,6 +50,7 @@ class Capabilities
             'ghostscript' => $this->ghostscript(),
             'office' => $this->office(),
             'ocr' => $this->ocr(),
+            'evren_ocr' => $this->evrenOcr,
             'zip' => $this->zip(),
             'gd' => $this->gd(),
             'process' => ProcessRunner::available(),

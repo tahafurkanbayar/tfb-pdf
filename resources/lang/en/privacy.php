@@ -3,6 +3,8 @@
 return [
     'title' => 'Privacy',
     'storage_title' => 'Where are your files stored?',
+    'evren_title' => 'OCR with Evren',
+    'evren_text' => 'If the administrator enables Evren OCR, page images of the document you consent to on the OCR screen are sent to Evren for text recognition. Deletion and retention settings on this server do not delete data at Evren; the provider’s own retention terms apply.',
     'retention_title' => 'How long are they kept?',
     'retention_text' => 'You can choose a retention period for each document (1 day, 7 days, 30 days or until you delete it). Expired documents and all their versions are permanently deleted automatically.',
     'cookies_title' => 'Cookies',

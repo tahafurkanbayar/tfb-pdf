@@ -341,6 +341,8 @@ Notlar:
 
 ## Opsiyonel Server Tools
 
+Tesseract/Ghostscript kurulamayan hostinglerde opsiyonel [Evren OCR bağlantısı](docs/EVREN.md) kullanılabilir (PHP cURL + GD). Sayfa görüntüleri kullanıcı onayıyla Evren'e gönderilir. API erişimi ve başarılı OCR yanıtının metin alanı doğrulanmalıdır. Evren üzerinden Office→PDF desteği henüz doğrulanmadı.
+
 Standart shared hostingde genellikle bulunmayan araçlar **zorunlu değildir**. Uygulama her birini otomatik tespit eder (PATH, bilinen kurulum yerleri, `--version` doğrulaması; sonuç önbelleğe alınır) ve yoksa ilgili özelliği kapatıp kullanıcıya açık bir mesaj gösterir.
 
 | Araç | Kullanım | Yoksa |

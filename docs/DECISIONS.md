@@ -110,3 +110,10 @@ Sayfa görüntüsü: Ghostscript varsa sunucuda (`png16m -dSAFER`); yoksa taray�
 - `.env` anahtarı kaldırma/yeniden adlandırma, minimum PHP/MySQL yükseltmesi veya elle müdahale gerektiren güncelleme MAJOR sayılır; yeni migration tek başına MINOR'dur (`/install` ile çalıştırılır).
 - Release'e `vendor/` dahil hazır ZIP eklenir: hedef kitle SSH/Composer olmayan cPanel kullanıcıları. Paket `bin/build-release.php` ile etiketlenmiş commit'ten (`git archive`) üretilir, `composer install --no-dev` uygulanır; testler ve geliştirme notları (CLAUDE.md, PROMPT, COMMANDS_LOG, PROGRESS) hariç. ZIP PharData ile yazılır (zip eklentisi gerektirmez); yanında SHA-256 dosyası.
 - GitHub'ın otomatik kaynak arşivleri tam kalsın diye `.gitattributes export-ignore` kullanılmadı; hariç tutma betikte.
+
+## 2026-10-12 — cPanel için Evren OCR
+- OCR modelleri yalnızca adanmış `/v1/ocr` ucunda kullanılır. Sunucu anahtarı tarayıcıya verilmez; sabit HTTPS adresi, TLS doğrulaması ve boyut/zaman sınırları uygulanır.
+- Sunucuda PDF raster aracı kurulamayan ortamda PDF.js sayfa görüntüleri üretir; sunucu bütün görüntüleri doğrulayıp yeniden kodladıktan sonra gönderir. Kullanıcı gönderim onayı hem arayüzde hem API'de zorunludur.
+- Kaynak PDF sayfaları FPDI ile korunur; sağlayıcının `text` yanıtı görünmez Unicode katmanı olur. Kelime koordinatları gelmediğinden seçim konumu yaklaşık olduğu açıkça belirtilir.
+- V1 koşulları OCR sırasında otomatik kabul edilmez; bu oturumda hesap sahibinin açık onayıyla yönetici komutuyla kabul edildi.
+- Office dosyalarını AI ile yeniden yazmak düzen ve veri korunmasını garanti etmez; doğrulanmış gerçek dönüşüm API bulunana kadar bu yaklaşım eklenmez.

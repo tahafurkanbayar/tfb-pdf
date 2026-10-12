@@ -3,6 +3,8 @@
 return [
     'title' => 'Gizlilik',
     'storage_title' => 'Dosyalarınız nerede saklanır?',
+    'evren_title' => 'Evren ile OCR',
+    'evren_text' => 'Yönetici Evren OCR bağlantısını etkinleştirmişse, OCR ekranında onay verdiğiniz belgenin sayfa görüntüleri metin tanıma için Evren’e gönderilir. Bu sunucudaki silme ve saklama ayarları Evren’deki verileri silmez; sağlayıcının kendi saklama koşulları geçerlidir.',
     'retention_title' => 'Ne kadar süre saklanır?',
     'retention_text' => 'Her belge için bir saklama süresi seçebilirsiniz (1 gün, 7 gün, 30 gün veya siz silene kadar). Süresi dolan belgeler ve tüm sürümleri otomatik olarak kalıcı biçimde silinir.',
     'cookies_title' => 'Çerezler',

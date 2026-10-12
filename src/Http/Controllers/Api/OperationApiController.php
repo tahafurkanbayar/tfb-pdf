@@ -132,10 +132,22 @@ final class OperationApiController extends Controller
 
     public function ocr(Request $request): Response
     {
+        $images = [];
+        foreach (array_keys($request->files) as $field) {
+            if (preg_match('/^page_([1-9]\d{0,4})$/D', (string) $field, $m)) {
+                $files = $request->files((string) $field);
+                if (count($files) !== 1) {
+                    throw new ValidationException('Invalid OCR page upload', 'ocr.images_invalid');
+                }
+                $images[(int) $m[1]] = $files[0];
+            }
+        }
         return $this->respond($this->tools()->ocr(
             $this->requireOwner(),
             (string) $request->input('document', ''),
-            self::versionInput($request)
+            self::versionInput($request),
+            $images,
+            in_array($request->input('evren_consent'), [true, '1'], true)
         ));
     }
 

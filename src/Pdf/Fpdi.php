@@ -37,6 +37,15 @@ class Fpdi extends \setasign\Fpdi\Tfpdf\Fpdi
         $this->SetFont(self::FONT, $style, $size);
     }
 
+    /** PDF text rendering mode: 3 is invisible but remains searchable/selectable. */
+    public function setTextRenderingMode(int $mode): void
+    {
+        if (!in_array($mode, [0, 3], true)) {
+            throw new \InvalidArgumentException('Unsupported text rendering mode');
+        }
+        $this->_out('BT ' . $mode . ' Tr ET');
+    }
+
     protected function getPdfParserInstance(StreamReader $streamReader, array $parserParams = [])
     {
         return new ExtendedPdfParser($streamReader);
